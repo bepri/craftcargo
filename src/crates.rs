@@ -5,7 +5,8 @@ use cargo::{
     core::source::MaybePackage,
     core::{
         resolver::features::CliFeatures, Dependency, EitherManifest, FeatureValue, Manifest,
-        Package, PackageId, Registry, Source, SourceId, Summary, Target, TargetKind, Workspace,
+        Package, PackageId, QueryKind, Registry, Source, SourceId, Summary, Target, TargetKind,
+        Workspace,
     },
     ops,
     ops::{PackageOpts, Packages},
@@ -60,7 +61,7 @@ fn hash<H: Hash>(hashable: &H) -> u64 {
 }
 
 fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<Vec<Summary>> {
-    let mut summaries = match registry.query_vec(dep, false) {
+    let mut summaries = match registry.query_vec(dep, QueryKind::Exact) {
         std::task::Poll::Ready(res) => res?,
         std::task::Poll::Pending => {
             registry.block_until_ready()?;
@@ -125,7 +126,9 @@ impl CrateInfo {
                     let dep = Dependency::parse(crate_name, None, source_id)?;
                     let mut package_id: Option<PackageId> = None;
                     loop {
-                        match source.query(&dep, &mut |p| package_id = Some(p.package_id())) {
+                        match source.query(&dep, QueryKind::Exact, &mut |p| {
+                            package_id = Some(p.package_id())
+                        }) {
                             std::task::Poll::Ready(res) => {
                                 res?;
                                 break;
