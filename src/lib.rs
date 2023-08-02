@@ -6,4 +6,5 @@ pub mod debian;
 mod util;
 
 pub mod build_order;
+pub mod deb_dependencies;
 pub mod package;

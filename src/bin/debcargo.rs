@@ -1,5 +1,6 @@
 use ansi_term::Colour::Red;
 use clap::{builder::styling::AnsiColor, builder::Styles, crate_version, Parser, Subcommand};
+use itertools::Itertools;
 
 use debcargo::crates::CrateInfo;
 use debcargo::debian::DebInfo;
@@ -8,6 +9,7 @@ use debcargo::package::*;
 use debcargo::{
     build_order::{build_order, BuildOrderArgs},
     crates::invalidate_crates_io_cache,
+    deb_dependencies::{deb_dependencies, DebDependenciesArgs},
 };
 
 const CLI_STYLE: Styles = Styles::styled()
@@ -60,6 +62,11 @@ enum Opt {
         #[command(flatten)]
         args: BuildOrderArgs,
     },
+    /// Print the dependencies of a package in d/control format
+    DebDependencies {
+        #[command(flatten)]
+        args: DebDependenciesArgs,
+    },
 }
 
 #[test]
@@ -111,6 +118,14 @@ fn real_main() -> Result<()> {
             for v in &build_order {
                 println!("{}", v);
             }
+            Ok(())
+        }
+        DebDependencies { args } => {
+            let (toolchain_deps, dependencies) = deb_dependencies(args)?;
+            println!(
+                "{}",
+                toolchain_deps.into_iter().chain(dependencies).join(", ")
+            );
             Ok(())
         }
     }
