@@ -633,7 +633,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         .collect();
 
     let features_with_deps = all_dependencies_and_features(crate_info.manifest());
-    let dev_depends = deb_deps(config, &crate_info.dev_dependencies())?;
+    let dev_depends = deb_deps(config.allow_prerelease_deps, &crate_info.dev_dependencies())?;
     let has_dev_deps = !dev_depends.is_empty();
     log::trace!(
         "features_with_deps: {:?}",
@@ -697,7 +697,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             "libstd-rust-dev".into(),
         ]
         .into_iter()
-        .chain(deb_deps(config, &default_deps)?)
+        .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
         .chain(extra_override_deps);
         if !bins.is_empty() {
             build_deps.chain(build_deps_extra).collect()
@@ -950,7 +950,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                     Some(feature)
                 },
                 f_deps,
-                deb_deps(config, &o_deps)?,
+                deb_deps(config.allow_prerelease_deps, &o_deps)?,
                 f_provides.clone(),
                 if feature.is_empty() {
                     recommends.clone()
