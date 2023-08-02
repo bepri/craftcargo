@@ -678,7 +678,6 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     };
 
     let build_deps = {
-        let rustc = rustc_dep(&crate_info.rust_version(), true);
         let build_deps = ["debhelper-compat (= 13)", "dh-sequence-cargo"]
             .iter()
             .map(|x| x.to_string());
@@ -691,14 +690,10 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             PackageKey::feature("default"),
             &default_features,
         );
-        let build_deps_extra = [
-            "cargo:native".into(),
-            rustc.clone(),
-            "libstd-rust-dev".into(),
-        ]
-        .into_iter()
-        .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
-        .chain(extra_override_deps);
+        let build_deps_extra = toolchain_deps(&crate_info.rust_version())
+            .into_iter()
+            .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
+            .chain(extra_override_deps);
         if !bins.is_empty() {
             build_deps.chain(build_deps_extra).collect()
         } else {
@@ -1185,6 +1180,11 @@ fn reduce_provides(
         .collect::<BTreeMap<_, _>>();
 
     (provides, features_with_deps)
+}
+
+fn toolchain_deps(min_rust_version: &Option<String>) -> Vec<String> {
+    let rustc = rustc_dep(min_rust_version, true);
+    ["cargo:native".into(), rustc, "libstd-rust-dev".into()].into()
 }
 
 fn rustc_dep(min_ver: &Option<String>, native: bool) -> String {
