@@ -7,7 +7,10 @@ use cargo::core::{Dependency, PackageId};
 use clap::{Parser, ValueEnum};
 
 use crate::config::Config;
-use crate::crates::{crate_name_ver_to_dep, show_dep, transitive_deps, CrateDepInfo, CrateInfo};
+use crate::crates::{
+    all_dependencies_and_features, crate_name_ver_to_dep, show_dep, transitive_deps, CrateDepInfo,
+    CrateInfo,
+};
 use crate::debian::control::base_deb_name;
 use crate::errors::Result;
 use crate::package::{PackageExtractArgs, PackageProcess};
@@ -170,7 +173,7 @@ fn resolve_info(
                 (process.crate_info, process.config)
             }
         };
-        let dep_info = info.all_dependencies_and_features();
+        let dep_info = all_dependencies_and_features(info.manifest());
         e.insert((info, dep_info, config));
     };
     Ok(id)

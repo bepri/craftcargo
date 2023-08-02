@@ -19,7 +19,9 @@ use tar::{Archive, Builder};
 use tempfile;
 
 use crate::config::{package_field_for_feature, testing_ignore_debpolv, Config, PackageKey};
-use crate::crates::{show_dep, transitive_deps, CrateDepInfo, CrateInfo};
+use crate::crates::{
+    all_dependencies_and_features, show_dep, transitive_deps, CrateDepInfo, CrateInfo,
+};
 use crate::errors::*;
 use crate::util::{self, copy_tree, expect_success, get_transitive_val, traverse_depth};
 
@@ -630,7 +632,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         .map(String::as_str)
         .collect();
 
-    let features_with_deps = crate_info.all_dependencies_and_features();
+    let features_with_deps = all_dependencies_and_features(crate_info.manifest());
     let dev_depends = deb_deps(config, &crate_info.dev_dependencies())?;
     let has_dev_deps = !dev_depends.is_empty();
     log::trace!(

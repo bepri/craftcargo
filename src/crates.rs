@@ -466,115 +466,6 @@ impl CrateInfo {
         deps
     }
 
-    /// Collect information about the dependency structure of features and
-    /// their external crate dependencies, in a simple output format.
-    pub fn all_dependencies_and_features(&self) -> CrateDepInfo {
-        use cargo::core::dependency::DepKind;
-
-        let mut deps_by_name: BTreeMap<&str, Vec<&Dependency>> = BTreeMap::new();
-        for dep in self.dependencies() {
-            // we treat build-dependencies also as dependencies in Debian
-            if dep.kind() != DepKind::Development {
-                let s = dep.name_in_toml().as_str();
-                deps_by_name.entry(s).or_default().push(dep);
-            }
-        }
-        let deps_by_name = deps_by_name;
-
-        let mut features_with_deps = BTreeMap::new();
-
-        // calculate dependencies of this crate's features
-        for (feature, deps) in self.manifest.summary().features() {
-            let mut feature_deps: Vec<&'static str> = vec![];
-            let mut other_deps: Vec<Dependency> = Vec::new();
-            for dep in deps {
-                use self::FeatureValue::*;
-                match dep {
-                    // another feature is a dependency
-                    Feature(dep_feature) => {
-                        feature_deps.push(InternedString::new(dep_feature).as_str())
-                    }
-                    // another package is a dependency
-                    Dep { dep_name } => {
-                        // unwrap is ok, valid Cargo.toml files must have this
-                        for &dep in deps_by_name.get(dep_name.as_str()).unwrap() {
-                            other_deps.push(dep.clone());
-                        }
-                    }
-                    // another package is a dependency
-                    DepFeature {
-                        dep_name,
-                        dep_feature,
-                        ..
-                    } => match deps_by_name.get(dep_name.as_str()) {
-                        // unwrap is ok, valid Cargo.toml files must have this
-                        Some(dd) => {
-                            for &dep in dd {
-                                let mut dep = dep.clone();
-                                let mut features: Vec<InternedString> =
-                                    vec![InternedString::new(dep_feature)];
-                                features.extend(dep.features());
-                                dep.set_features(features);
-                                dep.set_default_features(false);
-                                other_deps.push(dep);
-                            }
-                        }
-                        None => {
-                            let mut expected = false;
-                            for dep in self.dependencies() {
-                                if dep.kind() == DepKind::Development {
-                                    let s = dep.name_in_toml().as_str();
-                                    if s == dep_name.as_str() {
-                                        expected = true;
-                                    }
-                                }
-                            }
-                            if expected {
-                                debcargo_warn!(
-                                    "Ignoring \"{}\" feature \"{}\" as it depends on a \
-                                     dev-dependency \"{}\"",
-                                    self.package_id(),
-                                    feature,
-                                    dep_name
-                                );
-                            } else {
-                                panic!(
-                                    "failed to account for dependency \"{}\" of \"{}\" feature \"{}\"",
-                                    dep_name, self.package_id(), feature
-                                );
-                            }
-                        }
-                    },
-                }
-            }
-            if feature_deps.is_empty() {
-                // everything depends on bare library
-                feature_deps.push("");
-            }
-            features_with_deps.insert(feature.as_str(), (feature_deps, other_deps));
-        }
-
-        // calculate required dependencies for implicit no-default-features
-        let mut deps_required: Vec<Dependency> = Vec::new();
-        for deps in deps_by_name.values() {
-            for &dep in deps {
-                if !dep.is_optional() {
-                    deps_required.push(dep.clone())
-                }
-            }
-        }
-
-        // implicit no-default-features
-        features_with_deps.insert("", (vec![], deps_required));
-
-        // implicit default feature
-        if !features_with_deps.contains_key("default") {
-            features_with_deps.insert("default", (vec![""], vec![]));
-        }
-
-        features_with_deps
-    }
-
     pub fn get_summary_description(&self) -> (Option<String>, Option<String>) {
         let (summary, description) = if let Some(ref description) = self.metadata().description {
             // Convention these days seems to be to do manual text
@@ -844,6 +735,117 @@ impl CrateInfo {
         }
         Ok(source_modified)
     }
+}
+
+/// Collect information about the dependency structure of features and
+/// their external crate dependencies, in a simple output format.
+pub fn all_dependencies_and_features(manifest: &Manifest) -> CrateDepInfo {
+    use cargo::core::dependency::DepKind;
+
+    let mut deps_by_name: BTreeMap<&str, Vec<&Dependency>> = BTreeMap::new();
+    for dep in manifest.dependencies() {
+        // we treat build-dependencies also as dependencies in Debian
+        if dep.kind() != DepKind::Development {
+            let s = dep.name_in_toml().as_str();
+            deps_by_name.entry(s).or_default().push(dep);
+        }
+    }
+    let deps_by_name = deps_by_name;
+
+    let mut features_with_deps = BTreeMap::new();
+
+    // calculate dependencies of this crate's features
+    for (feature, deps) in manifest.summary().features() {
+        let mut feature_deps: Vec<&'static str> = vec![];
+        let mut other_deps: Vec<Dependency> = Vec::new();
+        for dep in deps {
+            use self::FeatureValue::*;
+            match dep {
+                // another feature is a dependency
+                Feature(dep_feature) => {
+                    feature_deps.push(InternedString::new(dep_feature).as_str())
+                }
+                // another package is a dependency
+                Dep { dep_name } => {
+                    // unwrap is ok, valid Cargo.toml files must have this
+                    for &dep in deps_by_name.get(dep_name.as_str()).unwrap() {
+                        other_deps.push(dep.clone());
+                    }
+                }
+                // another package is a dependency
+                DepFeature {
+                    dep_name,
+                    dep_feature,
+                    ..
+                } => {
+                    match deps_by_name.get(dep_name.as_str()) {
+                        // unwrap is ok, valid Cargo.toml files must have this
+                        Some(dd) => {
+                            for &dep in dd {
+                                let mut dep = dep.clone();
+                                let mut features: Vec<InternedString> =
+                                    vec![InternedString::new(dep_feature)];
+                                features.extend(dep.features());
+                                dep.set_features(features);
+                                dep.set_default_features(false);
+                                other_deps.push(dep);
+                            }
+                        }
+                        None => {
+                            let mut expected = false;
+                            for dep in manifest.dependencies() {
+                                if dep.kind() == DepKind::Development {
+                                    let s = dep.name_in_toml().as_str();
+                                    if s == dep_name.as_str() {
+                                        expected = true;
+                                    }
+                                }
+                            }
+                            if expected {
+                                debcargo_warn!(
+                                    "Ignoring \"{}\" feature \"{}\" as it depends on a \
+                                     dev-dependency \"{}\"",
+                                    manifest.package_id(),
+                                    feature,
+                                    dep_name
+                                );
+                            } else {
+                                panic!(
+                                    "failed to account for dependency \"{}\" of \"{}\" feature \"{}\"",
+                                    dep_name, manifest.package_id(), feature
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if feature_deps.is_empty() {
+            // everything depends on bare library
+            feature_deps.push("");
+        }
+        features_with_deps.insert(feature.as_str(), (feature_deps, other_deps));
+    }
+
+    // calculate required dependencies for implicit no-default-features
+    let mut deps_required: Vec<Dependency> = Vec::new();
+    for deps in deps_by_name.values() {
+        for &dep in deps {
+            if !dep.is_optional() {
+                deps_required.push(dep.clone())
+            }
+        }
+    }
+
+    // implicit no-default-features
+    features_with_deps.insert("", (vec![], deps_required));
+
+    // implicit default feature
+    if !features_with_deps.contains_key("default") {
+        features_with_deps.insert("default", (vec![""], vec![]));
+    }
+
+    features_with_deps
 }
 
 /// Calculate all feature-dependencies and external-dependencies of a given
