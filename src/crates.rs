@@ -75,7 +75,7 @@ fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<
 pub fn invalidate_crates_io_cache() -> Result<()> {
     let config = Config::default()?;
     let _lock = config.acquire_package_cache_lock()?;
-    let source_id = SourceId::crates_io(&config)?;
+    let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
     let yanked_whitelist = HashSet::new();
     let mut r = RegistrySource::remote(source_id, &yanked_whitelist, &config)?;
     r.invalidate_cache();
@@ -85,7 +85,7 @@ pub fn invalidate_crates_io_cache() -> Result<()> {
 pub fn crate_name_ver_to_dep(crate_name: &str, version: Option<&str>) -> Result<Dependency> {
     // note: this forces a network call
     let config = Config::default()?;
-    let source_id = SourceId::crates_io(&config)?;
+    let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
     let version = version.and_then(|v| {
         if v.is_empty() {
             None
