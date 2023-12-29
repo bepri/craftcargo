@@ -5,7 +5,8 @@ use cargo::{
     core::source::MaybePackage,
     core::{
         resolver::features::CliFeatures, Dependency, EitherManifest, FeatureValue, Manifest,
-        Package, PackageId, Registry, Source, SourceId, Summary, Target, TargetKind, Workspace,
+        Package, PackageId, QueryKind, Registry, Source, SourceId, Summary, Target, TargetKind,
+        Workspace,
     },
     ops,
     ops::{PackageOpts, Packages},
@@ -60,7 +61,7 @@ fn hash<H: Hash>(hashable: &H) -> u64 {
 }
 
 fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<Vec<Summary>> {
-    let mut summaries = match registry.query_vec(dep, false) {
+    let mut summaries = match registry.query_vec(dep, QueryKind::Exact) {
         std::task::Poll::Ready(res) => res?,
         std::task::Poll::Pending => {
             registry.block_until_ready()?;
@@ -74,7 +75,7 @@ fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<
 pub fn invalidate_crates_io_cache() -> Result<()> {
     let config = Config::default()?;
     let _lock = config.acquire_package_cache_lock()?;
-    let source_id = SourceId::crates_io(&config)?;
+    let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
     let yanked_whitelist = HashSet::new();
     let mut r = RegistrySource::remote(source_id, &yanked_whitelist, &config)?;
     r.invalidate_cache();
@@ -84,7 +85,7 @@ pub fn invalidate_crates_io_cache() -> Result<()> {
 pub fn crate_name_ver_to_dep(crate_name: &str, version: Option<&str>) -> Result<Dependency> {
     // note: this forces a network call
     let config = Config::default()?;
-    let source_id = SourceId::crates_io(&config)?;
+    let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
     let version = version.and_then(|v| {
         if v.is_empty() {
             None
@@ -125,7 +126,9 @@ impl CrateInfo {
                     let dep = Dependency::parse(crate_name, None, source_id)?;
                     let mut package_id: Option<PackageId> = None;
                     loop {
-                        match source.query(&dep, &mut |p| package_id = Some(p.package_id())) {
+                        match source.query(&dep, QueryKind::Exact, &mut |p| {
+                            package_id = Some(p.package_id())
+                        }) {
                             std::task::Poll::Ready(res) => {
                                 res?;
                                 break;
