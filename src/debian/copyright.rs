@@ -326,7 +326,7 @@ fn copyright_fromgit(repo_url: &str) -> Result<String> {
         .ok_or(anyhow::Error::msg("lo"))?
         .year();
 
-    let notice = match first_year.cmp(&latest_year) {
+    let notice = match first_year.cmp(latest_year) {
         Ordering::Equal => format!("{}", first_year),
         _ => format!("{}-{},", first_year, latest_year),
     };

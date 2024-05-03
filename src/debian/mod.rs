@@ -716,7 +716,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
 
     if lib {
         // debian/tests/control
-        let all_features: Vec<&str> = features_with_deps.keys().map(|f| *f).collect();
+        let all_features: Vec<&str> = features_with_deps.keys().copied().collect();
         let all_features_test_broken = match test_is_marked_broken("@") {
             Some(v) => v,
             None => all_features
@@ -1070,7 +1070,7 @@ fn generate_test_dependencies(
     f: &str,
     feature_deps: &[&str],
     config: &Config,
-    test_deps: &Vec<String>,
+    test_deps: &[String],
 ) -> Vec<String> {
     Some(f)
         .iter()
@@ -1082,7 +1082,7 @@ fn generate_test_dependencies(
                 .flatten()
         })
         .map(|s| s.to_string())
-        .chain(test_deps.clone())
+        .chain(test_deps.to_owned())
         .collect::<Vec<_>>()
 }
 
@@ -1195,7 +1195,7 @@ mod test {
 
     #[test]
     fn rustc_dep_includes_minver() {
-        assert_eq!("rustc:native (>= 1.65)", rustc_dep(&Some(&"1.65")));
+        assert_eq!("rustc:native (>= 1.65)", rustc_dep(&Some("1.65")));
     }
 
     #[test]
