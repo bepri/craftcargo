@@ -1,5 +1,5 @@
 use cargo::core::manifest;
-use chrono::{Datelike, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, Datelike};
 use git2::Repository;
 use regex;
 use tempfile;
@@ -318,18 +318,12 @@ fn copyright_fromgit(repo_url: &str) -> Result<String> {
     let first_commit = repo.find_commit(first_id)?;
     let latest_commit = repo.find_commit(latest_id)?;
 
-    let first_year = Utc
-        .from_utc_datetime(
-            &NaiveDateTime::from_timestamp_opt(first_commit.time().seconds(), 0)
-                .ok_or(anyhow::Error::msg("lo"))?,
-        )
+    let first_year = &DateTime::from_timestamp(first_commit.time().seconds(), 0)
+        .ok_or(anyhow::Error::msg("lo"))?
         .year();
 
-    let latest_year = Utc
-        .from_utc_datetime(
-            &NaiveDateTime::from_timestamp_opt(latest_commit.time().seconds(), 0)
-                .ok_or(anyhow::Error::msg("lo"))?,
-        )
+    let latest_year = &DateTime::from_timestamp(latest_commit.time().seconds(), 0)
+        .ok_or(anyhow::Error::msg("lo"))?
         .year();
 
     let notice = match first_year.cmp(&latest_year) {
