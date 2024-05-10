@@ -246,6 +246,7 @@ it's a maintenance burden. Use debcargo.toml instead."
                 .args(["pop", "--quiltrc=-", "-a"]),
             "failed to unapply patches",
         );
+        std::fs::remove_dir_all(&output_dir.join(".pc"))?;
     }
     Ok(tempdir)
 }
