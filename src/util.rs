@@ -12,6 +12,7 @@ use std::os::unix::fs::symlink;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use anyhow::bail;
 use itertools::Itertools;
 use walkdir::WalkDir;
 
@@ -121,16 +122,11 @@ where
     show_vec_with(it, std::string::ToString::to_string)
 }
 
-pub fn expect_success(cmd: &mut Command, err: &str) {
+pub fn expect_success(cmd: &mut Command, err: &str) -> Result<(), anyhow::Error> {
     match cmd.status() {
-        Ok(status) => {
-            if !status.success() {
-                panic!("{}", err);
-            }
-        }
-        Err(e) => {
-            panic!("{}\n{}", err, e);
-        }
+        Ok(status) if status.success() => Ok(()),
+        Ok(_) => bail!("{}", err),
+        Err(e) => bail!("{}\n{}", err, e),
     }
 }
 

@@ -236,7 +236,7 @@ it's a maintenance burden. Use debcargo.toml instead."
                 .env("QUILT_PATCHES", tempdir.path().join("patches"))
                 .args(["push", "--quiltrc=-", "-a"]),
             "failed to apply patches using quilt",
-        );
+        )?;
         crate_info.replace_manifest(&output_dir.join("Cargo.toml"))?;
         expect_success(
             Command::new("quilt")
@@ -245,7 +245,7 @@ it's a maintenance burden. Use debcargo.toml instead."
                 .env("QUILT_PATCHES", tempdir.path().join("patches"))
                 .args(["pop", "--quiltrc=-", "-a"]),
             "failed to unapply patches",
-        );
+        )?;
         std::fs::remove_dir_all(&output_dir.join(".pc"))?;
     }
     Ok(tempdir)
