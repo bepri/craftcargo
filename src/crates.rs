@@ -2,16 +2,17 @@ use anyhow::{format_err, Error};
 use cargo::{
     core::manifest::ManifestMetadata,
     core::registry::PackageRegistry,
-    core::source::MaybePackage,
     core::{
         resolver::features::CliFeatures, Dependency, EitherManifest, FeatureValue, Manifest,
-        Package, PackageId, QueryKind, Registry, Source, SourceId, Summary, Target, TargetKind,
-        Workspace,
+        Package, PackageId, Registry, SourceId, Summary, Target, TargetKind, Workspace,
     },
     ops,
     ops::{PackageOpts, Packages},
-    sources::RegistrySource,
-    util::{interning::InternedString, toml::read_manifest, FileLock},
+    sources::{
+        source::{MaybePackage, QueryKind, Source},
+        RegistrySource,
+    },
+    util::{cache_lock::CacheLockMode, interning::InternedString, toml::read_manifest, FileLock},
     Config,
 };
 use filetime::{set_file_times, FileTime};
@@ -74,7 +75,7 @@ fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<
 
 pub fn invalidate_crates_io_cache() -> Result<()> {
     let config = Config::default()?;
-    let _lock = config.acquire_package_cache_lock()?;
+    let _lock = config.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
     let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
     let yanked_whitelist = HashSet::new();
     let mut r = RegistrySource::remote(source_id, &yanked_whitelist, &config)?;
@@ -182,7 +183,7 @@ impl CrateInfo {
                 workspace
                     .target_dir()
                     .join("package")
-                    .open_rw(filename, &config, "crate file")?
+                    .open_rw_exclusive_create(filename, &config, "crate file")?
             };
 
             (package, crate_file)
@@ -228,14 +229,14 @@ impl CrateInfo {
             )?;
         }
 
-        let source_id = dependency.source_id();
+        let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
         let registry_name = format!(
             "{}-{:016x}",
             source_id.url().host_str().unwrap_or(""),
             hash(&source_id).swap_bytes()
         );
         let get_package_info = |config: &Config| -> Result<_> {
-            let lock = config.acquire_package_cache_lock()?;
+            let lock = config.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
             let mut registry = PackageRegistry::new(config)?;
             registry.lock_patches();
             let summaries = fetch_candidates(&mut registry, dependency)?;
@@ -277,7 +278,7 @@ impl CrateInfo {
             let crate_file = config
                 .registry_cache_path()
                 .join(&registry_name)
-                .open_ro(&filename, config, &filename)?;
+                .open_ro_shared(&filename, config, &filename)?;
             Ok((package.clone(), manifest.clone(), crate_file))
         };
         // if update is false but the user never downloaded the crate then the
@@ -332,8 +333,8 @@ impl CrateInfo {
         self.package.manifest_path()
     }
 
-    pub fn rust_version(&self) -> Option<&str> {
-        self.manifest.rust_version()
+    pub fn rust_version(&self) -> Option<String> {
+        self.manifest.rust_version().map(|v| v.to_string())
     }
 
     pub fn targets(&self) -> &[Target] {

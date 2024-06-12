@@ -1,11 +1,10 @@
 use super::{debian_copyright, get_licenses};
 
 use std::path::Path;
-use std::rc::Rc;
 
 use cargo::{
     core::{package::Package, SourceId},
-    util::{config::Config, toml::TomlManifest},
+    util::{config::Config, toml::schema::TomlManifest},
 };
 use toml::toml;
 
@@ -85,16 +84,16 @@ fn build_package_with_authors(authors: Vec<&str>) -> Package {
         authors = authors
         license = "AGPLv3"
     };
-    let toml_manifest: Rc<TomlManifest> =
-        Rc::new(toml::from_str(&toml::to_string(&toml).unwrap()).unwrap());
+    let toml_manifest: TomlManifest = toml::from_str(&toml::to_string(&toml).unwrap()).unwrap();
     #[cfg(unix)]
-    let package_root = Path::new("/path/to/mypackage");
+    let package_root = Path::new("/");
     #[cfg(windows)]
-    let package_root = Path::new("C:\\path\\to\\mypackage");
-    let source_id = SourceId::for_path(package_root).unwrap();
+    let package_root = Path::new("C:\\");
+    let source_id = SourceId::for_path(&package_root).unwrap();
     let config = Config::default().unwrap();
-    let manifest = TomlManifest::to_real_manifest(&toml_manifest, source_id, package_root, &config)
-        .unwrap()
-        .0;
+    let manifest =
+        TomlManifest::to_real_manifest(toml_manifest, false, source_id, &package_root, &config)
+            .unwrap()
+            .0;
     Package::new(manifest, Path::new("/path/to/manifest"))
 }
