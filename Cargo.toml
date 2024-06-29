@@ -17,7 +17,7 @@ anyhow = "1.0"
 cargo = "0.70.1"
 cargo-util = "=0.2.6"
 clap = { version = "~4.4.1", features = ["cargo", "derive", "wrap_help"] }
-chrono = "0.4"
+chrono = "0.4.31"
 env_logger = "0.10"
 filetime = "0.2"
 flate2 = "1"
