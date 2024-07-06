@@ -1,0 +1,7 @@
+semver_suffix = true
+overlay = "."
+
+[packages.lib]
+test_is_broken = false
+[packages."lib+Win32_Foundation"]
+test_is_broken = false

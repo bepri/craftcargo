@@ -1,0 +1,5 @@
+semver_suffix = true
+overlay = "."
+
+[packages.lib]
+depends = ["libdav1d-dev", "meson", "nasm"]

@@ -1,0 +1,9 @@
+#!/usr/bin/make -f
+include /usr/share/rustc/architecture.mk
+%:
+	dh $@ --buildsystem cargo
+
+# requires writable dir
+override_dh_auto_test:
+	dh_auto_test || true
+
