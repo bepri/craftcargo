@@ -4,7 +4,9 @@ version = "2.6.1"
 authors = [
  "Josh Triplett <josh@joshtriplett.org>",
  "Ximin Luo <infinity0@debian.org>",
- "Vasudev Kamath <vasudev@copyninja.info>"]
+ "Vasudev Kamath <vasudev@copyninja.info>",
+ "Fabian Grünbichler <debian@fabian.gruenbichler.email>",
+]
 license = "MIT/Apache-2.0"
 repository = "https://salsa.debian.org/rust-team/debcargo"
 description = "Create a Debian package from a Cargo crate."
