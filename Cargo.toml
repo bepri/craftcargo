@@ -16,7 +16,7 @@ ansi_term = "0.12"
 anyhow = "1.0"
 cargo = "0.76"
 cargo-util = "=0.2.9"
-clap = { version = "~4.4.1", features = ["cargo", "derive", "wrap_help"] }
+clap = { version = "4.5", features = ["cargo", "derive", "wrap_help"] }
 chrono = "0.4.31"
 env_logger = "0.10"
 filetime = "0.2"
