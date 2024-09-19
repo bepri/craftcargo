@@ -670,8 +670,6 @@ impl CrateInfo {
         // Ensure that Cargo.toml is in standard form, e.g. does not contain
         // path dependencies, so can be built standalone (see #4030).
         let toml_path = path.join("Cargo.toml");
-        let ws = Workspace::new(&toml_path.canonicalize()?, &self.config)?;
-        let registry_toml = self.package.to_registry_toml(&ws)?;
         let mut actual_toml = String::new();
         fs::File::open(&toml_path)?.read_to_string(&mut actual_toml)?;
 
@@ -682,6 +680,8 @@ impl CrateInfo {
             // to handle it specially.
             let old_toml_path = path.join("Cargo.toml.orig");
             fs::copy(&toml_path, &old_toml_path)?;
+            let ws = Workspace::new(&toml_path.canonicalize()?, &self.config)?;
+            let registry_toml = self.package.to_registry_toml(&ws)?;
             fs::OpenOptions::new()
                 .write(true)
                 .truncate(true)
