@@ -309,12 +309,6 @@ pub fn prepare_debian_folder(
         )?;
     }
 
-    // debian/compat
-    {
-        let mut compat = file("compat")?;
-        writeln!(compat, "12")?;
-    }
-
     // debian/copyright
     {
         let mut copyright = io::BufWriter::new(file("copyright")?);
@@ -646,7 +640,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
 
     let rustc = rustc_dep(&crate_info.rust_version());
     let build_deps = {
-        let build_deps = ["debhelper (>= 12)", "dh-cargo (>= 25)"]
+        let build_deps = ["debhelper-compat (= 13)", "dh-cargo (>= 25)"]
             .iter()
             .map(|x| x.to_string());
         // note: please keep this in sync with build_order::dep_features
