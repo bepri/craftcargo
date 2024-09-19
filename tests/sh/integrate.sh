@@ -170,7 +170,7 @@ run_sbuild() {(
 	echo >&2 "sbuild $dsc logging to $build"
 	sbuild --arch-all --arch-any --no-run-lintian --build-dep-resolver=aspcud \
 	  --aspcud-criteria="-removed,-changed,-new,+count(solution,APT-Release:=/o=sbuild-build-depends-archive/),-count(solution,APT-Release:=/o=Debian/)" \
-	  --extra-repository="deb file:$(readlink -f "$directory") ./" --extra-repository-key="$PWD/signing-key.gpg" \
+	  --extra-package ./ \
 	  -c "$CHROOT" -d unstable $SBUILD_EXTRA_ARGS "$dsc"
 )}
 
@@ -285,14 +285,6 @@ for i in "$@"; do run_x_or_deps "$i" true; done
 for i in "$@"; do run_x_or_deps "$i" build_source; done
 # sudo schroot -c source:debcargo-unstable-amd64-sbuild -- sh -c 'echo "deb [allow-insecure=yes] file:/home/infinity0/var/lib/rust/debcargo-tmp ./" > /etc/apt/sources.list.d/local-debcargo-integration-test.list'
 if $run_sbuild; then
-	if ! schroot -i -c "$CHROOT" >/dev/null; then
-		echo >&2 "create the $CHROOT schroot by running e.g.:"
-		echo >&2 "  sudo sbuild-createchroot unstable /srv/chroot/$CHROOT http://deb.debian.org/debian"
-		echo >&2 "  sudo schroot -c source:$CHROOT -- apt-get -y install dh-cargo"
-		echo >&2 "  sudo sbuild-update -udr $CHROOT"
-		echo >&2 "See https://wiki.debian.org/sbuild for more details"
-		exit 1
-	fi
 	for i in "$@"; do run_x_or_deps "$i" run_sbuild; done
 fi
 if $run_lintian; then

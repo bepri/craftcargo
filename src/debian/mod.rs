@@ -1119,7 +1119,7 @@ fn reduce_provides(
     (provides, features_with_deps)
 }
 
-fn rustc_dep(min_ver: &Option<&str>) -> String {
+fn rustc_dep(min_ver: &Option<String>) -> String {
     if let Some(min_ver) = min_ver {
         format!("rustc:native (>= {})", min_ver)
     } else {
@@ -1133,7 +1133,10 @@ mod test {
 
     #[test]
     fn rustc_dep_includes_minver() {
-        assert_eq!("rustc:native (>= 1.65)", rustc_dep(&Some("1.65")));
+        assert_eq!(
+            "rustc:native (>= 1.65)",
+            rustc_dep(&Some("1.65".to_string()))
+        );
     }
 
     #[test]
