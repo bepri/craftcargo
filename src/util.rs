@@ -55,8 +55,8 @@ pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
             let reader = BufReader::new(file);
             // If we find one FIXME we break the loop and check next file. Idea
             // is only to find files with FIXME strings in it.
-            for line in reader.lines().flatten() {
-                if line.contains("FIXME") {
+            for line in reader.lines() {
+                if line?.contains("FIXME") {
                     fixmes.insert(entry.path().to_path_buf());
                     break;
                 }

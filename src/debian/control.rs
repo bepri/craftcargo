@@ -307,7 +307,7 @@ impl Package {
         // https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=901827#35
         // https://wiki.debian.org/Teams/RustPackaging/Policy#Package_provides
         let mut provides = vec![];
-        let version_suffixes = vec![
+        let version_suffixes = [
             "".to_string(),
             format!("-{}", version.major),
             format!("-{}.{}", version.major, version.minor),

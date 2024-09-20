@@ -1150,6 +1150,7 @@ fn changelog_or_new(tempdir: &Path) -> Result<(fs::File, String)> {
         .read(true)
         .write(true)
         .create(true)
+        .truncate(false)
         .open(tempdir.join("changelog"))?;
     let mut changelog_data = String::new();
     changelog.read_to_string(&mut changelog_data)?;

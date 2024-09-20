@@ -344,10 +344,7 @@ pub fn debian_copyright(
     guess_harder: bool,
 ) -> Result<DebCopyright> {
     let meta = manifest.metadata().clone();
-    let repository = match meta.repository {
-        None => "",
-        Some(ref r) => r,
-    };
+    let repository = meta.repository.unwrap_or_default();
 
     // The Authors field is optional according to
     // https://rust-lang.github.io/rfcs/3052-optional-authors-field.html
@@ -359,7 +356,7 @@ pub fn debian_copyright(
         &meta.authors
     };
 
-    let upstream = UpstreamInfo::new(manifest.name().to_string(), authors, repository);
+    let upstream = UpstreamInfo::new(manifest.name().to_string(), authors, &repository);
 
     let mut licenses: Vec<License> = Vec::new();
     let mut crate_license: String = "".to_string();
@@ -404,7 +401,7 @@ pub fn debian_copyright(
     // Insert catch all block as the first block of copyright file. Capture
     // copyright notice from git log of the upstream repository.
     let years = if guess_harder && !repository.is_empty() {
-        match copyright_fromgit(repository) {
+        match copyright_fromgit(&repository) {
             Ok(x) => x,
             Err(e) => {
                 debcargo_warn!(
