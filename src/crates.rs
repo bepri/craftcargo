@@ -1,19 +1,19 @@
 use anyhow::{format_err, Error};
 use cargo::{
-    core::manifest::ManifestMetadata,
-    core::registry::PackageRegistry,
     core::{
-        resolver::features::CliFeatures, Dependency, EitherManifest, FeatureValue, Manifest,
-        Package, PackageId, Registry, SourceId, Summary, Target, TargetKind, Workspace,
+        manifest::ManifestMetadata, registry::PackageRegistry, resolver::features::CliFeatures,
+        Dependency, EitherManifest, FeatureValue, Manifest, Package, PackageId, Registry, SourceId,
+        Summary, Target, TargetKind, Workspace,
     },
-    ops,
-    ops::{PackageOpts, Packages},
+    ops::{self, PackageOpts, Packages},
     sources::{
         source::{MaybePackage, QueryKind, Source},
-        RegistrySource,
+        IndexSummary, RegistrySource,
     },
-    util::{cache_lock::CacheLockMode, interning::InternedString, toml::read_manifest, FileLock},
-    Config,
+    util::{
+        cache_lock::CacheLockMode, interning::InternedString, toml::read_manifest, FileLock,
+        GlobalContext,
+    },
 };
 use filetime::{set_file_times, FileTime};
 use flate2::read::GzDecoder;
@@ -39,7 +39,7 @@ pub struct CrateInfo {
     // allows overriding package.manifest() e.g. via patches
     manifest: Manifest,
     crate_file: FileLock,
-    config: Config,
+    context: GlobalContext,
     source_id: SourceId,
     excludes: Vec<Pattern>,
     includes: Vec<Pattern>,
@@ -61,7 +61,7 @@ fn hash<H: Hash>(hashable: &H) -> u64 {
     hasher.finish()
 }
 
-fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<Vec<Summary>> {
+fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<Vec<IndexSummary>> {
     let mut summaries = match registry.query_vec(dep, QueryKind::Exact) {
         std::task::Poll::Ready(res) => res?,
         std::task::Poll::Pending => {
@@ -74,19 +74,19 @@ fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<
 }
 
 pub fn invalidate_crates_io_cache() -> Result<()> {
-    let config = Config::default()?;
-    let _lock = config.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
-    let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
+    let context = GlobalContext::default()?;
+    let _lock = context.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
+    let source_id = SourceId::crates_io_maybe_sparse_http(&context)?;
     let yanked_whitelist = HashSet::new();
-    let mut r = RegistrySource::remote(source_id, &yanked_whitelist, &config)?;
+    let mut r = RegistrySource::remote(source_id, &yanked_whitelist, &context)?;
     r.invalidate_cache();
     Ok(())
 }
 
 pub fn crate_name_ver_to_dep(crate_name: &str, version: Option<&str>) -> Result<Dependency> {
     // note: this forces a network call
-    let config = Config::default()?;
-    let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
+    let context = GlobalContext::default()?;
+    let source_id = SourceId::crates_io_maybe_sparse_http(&context)?;
     let version = version.and_then(|v| {
         if v.is_empty() {
             None
@@ -113,17 +113,17 @@ impl CrateInfo {
         version: Option<&str>,
         crate_path: &Path,
     ) -> Result<CrateInfo> {
-        let config = Config::default()?;
+        let context = GlobalContext::default()?;
         let crate_path = crate_path.canonicalize()?;
         let source_id = SourceId::for_path(&crate_path)?;
 
         let (package, crate_file) = {
             let yanked_whitelist = HashSet::new();
 
-            let mut source = source_id.load(&config, &yanked_whitelist)?;
+            let mut source = source_id.load(&context, &yanked_whitelist)?;
 
             let package_id = match version {
-                None | Some("") => {
+                None => {
                     let dep = Dependency::parse(crate_name, None, source_id)?;
                     let mut package_id: Option<PackageId> = None;
                     loop {
@@ -141,7 +141,10 @@ impl CrateInfo {
                     }
                     package_id.unwrap()
                 }
-                Some(version) => PackageId::new(crate_name, version, source_id)?,
+                Some(version) => {
+                    let version = version.parse::<Version>()?;
+                    PackageId::new(crate_name.into(), version, source_id)
+                }
             };
 
             let maybe_package = source.download(package_id)?;
@@ -155,10 +158,10 @@ impl CrateInfo {
             }?;
 
             let crate_file = {
-                let workspace = Workspace::ephemeral(package.clone(), &config, None, true)?;
+                let workspace = Workspace::ephemeral(package.clone(), &context, None, true)?;
 
                 let opts = PackageOpts {
-                    config: &config,
+                    gctx: &context,
                     verify: false,
                     list: false,
                     check_metadata: true,
@@ -183,7 +186,7 @@ impl CrateInfo {
                 workspace
                     .target_dir()
                     .join("package")
-                    .open_rw_exclusive_create(filename, &config, "crate file")?
+                    .open_rw_exclusive_create(filename, &context, "crate file")?
             };
 
             (package, crate_file)
@@ -195,7 +198,7 @@ impl CrateInfo {
             package,
             manifest,
             crate_file,
-            config,
+            context,
             source_id,
             excludes: vec![],
             includes: vec![],
@@ -212,32 +215,32 @@ impl CrateInfo {
     }
 
     pub fn new_from_dependency(dependency: &Dependency, update: bool) -> Result<CrateInfo> {
-        let mut config = Config::default()?;
+        let mut context = GlobalContext::default()?;
         if !update {
             // unfriendly API from cargo; we'll have to make do with it for
             // now as there is no other alternative
-            config.configure(
+            context.configure(
                 0,
                 false,
                 None,
-                config.frozen(),
-                config.locked(),
+                context.frozen(),
+                context.locked(),
                 true, // offline
-                &config.target_dir()?.map(|x| x.into_path_unlocked()),
+                &context.target_dir()?.map(|x| x.into_path_unlocked()),
                 &[],
                 &[],
             )?;
         }
 
-        let source_id = SourceId::crates_io_maybe_sparse_http(&config)?;
+        let source_id = SourceId::crates_io_maybe_sparse_http(&context)?;
         let registry_name = format!(
             "{}-{:016x}",
             source_id.url().host_str().unwrap_or(""),
             hash(&source_id).swap_bytes()
         );
-        let get_package_info = |config: &Config| -> Result<_> {
-            let lock = config.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
-            let mut registry = PackageRegistry::new(config)?;
+        let get_package_info = |context: &GlobalContext| -> Result<_> {
+            let lock = context.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
+            let mut registry = PackageRegistry::new(context)?;
             registry.lock_patches();
             let summaries = fetch_candidates(&mut registry, dependency)?;
             drop(lock);
@@ -275,22 +278,22 @@ impl CrateInfo {
                 }
             }
             let filename = format!("{}-{}.crate", pkgid.name(), pkgid.version());
-            let crate_file = config
+            let crate_file = context
                 .registry_cache_path()
                 .join(&registry_name)
-                .open_ro_shared(&filename, config, &filename)?;
+                .open_ro_shared(&filename, context, &filename)?;
             Ok((package.clone(), manifest.clone(), crate_file))
         };
         // if update is false but the user never downloaded the crate then the
         // first call will error; re-try with online in that case
         let (package, manifest, crate_file) =
-            get_package_info(&config).or_else(|_| get_package_info(&Config::default()?))?;
+            get_package_info(&context).or_else(|_| get_package_info(&GlobalContext::default()?))?;
 
         Ok(CrateInfo {
             package,
             manifest,
             crate_file,
-            config,
+            context,
             source_id,
             excludes: vec![],
             includes: vec![],
@@ -319,7 +322,7 @@ impl CrateInfo {
     }
 
     pub fn replace_manifest(&mut self, path: &Path) -> Result<&Self> {
-        if let (EitherManifest::Real(v), _) = read_manifest(path, self.source_id, &self.config)? {
+        if let EitherManifest::Real(v) = read_manifest(path, self.source_id, &self.context)? {
             self.manifest = v;
         }
         Ok(self)
@@ -681,8 +684,7 @@ impl CrateInfo {
             // to handle it specially.
             let old_toml_path = path.join("Cargo.toml.orig");
             fs::copy(&toml_path, &old_toml_path)?;
-            let ws = Workspace::new(&toml_path.canonicalize()?, &self.config)?;
-            let registry_toml = self.package.to_registry_toml(&ws)?;
+            let registry_toml = self.package.manifest().to_resolved_contents()?;
             fs::OpenOptions::new()
                 .write(true)
                 .truncate(true)

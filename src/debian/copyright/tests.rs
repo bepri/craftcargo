@@ -1,10 +1,10 @@
 use super::{debian_copyright, get_licenses};
 
-use std::path::Path;
+use std::{io::Write, path::Path};
 
 use cargo::{
-    core::{package::Package, SourceId},
-    util::{config::Config, toml::schema::TomlManifest},
+    core::{package::Package, EitherManifest, SourceId},
+    GlobalContext,
 };
 use toml::toml;
 
@@ -84,16 +84,26 @@ fn build_package_with_authors(authors: Vec<&str>) -> Package {
         authors = authors
         license = "AGPLv3"
     };
-    let toml_manifest: TomlManifest = toml::from_str(&toml::to_string(&toml).unwrap()).unwrap();
+    let tmp_dir = tempfile::tempdir().unwrap();
+    let manifest_path = tmp_dir.path().join("Cargo.toml");
+    let mut manifest_file = std::fs::File::create(&manifest_path).unwrap();
+    manifest_file
+        .write_all(toml::to_string(&toml).unwrap().as_bytes())
+        .unwrap();
+
+    let src_dir = tmp_dir.path().join("src");
+    std::fs::create_dir(&src_dir).unwrap();
+    std::fs::File::create(src_dir.join("lib.rs")).unwrap();
     #[cfg(unix)]
     let package_root = Path::new("/");
     #[cfg(windows)]
     let package_root = Path::new("C:\\");
-    let source_id = SourceId::for_path(&package_root).unwrap();
-    let config = Config::default().unwrap();
-    let manifest =
-        TomlManifest::to_real_manifest(toml_manifest, false, source_id, &package_root, &config)
-            .unwrap()
-            .0;
-    Package::new(manifest, Path::new("/path/to/manifest"))
+    let source_id = SourceId::for_path(package_root).unwrap();
+    let context = GlobalContext::default().unwrap();
+    let manifest = cargo::util::toml::read_manifest(&manifest_path, source_id, &context).unwrap();
+    if let EitherManifest::Real(manifest) = manifest {
+        Package::new(manifest, Path::new("/path/to/manifest"))
+    } else {
+        unimplemented!();
+    }
 }
