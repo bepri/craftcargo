@@ -23,12 +23,12 @@ use semver::Version;
 use tar::Archive;
 use tempfile;
 
-use std;
 use std::collections::{BTreeMap, HashSet};
 use std::fs;
 use std::hash::{Hash, Hasher};
-use std::io::{self, Read, Write};
+use std::io::{self, Read};
 use std::path::Path;
+use std::{self, ffi::OsStr};
 
 use crate::config::testing_ignore_debpolv;
 use crate::errors::*;
@@ -684,17 +684,35 @@ impl CrateInfo {
             // to handle it specially.
             let old_toml_path = path.join("Cargo.toml.orig");
             fs::copy(&toml_path, &old_toml_path)?;
-            let registry_toml = self.package.manifest().to_resolved_contents()?;
-            fs::OpenOptions::new()
-                .write(true)
-                .truncate(true)
-                .open(&toml_path)?
-                .write_all(registry_toml.as_bytes())?;
-            debcargo_info!(
-                "Rewrote {:?} to canonical form\nOld backed up as {:?}",
-                &toml_path,
-                &old_toml_path,
-            );
+            let ws = Workspace::new(&toml_path.canonicalize()?, &self.context)?;
+            let opts = PackageOpts {
+                gctx: &self.context,
+                list: false,
+                check_metadata: false,
+                allow_dirty: true,
+                verify: false,
+                jobs: None,
+                keep_going: false,
+                to_package: cargo::ops::Packages::Default,
+                targets: Vec::new(),
+                cli_features: CliFeatures::new_all(true),
+            };
+            let res = cargo::ops::package_one(&ws, &self.package, &opts)?
+                .ok_or_else(|| format_err!("Packaging non-canonicalized crate failed!"))?;
+            let mut archive = Archive::new(GzDecoder::new(res.file()));
+            for entry in archive.entries()? {
+                let mut entry = entry?;
+                let entry_path = entry.path()?;
+                eprintln!("{entry_path:?}");
+                let components = entry_path.iter();
+                if components.clone().count() == 2
+                    && components.last() == Some(OsStr::new("Cargo.toml"))
+                {
+                    entry.unpack(&toml_path)?;
+                    break;
+                }
+            }
+            std::fs::remove_dir_all(path.join("target"))?;
             source_modified = true;
             // avoid lintian errors about package-contains-ancient-file
             // TODO: do we want to do this for unmodified tarballs? it would
