@@ -353,7 +353,7 @@ pub fn prepare_debian_folder(
                 )?;
                 writeln!(
                     watch,
-                    r"uversionmangle=s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\d*)$/$1~$2/ \"
+                    r"uversionmangle=s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/ \"
                 )?;
                 writeln!(
                     watch,
