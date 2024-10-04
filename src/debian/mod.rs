@@ -674,7 +674,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
         base_pkgname,
         name_suffix,
         crate_name,
-        meta.homepage.as_ref().unwrap_or(&"".to_owned()),
+        meta.homepage.as_deref().unwrap_or(""),
         lib,
         maintainer.to_string(),
         uploaders.iter().map(|s| s.to_string()).collect(),
