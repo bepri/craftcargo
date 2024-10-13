@@ -718,7 +718,7 @@ impl CrateInfo {
                 false
             };
 
-            if check_reference("license_file", self.metadata().license_file.as_deref())
+            if check_reference("license-file", self.metadata().license_file.as_deref())
                 || check_reference("readme", self.metadata().readme.as_deref())
             {
                 fs::write(&toml_path, actual_toml.as_bytes())?;
