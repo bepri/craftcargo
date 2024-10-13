@@ -684,6 +684,7 @@ impl CrateInfo {
             // already do this before uploading the crate and we shouldn't need
             // to handle it specially.
             log::debug!("Cargo.toml not canonicalized..");
+            let orig_toml = actual_toml.clone();
 
             // Some old uncanonicalized Cargo.toml files contain invalid relative references to
             // license or readme files that newer cargo doesn't accept anymore.. attempt to monkey
@@ -743,27 +744,19 @@ impl CrateInfo {
                 .first()
                 .ok_or_else(|| format_err!("No canonicalized archives found.."))?;
             let mut archive = Archive::new(GzDecoder::new(file.file()));
-            let mut unpacked = 0;
-            let orig_toml_path = OsStr::new("Cargo.toml.orig");
-            let canonicalized_toml_path = OsStr::new("Cargo.toml");
 
             for entry in archive.entries()? {
                 let mut entry = entry?;
                 let entry_path = entry.path()?;
                 let components = entry_path.iter();
-                if components.clone().count() == 2 {
-                    if let Some(archive_path) = components.clone().last() {
-                        if archive_path == orig_toml_path || archive_path == canonicalized_toml_path
-                        {
-                            entry.unpack(path.join(archive_path))?;
-                            unpacked += 1;
-                        }
-                    }
-                }
-                if unpacked == 2 {
+                if components.clone().count() == 2
+                    && components.last() == Some(OsStr::new("Cargo.toml"))
+                {
+                    entry.unpack(&toml_path)?;
                     break;
                 }
             }
+            fs::write(path.join("Cargo.toml.orig"), orig_toml.as_bytes())?;
             std::fs::remove_dir_all(path.join("target"))?;
             source_modified = true;
             // avoid lintian errors about package-contains-ancient-file
