@@ -8,7 +8,7 @@ use cargo::{
     ops::{self, PackageOpts, Packages},
     sources::{
         source::{MaybePackage, QueryKind, Source},
-        IndexSummary, RegistrySource,
+        IndexSummary, RegistrySource, SourceConfigMap,
     },
     util::{
         cache_lock::CacheLockMode, interning::InternedString, toml::read_manifest, FileLock,
@@ -240,7 +240,8 @@ impl CrateInfo {
         );
         let get_package_info = |context: &GlobalContext| -> Result<_> {
             let lock = context.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
-            let mut registry = PackageRegistry::new(context)?;
+            let mut registry =
+                PackageRegistry::new_with_source_config(context, SourceConfigMap::new(context)?)?;
             registry.lock_patches();
             let summaries = fetch_candidates(&mut registry, dependency)?;
             drop(lock);
@@ -697,8 +698,7 @@ impl CrateInfo {
                 targets: Vec::new(),
                 cli_features: CliFeatures::new_all(true),
             };
-            let res = cargo::ops::package_one(&ws, &self.package, &opts)?
-                .ok_or_else(|| format_err!("Packaging non-canonicalized crate failed!"))?;
+            let res = cargo::ops::package_one(&ws, &self.package, &opts)?;
             let mut archive = Archive::new(GzDecoder::new(res.file()));
             for entry in archive.entries()? {
                 let mut entry = entry?;
