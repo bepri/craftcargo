@@ -612,7 +612,7 @@ impl CrateInfo {
         }
     }
 
-    pub fn extract_crate(&self, path: &Path) -> Result<bool> {
+    pub fn extract_crate(&mut self, path: &Path) -> Result<bool> {
         let mut archive = Archive::new(GzDecoder::new(self.crate_file.file()));
         let tempdir = tempfile::Builder::new()
             .prefix("debcargo")
@@ -683,11 +683,50 @@ impl CrateInfo {
             // if-conditional is supposed to check; modern versions of cargo
             // already do this before uploading the crate and we shouldn't need
             // to handle it specially.
-            let old_toml_path = path.join("Cargo.toml.orig");
-            fs::copy(&toml_path, &old_toml_path)?;
-            let ws = Workspace::new(&toml_path.canonicalize()?, &self.context)?;
+            log::debug!("Cargo.toml not canonicalized..");
+
+            // Some old uncanonicalized Cargo.toml files contain invalid relative references to
+            // license or readme files that newer cargo doesn't accept anymore.. attempt to monkey
+            // patch them if possible
+            let mut check_reference = |name, value: Option<&str>| {
+                if let Some(referenced_path) = value {
+                    let full_referenced_path = path.join(referenced_path);
+                    if !full_referenced_path.exists() {
+                        debcargo_warn!(
+                            "Cargo.toml references non-existing license_file path: {:?}",
+                            full_referenced_path
+                        );
+                        if let Some((_prefix, file)) = referenced_path.rsplit_once("/") {
+                            if path.join(file).exists() {
+                                debcargo_info!("Replacing reference with '{}'", file);
+                                actual_toml = actual_toml.replace(referenced_path, file);
+                            } else {
+                                debcargo_info!("Removing reference");
+                                actual_toml = actual_toml
+                                    .replace(&format!("{name} = \"{referenced_path}\""), "");
+                            }
+                        } else {
+                            debcargo_info!("Removing reference");
+                            actual_toml =
+                                actual_toml.replace(&format!("{name} = \"{referenced_path}\""), "");
+                        }
+                        return true;
+                    }
+                }
+
+                false
+            };
+
+            if check_reference("license_file", self.metadata().license_file.as_deref())
+                || check_reference("readme", self.metadata().readme.as_deref())
+            {
+                fs::write(&toml_path, actual_toml.as_bytes())?;
+            }
+            let updated = self.replace_manifest(&toml_path.canonicalize()?)?;
+
+            let ws = Workspace::new(&toml_path.canonicalize()?, &updated.context)?;
             let opts = PackageOpts {
-                gctx: &self.context,
+                gctx: &updated.context,
                 list: false,
                 check_metadata: false,
                 allow_dirty: true,
@@ -698,17 +737,30 @@ impl CrateInfo {
                 targets: Vec::new(),
                 cli_features: CliFeatures::new_all(true),
             };
-            let res = cargo::ops::package_one(&ws, &self.package, &opts)?;
-            let mut archive = Archive::new(GzDecoder::new(res.file()));
+            let res = cargo::ops::package(&ws, &opts)?;
+            let files = res.ok_or_else(|| format_err!("Failed to canonicalize"))?;
+            let file = files
+                .first()
+                .ok_or_else(|| format_err!("No canonicalized archives found.."))?;
+            let mut archive = Archive::new(GzDecoder::new(file.file()));
+            let mut unpacked = 0;
+            let orig_toml_path = OsStr::new("Cargo.toml.orig");
+            let canonicalized_toml_path = OsStr::new("Cargo.toml");
+
             for entry in archive.entries()? {
                 let mut entry = entry?;
                 let entry_path = entry.path()?;
-                eprintln!("{entry_path:?}");
                 let components = entry_path.iter();
-                if components.clone().count() == 2
-                    && components.last() == Some(OsStr::new("Cargo.toml"))
-                {
-                    entry.unpack(&toml_path)?;
+                if components.clone().count() == 2 {
+                    if let Some(archive_path) = components.clone().last() {
+                        if archive_path == orig_toml_path || archive_path == canonicalized_toml_path
+                        {
+                            entry.unpack(path.join(archive_path))?;
+                            unpacked += 1;
+                        }
+                    }
+                }
+                if unpacked == 2 {
                     break;
                 }
             }
@@ -719,6 +771,7 @@ impl CrateInfo {
             // force us to modify them, but otherwise we get that ugly warning
             let last_mtime = FileTime::from_unix_time(last_mtime as i64, 0);
             set_file_times(toml_path, last_mtime, last_mtime)?;
+            debcargo_info!("Cargo.toml manually canonicalized!");
         }
         Ok(source_modified)
     }
