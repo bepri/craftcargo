@@ -50,6 +50,7 @@ pub struct PkgTest {
     extra_test_args: Vec<String>,
     depends: Vec<String>,
     extra_restricts: Vec<String>,
+    architecture: Vec<String>,
 }
 
 impl fmt::Display for Source {
@@ -149,6 +150,9 @@ impl fmt::Display for PkgTest {
             "Restrictions: allow-stderr, skip-not-installable{}",
             restricts,
         )?;
+        if !self.architecture.is_empty() {
+            writeln!(f, "Architecture: {}", self.architecture.join(" "))?;
+        }
         Ok(())
     }
 }
@@ -504,6 +508,7 @@ impl fmt::Display for Description {
 }
 
 impl PkgTest {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         name: &str,
         crate_name: &str,
@@ -512,6 +517,7 @@ impl PkgTest {
         extra_test_args: Vec<&str>,
         depends: &[String],
         extra_restricts: Vec<&str>,
+        architecture: &[&str],
     ) -> Result<PkgTest> {
         Ok(PkgTest {
             name: name.to_string(),
@@ -521,6 +527,7 @@ impl PkgTest {
             extra_test_args: extra_test_args.iter().map(|x| x.to_string()).collect(),
             depends: depends.to_vec(),
             extra_restricts: extra_restricts.iter().map(|x| x.to_string()).collect(),
+            architecture: architecture.iter().map(|x| x.to_string()).collect(),
         })
     }
 }

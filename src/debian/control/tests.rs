@@ -5,6 +5,7 @@ struct PkgTestFmtData<'a> {
     extra_test_args: Vec<&'a str>,
     depends: Vec<String>,
     extra_restricts: Vec<&'a str>,
+    architecture: &'a [&'a str],
 }
 
 #[test]
@@ -15,12 +16,14 @@ fn pkgtest_fmt_has_no_extra_whitespace() {
             extra_test_args: Vec::new(),
             depends: Vec::new(),
             extra_restricts: Vec::new(),
+            architecture: &[],
         },
         PkgTestFmtData {
             feature: "X",
             extra_test_args: vec!["--no-default-features", "--features X"],
             depends: vec!["libfoo-dev".into(), "bar".into()],
             extra_restricts: vec!["flaky"],
+            architecture: &["!riscv64"],
         },
     ];
 
@@ -33,6 +36,7 @@ fn pkgtest_fmt_has_no_extra_whitespace() {
             check.extra_test_args,
             &check.depends,
             check.extra_restricts,
+            check.architecture,
         )
         .unwrap();
 

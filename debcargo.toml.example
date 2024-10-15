@@ -227,7 +227,14 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 # Some tests depend on extra system tools or libraries, which need to be given
 # to autopkgtest. Like test_is_broken, the effect is transitive to its rdeps.
 #test_depends = []
-#
+
+# Some tests might be broken on certain architectures, or just take too long.
+# This allows to (transitively) set Architecture restrictions (either positive
+# or negative) for autopkgtests. Use an explicit empty list ([]) to reset an
+# inherited restriction. The "@" (all features) test will default to a
+# combination of all individual restrictions.
+#test_architecture = []
+
 # Note: we do not (currently) support unsetting of this in indirect rdeps. This
 # would result in similar conflict issues as documented for test_is_broken. It
 # is possible to work around it similarly, by requiring manual resolution - but

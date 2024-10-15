@@ -55,6 +55,7 @@ pub struct PackageOverride {
     provides: Option<Vec<String>>,
     extra_lines: Option<Vec<String>>,
     test_is_broken: Option<bool>,
+    test_architecture: Option<Vec<String>>,
     test_depends: Option<Vec<String>>,
 }
 
@@ -202,6 +203,10 @@ impl Config {
 
     pub fn package_test_is_broken(&self, key: PackageKey) -> Option<bool> {
         self.with_package(key, |pkg| pkg.test_is_broken)
+    }
+
+    pub fn package_test_architecture(&self, key: PackageKey) -> Option<&Vec<String>> {
+        self.with_package(key, |pkg| pkg.test_architecture.as_ref())
     }
 
     pub fn package_test_depends(&self, key: PackageKey) -> Option<&Vec<String>> {

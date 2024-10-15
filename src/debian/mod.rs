@@ -1,6 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::io::{self, ErrorKind, Read, Seek, Write as IoWrite};
+use std::ops::Deref;
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
@@ -12,6 +13,7 @@ use chrono::{self, Datelike};
 use flate2::read::GzDecoder;
 use flate2::write::GzEncoder;
 use flate2::Compression;
+use itertools::Itertools;
 use regex::Regex;
 use tar::{Archive, Builder};
 use tempfile;
@@ -657,6 +659,23 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
         }
     };
 
+    let test_architecture = |f: &str| {
+        let getparents = |f: &str| features_with_deps.get(f).map(|(d, _)| d);
+        let feature_get_test_architecture =
+            |f: &str| config.package_test_architecture(PackageKey::feature(f));
+        match get_transitive_val(&getparents, &feature_get_test_architecture, f) {
+            Err((k, vv)) => debcargo_bail!(
+                "{} {}: {}: {:?}",
+                "error trying to recursively determine test_architecture for",
+                k,
+                "dependencies have inconsistent config values",
+                vv
+            ),
+            Ok(Some(v)) if v.is_empty() => Ok(None), // allow resetting via explicit empty list
+            Ok(other) => Ok(other),
+        }
+    };
+
     let build_deps = {
         let rustc = rustc_dep(&crate_info.rust_version(), true);
         let build_deps = ["debhelper-compat (= 13)", "dh-sequence-cargo"]
@@ -735,6 +754,21 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
                 .iter()
                 .any(|f| test_is_marked_broken(f).unwrap_or(false)),
         };
+        let all_features_test_arch = match test_architecture("@")? {
+            Some(v) => v.to_owned(),
+            None => all_features
+                .iter()
+                .fold(HashSet::new(), |mut set, f| {
+                    if let Ok(Some(arch)) = test_architecture(f) {
+                        set.extend(arch.to_owned());
+                    }
+                    set
+                })
+                .into_iter()
+                .collect_vec(),
+        };
+        let all_features_test_arch: Vec<&str> =
+            all_features_test_arch.iter().map(AsRef::as_ref).collect();
         let all_features_test_depends =
             generate_test_dependencies("@", &all_features, config, &test_deps);
         let mut testctl = io::BufWriter::new(file("tests/control")?);
@@ -753,6 +787,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
                 } else {
                     vec![]
                 },
+                all_features_test_arch.deref(),
             )?
         )?;
 
@@ -966,6 +1001,11 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
 
                 // deps
                 let test_depends = generate_test_dependencies(f, &feature_deps, config, &test_deps);
+                let test_arch = match test_architecture(f)? {
+                    Some(v) => v.to_owned(),
+                    None => Vec::new(),
+                };
+                let test_arch: Vec<&str> = test_arch.iter().map(AsRef::as_ref).collect();
                 let pkgtest = PkgTest::new(
                     package.name(),
                     crate_name,
@@ -978,6 +1018,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
                     } else {
                         vec![]
                     },
+                    test_arch.deref(),
                 )?;
                 write!(testctl, "\n{}", pkgtest)?;
             }
