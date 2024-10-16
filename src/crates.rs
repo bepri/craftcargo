@@ -18,6 +18,7 @@ use cargo::{
 use filetime::{set_file_times, FileTime};
 use flate2::read::GzDecoder;
 use glob::Pattern;
+use itertools::Itertools;
 use regex::Regex;
 use semver::Version;
 use tar::Archive;
@@ -97,6 +98,50 @@ pub fn crate_name_ver_to_dep(crate_name: &str, version: Option<&str>) -> Result<
         }
     });
     Dependency::parse(crate_name, version.as_deref(), source_id)
+}
+
+// attempt to map back a version requirement to a version that can be used as last resort
+// fallback in case all versions satisfying the requirement are yanked
+fn ver_req_to_ver(dep: &Dependency) -> Option<Version> {
+    match dep.version_req() {
+        // if any version would satisfy the dep, but all of them are yanked, we probably don't want
+        // to use this crate anyway ;)
+        cargo::util::OptVersionReq::Any => None,
+        // a regular version requirement is only useful if it has a single element
+        cargo::util::OptVersionReq::Req(req) if req.comparators.len() == 1 => {
+            let comp = req.comparators.first().unwrap();
+            match comp.op {
+                // these are all satisfied by the full version, if one is set
+                semver::Op::Exact
+                | semver::Op::GreaterEq
+                | semver::Op::LessEq
+                | semver::Op::Tilde
+                | semver::Op::Caret => {
+                    if let Some(minor) = comp.minor {
+                        // if the requirement comes with a full version extract it
+                        comp.patch.map(|patch| semver::Version {
+                            major: comp.major,
+                            minor,
+                            patch,
+                            pre: comp.pre.clone(),
+                            build: semver::BuildMetadata::default(),
+                        })
+                    } else {
+                        // we'd have to guess here..
+                        None
+                    }
+                }
+                // Greater, Less or Wildcard all require guessing as well
+                _ => None,
+            }
+        }
+        // requirements with multiple constraints
+        cargo::util::OptVersionReq::Req(_) => None,
+        // locked requirements contain an exact version
+        cargo::util::OptVersionReq::Locked(ver, _) => Some(ver.clone()),
+        // precise requirements contain an exact version
+        cargo::util::OptVersionReq::Precise(ver, _) => Some(ver.clone()),
+    }
 }
 
 pub fn show_dep(dep: &Dependency) -> String {
@@ -238,17 +283,32 @@ impl CrateInfo {
             source_id.url().host_str().unwrap_or(""),
             hash(&source_id).swap_bytes()
         );
-        let get_package_info = |context: &GlobalContext| -> Result<_> {
+        let get_package_info = |context: &GlobalContext,
+                                possibly_yanked_ver: Option<&Version>|
+         -> Result<_> {
             let lock = context.acquire_package_cache_lock(CacheLockMode::DownloadExclusive)?;
             let mut registry =
                 PackageRegistry::new_with_source_config(context, SourceConfigMap::new(context)?)?;
+
+            // if we have some exact version that should satisfy our dependency requirements, and
+            // we are on our third attempt of retrieving the crate info from the registry, add this
+            // version to the yanked whitelist as a last resort
+            if let Some(ver) = possibly_yanked_ver {
+                let pkgids = vec![PackageId::new(
+                    dependency.package_name(),
+                    ver.clone(),
+                    dependency.source_id(),
+                )];
+                debcargo_warn!(
+                    "Adding {} to yanked whitelist as last resort..",
+                    pkgids.first().unwrap()
+                );
+                registry.add_to_yanked_whitelist(pkgids.into_iter());
+            }
             registry.lock_patches();
             let summaries = fetch_candidates(&mut registry, dependency)?;
             drop(lock);
-            let pkgids = summaries
-                .into_iter()
-                .map(|s| s.package_id())
-                .collect::<Vec<_>>();
+            let pkgids = summaries.into_iter().map(|s| s.package_id()).collect_vec();
             let pkgid = pkgids.iter().max().ok_or_else(|| {
                 format_err!(
                     concat!(
@@ -260,6 +320,7 @@ impl CrateInfo {
             })?;
             let pkgset = registry.get(pkgids.as_slice())?;
             let package = pkgset.get_one(*pkgid)?;
+
             let manifest = package.manifest();
             for f in dependency.features() {
                 // apparently, if offline is set then cargo sometimes selects
@@ -287,8 +348,16 @@ impl CrateInfo {
         };
         // if update is false but the user never downloaded the crate then the
         // first call will error; re-try with online in that case
-        let (package, manifest, crate_file) =
-            get_package_info(&context).or_else(|_| get_package_info(&GlobalContext::default()?))?;
+        let (package, manifest, crate_file) = get_package_info(&context, None)
+            .or_else(|_| get_package_info(&GlobalContext::default()?, None))
+            .or_else(|err| {
+                let ver = ver_req_to_ver(dependency);
+                if ver.is_some() {
+                    get_package_info(&GlobalContext::default()?, ver.as_ref())
+                } else {
+                    Err(err)
+                }
+            })?;
 
         Ok(CrateInfo {
             package,
