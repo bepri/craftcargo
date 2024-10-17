@@ -638,8 +638,8 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
         }
     };
 
-    let rustc = rustc_dep(&crate_info.rust_version());
     let build_deps = {
+        let rustc = rustc_dep(&crate_info.rust_version(), true);
         let build_deps = ["debhelper-compat (= 13)", "dh-sequence-cargo"]
             .iter()
             .map(|x| x.to_string());
@@ -669,7 +669,10 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
                 .collect()
         }
     };
-    let test_deps: Vec<String> = Some(rustc).into_iter().chain(dev_depends).collect();
+    let test_deps: Vec<String> = Some(rustc_dep(&crate_info.rust_version(), false))
+        .into_iter()
+        .chain(dev_depends)
+        .collect();
     let mut source = Source::new(
         base_pkgname,
         name_suffix,
@@ -1115,11 +1118,12 @@ fn reduce_provides(
     (provides, features_with_deps)
 }
 
-fn rustc_dep(min_ver: &Option<String>) -> String {
+fn rustc_dep(min_ver: &Option<String>, native: bool) -> String {
+    let native = if native { ":native" } else { "" };
     if let Some(min_ver) = min_ver {
-        format!("rustc:native (>= {})", min_ver)
+        format!("rustc{native} (>= {min_ver})")
     } else {
-        "rustc:native".into()
+        format!("rustc{native}")
     }
 }
 
@@ -1131,13 +1135,26 @@ mod test {
     fn rustc_dep_includes_minver() {
         assert_eq!(
             "rustc:native (>= 1.65)",
-            rustc_dep(&Some("1.65".to_string()))
+            rustc_dep(&Some("1.65".to_string()), true)
         );
     }
 
     #[test]
     fn rustc_dep_excludes_minver() {
-        assert_eq!("rustc:native", rustc_dep(&None));
+        assert_eq!("rustc:native", rustc_dep(&None, true));
+    }
+
+    #[test]
+    fn rustc_dep_includes_minver_autopkgtest() {
+        assert_eq!(
+            "rustc (>= 1.65)",
+            rustc_dep(&Some("1.65".to_string()), false)
+        );
+    }
+
+    #[test]
+    fn rustc_dep_excludes_minver_autopkgtest() {
+        assert_eq!("rustc", rustc_dep(&None, false));
     }
 }
 
