@@ -594,6 +594,15 @@ impl CrateInfo {
             Some(ext) => ext == "c" || ext == "a",
             _ => false,
         };
+
+        let debian_dir_pattern = Pattern::new("*/debian/*").unwrap();
+        if debian_dir_pattern.matches_path(path) {
+            return Err(format!(
+                "Suspicious file or directory, should probably be excluded: {:?}",
+                path
+            ));
+        }
+
         if suspicious {
             if self.includes.iter().any(|p| p.matches_path(path)) {
                 debcargo_info!("Suspicious file, on whitelist so ignored: {:?}", path);
