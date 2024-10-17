@@ -41,8 +41,8 @@ pub struct CrateInfo {
     crate_file: FileLock,
     context: GlobalContext,
     source_id: SourceId,
-    excludes: Vec<Pattern>,
-    includes: Vec<Pattern>,
+    excludes: Vec<String>,
+    includes: Vec<String>,
 }
 
 pub type CrateDepInfo = BTreeMap<
@@ -574,20 +574,25 @@ impl CrateInfo {
         excludes: Option<&Vec<String>>,
         includes: Option<&Vec<String>>,
     ) {
-        self.excludes = excludes
-            .into_iter()
-            .flatten()
-            .map(|x| Pattern::new(&("*/".to_owned() + x)).unwrap())
-            .collect::<Vec<_>>();
-        self.includes = includes
-            .into_iter()
-            .flatten()
-            .map(|x| Pattern::new(&("*/".to_owned() + x)).unwrap())
-            .collect::<Vec<_>>();
+        self.excludes = excludes.cloned().unwrap_or_default();
+        self.includes = includes.cloned().unwrap_or_default();
     }
 
     pub fn filter_path(&self, path: &Path) -> ::std::result::Result<bool, String> {
-        if self.excludes.iter().any(|p| p.matches_path(path)) {
+        let top_level = path
+            .ancestors()
+            .find(|p| p.parent() == Some(Path::new("")))
+            .unwrap()
+            .to_str()
+            .ok_or_else(|| format!("Failed to get top-level element of {path:?}"))?;
+
+        let matches = move |pattern: &String| -> bool {
+            Pattern::new(&format!("{top_level}/{pattern}"))
+                .unwrap()
+                .matches_path(path)
+        };
+
+        if self.excludes.iter().any(matches) {
             return Ok(true);
         }
         let suspicious = match path.extension() {
@@ -595,7 +600,7 @@ impl CrateInfo {
             _ => false,
         };
 
-        let debian_dir_pattern = Pattern::new("*/debian/*").unwrap();
+        let debian_dir_pattern = Pattern::new(&format!("{top_level}/debian/*")).unwrap();
         if debian_dir_pattern.matches_path(path) {
             return Err(format!(
                 "Suspicious file or directory, should probably be excluded: {:?}",
@@ -604,7 +609,7 @@ impl CrateInfo {
         }
 
         if suspicious {
-            if self.includes.iter().any(|p| p.matches_path(path)) {
+            if self.includes.iter().any(matches) {
                 debcargo_info!("Suspicious file, on whitelist so ignored: {:?}", path);
                 Ok(false)
             } else if testing_ignore_debpolv() {
