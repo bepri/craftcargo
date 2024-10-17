@@ -4,21 +4,11 @@ Index: openssl-sys-0.9.93/Cargo.toml
 ===================================================================
 --- openssl-sys-0.9.93.orig/Cargo.toml
 +++ openssl-sys-0.9.93/Cargo.toml
-@@ -31,10 +31,6 @@ repository = "https://github.com/sfackle
- [package.metadata.pkg-config]
- openssl = "1.0.1"
- 
+@@ -34,4 +34,0 @@ repository = "https://github.com/sfackle
 -[dependencies.bssl-sys]
 -version = "0.1.0"
 -optional = true
 -
- [dependencies.libc]
- version = "0.2"
- 
-@@ -58,5 +54,5 @@ version = "0.3.9"
- version = "0.2.8"
- 
- [features]
+@@ -61,1 +57,1 @@ version = "0.3.9"
 -unstable_boringssl = ["bssl-sys"]
 +unstable_boringssl = []
- vendored = ["openssl-src"]
