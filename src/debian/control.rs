@@ -314,6 +314,11 @@ impl Package {
             format!("-{}.{}.{}", version.major, version.minor, version.patch),
         ];
         for suffix in version_suffixes.iter() {
+            // don't provide unversioned variants in semver-suffix packages
+            if name_suffix.is_some() && suffix.is_empty() {
+                continue;
+            };
+
             let p = format!("{}{}", basename, suffix);
             provides.push(deb_feature2(&p, feature.unwrap_or("")));
             provides.extend(f_provides.iter().map(|f| deb_feature2(&p, f)));
@@ -370,10 +375,14 @@ impl Package {
             description,
             extra_lines: match (name_suffix, feature) {
                 (Some(_), None) => {
-                    let fullpkg = format!("{}-{}", basename, version);
+                    // B+R needs to be set on "real" package, not virtual ones
+                    // constrain by "next" version, so that it is possible to install a newer,
+                    // non-suffixed package at the same time
+                    let mut next_version = version.clone();
+                    next_version.patch += 1;
                     vec![
-                        format!("Replaces: {}", deb_name(&fullpkg)),
-                        format!("Breaks: {}", deb_name(&fullpkg)),
+                        format!("Replaces: {} (<< {}~)", deb_name(basename), next_version),
+                        format!("Breaks: {} (<< {}~)", deb_name(basename), next_version),
                     ]
                 }
                 (_, _) => vec![],
