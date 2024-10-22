@@ -231,7 +231,7 @@ dependencies = [
  "cargo-credential-wincred",
  "cargo-platform",
  "cargo-util",
- "cargo-util-schemas 0.5.0",
+ "cargo-util-schemas",
  "clap",
  "color-print",
  "crates-io",
@@ -366,22 +366,6 @@ dependencies = [
  "tracing",
  "walkdir",
  "windows-sys 0.52.0",
-]
-
-[[package]]
-name = "cargo-util-schemas"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34ddc7fc157e3dbbd88f05ef8be7c3ed3ecb05925a3f51f716d6103a607fb7c4"
-dependencies = [
- "semver",
- "serde",
- "serde-untagged",
- "serde-value",
- "thiserror",
- "toml",
- "unicode-xid",
- "url",
 ]
 
 [[package]]
@@ -665,13 +649,13 @@ dependencies = [
 
 [[package]]
 name = "debcargo"
-version = "2.7.2-alpha.0"
+version = "2.7.3-alpha.0"
 dependencies = [
  "ansi_term",
  "anyhow",
  "cargo",
  "cargo-util",
- "cargo-util-schemas 0.4.0",
+ "cargo-util-schemas",
  "chrono",
  "clap",
  "env_logger",
