@@ -219,8 +219,9 @@ pub fn apply_overlay_and_patches(
 it's a maintenance burden. Use debcargo.toml instead."
         )
     }
+    // apply patches to Cargo.toml in case they exist, and re-read it
     if tempdir.path().join("patches").join("series").exists() {
-        // apply patches to Cargo.toml in case they exist, and re-read it
+        debcargo_info!("applying patches..");
         let output_dir = &fs::canonicalize(output_dir)?;
         let stderr = || {
             // create a new owned handle to stderr
@@ -229,15 +230,32 @@ it's a maintenance burden. Use debcargo.toml instead."
                 .open("/dev/stderr")
                 .unwrap()
         };
-        expect_success(
+        // common case, patches might need rebasing!
+        if let Err(err) = expect_success(
             Command::new("quilt")
                 .stdout(stderr())
                 .current_dir(output_dir)
                 .env("QUILT_PATCHES", tempdir.path().join("patches"))
                 .args(["push", "--quiltrc=-", "-a"]),
             "failed to apply patches using quilt",
-        );
+        ) {
+            debcargo_warn!(format!("{err}, attempting cleanup"));
+            let _ = expect_success(
+                Command::new("quilt")
+                    .stdout(stderr())
+                    .current_dir(output_dir)
+                    .env("QUILT_PATCHES", tempdir.path().join("patches"))
+                    .args(["pop", "--quiltrc=-", "-a", "-f"]),
+                "failed to unapply partially applied patches",
+            );
+            std::fs::remove_dir_all(&output_dir.join(".pc"))?;
+            debcargo_bail!("applying patches failed! see above for details..");
+        }
+        debcargo_info!("reloading Cargo.toml..");
         crate_info.replace_manifest(&output_dir.join("Cargo.toml"))?;
+
+        // this should never fail!
+        debcargo_info!("unapplying patches again..");
         expect_success(
             Command::new("quilt")
                 .stdout(stderr())
@@ -245,7 +263,8 @@ it's a maintenance burden. Use debcargo.toml instead."
                 .env("QUILT_PATCHES", tempdir.path().join("patches"))
                 .args(["pop", "--quiltrc=-", "-a"]),
             "failed to unapply patches",
-        );
+        )?;
+        std::fs::remove_dir_all(&output_dir.join(".pc"))?;
     }
     Ok(tempdir)
 }
