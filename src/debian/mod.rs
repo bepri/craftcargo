@@ -169,7 +169,7 @@ pub fn prepare_orig_tarball(
                     Err(e) => debcargo_bail!(e),
                     Ok(r) => {
                         if !r {
-                            new_archive.append(&entry.header().clone(), entry)?;
+                            new_archive.append_data(&mut entry.header().clone(), path, entry)?;
                         } else {
                             writeln!(
                                 io::stderr(),
