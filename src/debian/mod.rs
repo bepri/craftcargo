@@ -250,7 +250,7 @@ it's a maintenance burden. Use debcargo.toml instead."
                     .args(["pop", "--quiltrc=-", "-a", "-f"]),
                 "failed to unapply partially applied patches",
             );
-            std::fs::remove_dir_all(&output_dir.join(".pc"))?;
+            std::fs::remove_dir_all(output_dir.join(".pc"))?;
             debcargo_bail!("applying patches failed! see above for details..");
         }
         debcargo_info!("reloading Cargo.toml..");
@@ -266,7 +266,7 @@ it's a maintenance burden. Use debcargo.toml instead."
                 .args(["pop", "--quiltrc=-", "-a"]),
             "failed to unapply patches",
         )?;
-        std::fs::remove_dir_all(&output_dir.join(".pc"))?;
+        std::fs::remove_dir_all(output_dir.join(".pc"))?;
     }
     Ok(tempdir)
 }
@@ -1187,37 +1187,6 @@ fn rustc_dep(min_ver: &Option<String>, native: bool) -> String {
     }
 }
 
-#[cfg(test)]
-mod test {
-    use super::rustc_dep;
-
-    #[test]
-    fn rustc_dep_includes_minver() {
-        assert_eq!(
-            "rustc:native (>= 1.65)",
-            rustc_dep(&Some("1.65".to_string()), true)
-        );
-    }
-
-    #[test]
-    fn rustc_dep_excludes_minver() {
-        assert_eq!("rustc:native", rustc_dep(&None, true));
-    }
-
-    #[test]
-    fn rustc_dep_includes_minver_autopkgtest() {
-        assert_eq!(
-            "rustc (>= 1.65)",
-            rustc_dep(&Some("1.65".to_string()), false)
-        );
-    }
-
-    #[test]
-    fn rustc_dep_excludes_minver_autopkgtest() {
-        assert_eq!("rustc", rustc_dep(&None, false));
-    }
-}
-
 fn changelog_or_new(tempdir: &Path) -> Result<(fs::File, String)> {
     let mut changelog = fs::OpenOptions::new()
         .read(true)
@@ -1247,5 +1216,36 @@ fn changelog_first_last(tempdir: &Path) -> Result<(i32, i32)> {
         Ok((first.unwrap(), last))
     } else {
         Err(format_err!("changelog had no entries"))
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::rustc_dep;
+
+    #[test]
+    fn rustc_dep_includes_minver() {
+        assert_eq!(
+            "rustc:native (>= 1.65)",
+            rustc_dep(&Some("1.65".to_string()), true)
+        );
+    }
+
+    #[test]
+    fn rustc_dep_excludes_minver() {
+        assert_eq!("rustc:native", rustc_dep(&None, true));
+    }
+
+    #[test]
+    fn rustc_dep_includes_minver_autopkgtest() {
+        assert_eq!(
+            "rustc (>= 1.65)",
+            rustc_dep(&Some("1.65".to_string()), false)
+        );
+    }
+
+    #[test]
+    fn rustc_dep_excludes_minver_autopkgtest() {
+        assert_eq!("rustc", rustc_dep(&None, false));
     }
 }
