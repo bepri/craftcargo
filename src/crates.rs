@@ -216,17 +216,10 @@ impl CrateInfo {
                     targets: Vec::new(),
                     to_package: Packages::Default,
                     keep_going: false,
+                    reg_or_index: None,
                 };
+                ops::package(&workspace, &opts)?;
 
-                // as of cargo 0.41 this returns a FileLock with a temp path, instead of the one
-                // it got renamed to
-                if ops::package(&workspace, &opts)?.is_none() {
-                    return Err(format_err!(
-                        "Failed to assemble crate file for local crate {} at {}\n",
-                        crate_name,
-                        crate_path.display()
-                    ));
-                }
                 let filename = format!("{}-{}.crate", crate_name, package_id.version());
                 workspace
                     .target_dir()
@@ -820,9 +813,9 @@ impl CrateInfo {
                 to_package: cargo::ops::Packages::Default,
                 targets: Vec::new(),
                 cli_features: CliFeatures::new_all(true),
+                reg_or_index: None,
             };
-            let res = cargo::ops::package(&ws, &opts)?;
-            let files = res.ok_or_else(|| format_err!("Failed to canonicalize"))?;
+            let files = cargo::ops::package(&ws, &opts)?;
             let file = files
                 .first()
                 .ok_or_else(|| format_err!("No canonicalized archives found.."))?;
