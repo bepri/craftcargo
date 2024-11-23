@@ -711,11 +711,19 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<std::fs::File, s
         .into_iter()
         .chain(dev_depends)
         .collect();
+
+    // prefer Cargo.toml homepage, fallback to Cargo.toml repository
+    let homepage = meta
+        .homepage
+        .as_deref()
+        .or(meta.repository.as_deref())
+        .unwrap_or("");
+
     let mut source = Source::new(
         base_pkgname,
         name_suffix,
         crate_name,
-        meta.homepage.as_deref().unwrap_or(""),
+        homepage,
         lib,
         maintainer.to_string(),
         uploaders.iter().map(|s| s.to_string()).collect(),
