@@ -649,7 +649,7 @@ dependencies = [
 
 [[package]]
 name = "debcargo"
-version = "2.7.5-alpha.0"
+version = "2.7.5"
 dependencies = [
  "ansi_term",
  "anyhow",
