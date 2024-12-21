@@ -1,6 +1,6 @@
 use anyhow;
 
-pub type Result<T> = ::std::result::Result<T, anyhow::Error>;
+pub type Result<T> = std::result::Result<T, anyhow::Error>;
 pub use anyhow::format_err;
 
 #[macro_export]

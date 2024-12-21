@@ -192,7 +192,7 @@ fn gen_files(debsrcdir: &Path) -> Result<Vec<Files>> {
         regex::Regex::new(r"(?:[Cc]opyright|©)(?:\s|[©:,()Cc<])*\b(\d{4}\b.*)$")?;
 
     // Get current working directory and move inside the extracted source of
-    // crate. This is necessary so as to capture correct path for files in
+    // crate. This is necessary in order to capture correct path for files in
     // debian/copyright.
     let current_dir = env::current_dir()?;
     env::set_current_dir(debsrcdir)?;
@@ -311,7 +311,7 @@ fn copyright_fromgit(repo_url: &str) -> Result<String> {
     let mut revwalker = repo.revwalk()?;
     revwalker.push_head()?;
 
-    // Get the latest and first commit id. This is bit ugly
+    // Get the latest and first commit id. This is a bit ugly
     let latest_id = revwalker.next().unwrap()?;
     let first_id = revwalker.last().unwrap()?; // revwalker ends here is consumed by last
 
@@ -376,7 +376,7 @@ pub fn debian_copyright(
             stext,
         ));
     } else if let Some(ref license) = meta.license {
-        licenses = get_licenses(license).unwrap();
+        licenses = get_licenses(license)?;
         crate_license = license
             .trim()
             .replace('/', " or ")

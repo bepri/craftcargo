@@ -47,19 +47,19 @@ impl V {
     }
 }
 
-impl cmp::Ord for V {
+impl Ord for V {
     fn cmp(&self, other: &V) -> cmp::Ordering {
         self.mmp().cmp(&other.mmp())
     }
 }
 
-impl cmp::PartialOrd for V {
+impl PartialOrd for V {
     fn partial_cmp(&self, other: &V) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl cmp::PartialEq for V {
+impl PartialEq for V {
     fn eq(&self, other: &V) -> bool {
         self.mmp() == other.mmp()
     }
@@ -120,13 +120,13 @@ impl VRange {
                     ranges.extend((ge_maj + 1..lt_maj).map(|maj| (M(maj), None)));
                     ranges.push((M(lt_maj), Some((false, lt))));
                 } else {
-                    assert!(ge_maj == lt_maj);
+                    assert_eq!(ge_maj, lt_maj);
                     if ge_min < lt_min {
                         ranges.push((MM(ge_maj, ge_min), Some((true, ge))));
                         ranges.extend((ge_min + 1..lt_min).map(|min| (MM(ge_maj, min), None)));
                         ranges.push((MM(lt_maj, lt_min), Some((false, lt))));
                     } else {
-                        assert!(ge_min == lt_min);
+                        assert_eq!(ge_min, lt_min);
                         ranges.push((MMP(ge_maj, ge_min, ge_pat), Some((true, ge))));
                         ranges.extend(
                             (ge_pat + 1..lt_pat).map(|pat| (MMP(ge_maj, ge_min, pat), None)),
@@ -271,7 +271,7 @@ fn generate_version_constraints(
 
         (_, _) => {
             // https://github.com/dtolnay/semver/issues/262
-            panic!("Op is non-exhuastive for some reason");
+            panic!("Op is non-exhaustive for some reason");
         }
     }
 
@@ -279,7 +279,7 @@ fn generate_version_constraints(
 }
 
 /// Translates a Cargo dependency into a Debian package dependency.
-pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // result is a AND-clause
+pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // result is an AND-clause
 {
     let dep_dashed = base_deb_name(&dep.package_name());
     let mut suffixes = Vec::new();
@@ -292,7 +292,7 @@ pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // resu
     if suffixes.is_empty() {
         suffixes.push("-dev".to_string());
     }
-    let req = semver::VersionReq::parse(&dep.version_req().to_string()).unwrap();
+    let req = semver::VersionReq::parse(&dep.version_req().to_string())?;
     let mut deps = Vec::new();
     for suffix in suffixes {
         let base = format!("{}-{}", Package::pkg_prefix(), dep_dashed);
@@ -306,7 +306,7 @@ pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // resu
     Ok(deps)
 }
 
-pub fn deb_deps(config: &Config, cdeps: &[Dependency]) -> Result<Vec<String>> // result is a AND-clause
+pub fn deb_deps(config: &Config, cdeps: &[Dependency]) -> Result<Vec<String>> // result is an AND-clause
 {
     let mut deps = Vec::new();
     for dep in cdeps {
@@ -324,3 +324,6 @@ pub fn deb_dep_add_nocheck(x: &str) -> String {
         .trim_end()
         .to_string()
 }
+
+#[cfg(test)]
+mod tests;

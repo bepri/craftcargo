@@ -42,6 +42,12 @@ pub struct Description {
     pub suffix: String,
 }
 
+impl Description {
+    pub fn new(prefix: String, suffix: String) -> Self {
+        Self { prefix, suffix }
+    }
+}
+
 pub struct PkgTest {
     name: String,
     crate_name: String,
@@ -329,7 +335,7 @@ impl Package {
         }
         let provides_self = deb_feature(feature.unwrap_or(""));
         // rust dropped Vec::remove_item for annoying reasons, the below is
-        // an unofficial recommended replacement from the RFC #40062
+        // an unofficialy recommended replacement from the RFC #40062
         let i = provides.iter().position(|x| *x == *provides_self);
         i.map(|i| provides.remove(i));
 

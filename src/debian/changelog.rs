@@ -56,8 +56,7 @@ impl str::FromStr for ChangelogEntry {
 
         let firstline = lines[0];
         let re1 =
-            Regex::new(r"(?i)^(\w[-+0-9a-z.]*) \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+);(.*?)\s*$")
-                .unwrap();
+            Regex::new(r"(?i)^(\w[-+0-9a-z.]*) \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+);(.*?)\s*$")?;
         let matches1 = re1.captures(firstline).unwrap();
         let mut i = 1;
         while line_is_blank(lines[i]) {
@@ -72,7 +71,7 @@ impl str::FromStr for ChangelogEntry {
         while line_is_blank(lines.last().unwrap()) {
             lines.pop();
         }
-        let re2 = Regex::new(r"^ \-\- ((?:.*) <(?:.*)>)  ?(\w.*\S)\s*$").unwrap();
+        let re2 = Regex::new(r"^ \-\- ((?:.*) <(?:.*)>)  ?(\w.*\S)\s*$")?;
         let matches2 = re2.captures(lastline).unwrap();
 
         Ok(Self::new(
@@ -181,3 +180,6 @@ impl<'a> Iterator for ChangelogIterator<'a> {
         Some(str::from_utf8(result).unwrap())
     }
 }
+
+#[cfg(test)]
+mod tests;

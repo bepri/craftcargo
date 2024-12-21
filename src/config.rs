@@ -44,6 +44,27 @@ pub struct SourceOverride {
     build_depends_excludes: Option<Vec<String>>,
 }
 
+impl SourceOverride {
+    pub fn new(
+        section: Option<String>,
+        policy: Option<String>,
+        homepage: Option<String>,
+        vcs_git: Option<String>,
+        vcs_browser: Option<String>,
+        build_depends: Option<Vec<String>>,
+        build_depends_excludes: Option<Vec<String>>,
+    ) -> Self {
+        Self {
+            section,
+            policy,
+            homepage,
+            vcs_git,
+            vcs_browser,
+            build_depends,
+            build_depends_excludes,
+        }
+    }
+}
 #[derive(Deserialize, Debug, Clone, Default)]
 pub struct PackageOverride {
     section: Option<String>,
