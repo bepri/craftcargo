@@ -68,7 +68,10 @@ fn test_v_range() {
 fn test_v_range_to_deb_or_clause_empty() {
     let vr = VRange::new();
 
-    assert_eq!("bases", vr.to_deb_or_clause("base", "s").unwrap())
+    assert_eq!(
+        "base+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
 }
 
 #[test]
@@ -79,8 +82,8 @@ fn test_v_range_to_deb_ge_only() {
     vr.constrain_ge(v1);
 
     assert_eq!(
-        "bases (>= 0.9-~~)",
-        vr.to_deb_or_clause("base", "s").unwrap()
+        "base+feature (>= 0.9-~~)",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
     )
 }
 
@@ -92,8 +95,8 @@ fn test_v_range_to_deb_lt_only() {
     vr.constrain_lt(v1);
 
     assert_eq!(
-        "bases (<< 0.10-~~)",
-        vr.to_deb_or_clause("base", "s").unwrap()
+        "base+feature (<< 0.10-~~)",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
     )
 }
 
@@ -106,7 +109,10 @@ fn test_v_range_to_deb_or_clause_minor_one_apart() {
     vr.constrain_ge(v1);
     vr.constrain_lt(v2);
 
-    assert_eq!("base-0.9s", vr.to_deb_or_clause("base", "s").unwrap())
+    assert_eq!(
+        "base-0.9+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
 }
 
 #[test]
@@ -119,8 +125,8 @@ fn test_v_range_to_deb_or_clause_minor_two_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-0.10s | base-0.9s",
-        vr.to_deb_or_clause("base", "s").unwrap()
+        "base-0.10+feature | base-0.9+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
     )
 }
 
@@ -133,7 +139,10 @@ fn test_v_range_to_deb_or_clause_major_one_apart() {
     vr.constrain_ge(v1);
     vr.constrain_lt(v2);
 
-    assert_eq!("base-9s", vr.to_deb_or_clause("base", "s").unwrap())
+    assert_eq!(
+        "base-9+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
 }
 
 #[test]
@@ -146,8 +155,8 @@ fn test_v_range_to_deb_or_clause_major_two_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-10s | base-9s",
-        vr.to_deb_or_clause("base", "s").unwrap()
+        "base-10+feature | base-9+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
     )
 }
 
@@ -160,7 +169,7 @@ fn test_v_range_to_deb_or_clause_bad_range() {
     vr.constrain_ge(v2);
     vr.constrain_lt(v1);
 
-    let err = vr.to_deb_or_clause("base", "s");
+    let err = vr.to_deb_or_clause("base", "+feature");
     assert!(err.is_err());
     assert_eq!(
         "bad version range: >= 11.0, << 9.0",
