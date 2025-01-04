@@ -131,6 +131,51 @@ fn test_v_range_to_deb_or_clause_minor_two_apart() {
 }
 
 #[test]
+fn test_v_range_to_deb_or_clause_minor_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 0.1.2").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("0.4").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-0.3+feature | base-0.2+feature | base-0.1+feature (>= 0.1.2-~~)",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_or_clause_minor_complicated() {
+    let v1 = V::new(&semver::Comparator::parse(">= 0.1.2").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("0.1.5").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-0.1.4+feature | base-0.1.3+feature | base-0.1.2+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_or_clause_minor_more_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 0.1.2").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("0.4.5").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-0.4+feature (<< 0.4.5-~~) | base-0.3+feature | base-0.2+feature | base-0.1+feature (>= 0.1.2-~~)",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
 fn test_v_range_to_deb_or_clause_major_one_apart() {
     let v1 = V::new(&semver::Comparator::parse("9.0").unwrap()).unwrap();
     let v2 = V::new(&semver::Comparator::parse("10.0").unwrap()).unwrap();
@@ -156,6 +201,51 @@ fn test_v_range_to_deb_or_clause_major_two_apart() {
 
     assert_eq!(
         "base-10+feature | base-9+feature",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_or_clause_major_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 1.2.3").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("4.0").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-3+feature | base-2+feature | base-1+feature (>= 1.2.3-~~)",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_or_clause_major_complicated() {
+    let v1 = V::new(&semver::Comparator::parse(">= 1.2.3").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("1.9.9").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-1.9+feature (<< 1.9.9-~~) | base-1.8+feature | base-1.7+feature | base-1.6+feature | base-1.5+feature | base-1.4+feature | base-1.3+feature | base-1.2+feature (>= 1.2.3-~~)",
+        vr.to_deb_or_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_or_clause_major_more_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 1.2.3").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("4.5.6").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-4+feature (<< 4.5.6-~~) | base-3+feature | base-2+feature | base-1+feature (>= 1.2.3-~~)",
         vr.to_deb_or_clause("base", "+feature").unwrap()
     )
 }
