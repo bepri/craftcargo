@@ -125,7 +125,7 @@ fn test_v_range_to_deb_clause_minor_two_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-0+feature (>= 0.9-~~), base-0+feature (<< 0.11-~~)",
+        "base+feature (>= 0.9-~~), base+feature (<< 0.11-~~)",
         vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
@@ -140,7 +140,7 @@ fn test_v_range_to_deb_clause_minor_complicated_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-0+feature (>= 0.1.2-~~), base-0+feature (<< 0.4-~~)",
+        "base+feature (>= 0.1.2-~~), base+feature (<< 0.4-~~)",
         vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
@@ -170,7 +170,7 @@ fn test_v_range_to_deb_clause_minor_more_complicated_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-0+feature (>= 0.1.2-~~), base-0+feature (<< 0.4.5-~~)",
+        "base+feature (>= 0.1.2-~~), base+feature (<< 0.4.5-~~)",
         vr.to_deb_clause("base", "+feature").unwrap()
     )
 }

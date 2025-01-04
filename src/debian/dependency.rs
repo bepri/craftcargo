@@ -115,16 +115,20 @@ impl VRange {
                 let mut ranges = vec![];
                 let (lt_maj, lt_min, lt_pat) = lt.mmp();
                 let (ge_maj, ge_min, _ge_pat) = ge.mmp();
-                if ge_maj == 0 && lt_maj == 0 && ge_min + 1 == lt_min && lt_pat == 0 {
-                    ranges.push((Some(MM(ge_maj, ge_min)), true, ge));
-                } else if ge_maj + 1 == lt_maj && lt_min == 0 && lt_pat == 0 {
+
+                if ge_maj + 1 == lt_maj && lt_min == 0 && lt_pat == 0 {
                     ranges.push((Some(M(ge_maj)), true, ge));
                 } else if ge_maj < lt_maj {
                     ranges.push((None, true, ge));
                     ranges.push((None, false, lt));
                 } else {
                     assert_eq!(ge_maj, lt_maj);
-                    if ge_min < lt_min {
+                    if ge_maj == 0 && ge_min + 1 == lt_min && lt_pat == 0 {
+                        ranges.push((Some(MM(ge_maj, ge_min)), true, ge));
+                    } else if ge_maj == 0 && ge_min < lt_min {
+                        ranges.push((None, true, ge));
+                        ranges.push((None, false, lt));
+                    } else if ge_min < lt_min {
                         ranges.push((Some(M(ge_maj)), true, ge));
                         ranges.push((Some(M(lt_maj)), false, lt));
                     } else {
