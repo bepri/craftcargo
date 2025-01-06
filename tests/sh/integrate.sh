@@ -195,10 +195,6 @@ build_source() {(
 	local config="$config_dir/${deb_src_name}/debian/debcargo.toml"
 	if [ -f "$config" ]; then
 		option="--config $config"
-		if ! grep -q 'semver_suffix = true' "$config"; then
-			echo >&2 "bad config: $config must contain \"semver_suffix = true\""
-			return 1
-		fi
 		echo >&2 "using config: $config"
 	elif [ "$deb_src_name" != "$($debcargo deb-src-name "$crate" "")" ]; then
 		config="$config_dir/old-version/debian/debcargo.toml"
