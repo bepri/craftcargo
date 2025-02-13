@@ -102,7 +102,7 @@ impl VRange {
         self
     }
 
-    fn to_deb_or_clause(&self, base: &str, suffix: &str) -> Result<String> {
+    fn to_deb_clause(&self, base: &str, suffix: &str) -> Result<String> {
         use debian::dependency::V::*;
         match (&self.ge, &self.lt) {
             (None, None) => Ok(format!("{}{}", base, suffix)),
@@ -114,34 +114,48 @@ impl VRange {
                 }
                 let mut ranges = vec![];
                 let (lt_maj, lt_min, lt_pat) = lt.mmp();
-                let (ge_maj, ge_min, ge_pat) = ge.mmp();
-                if ge_maj < lt_maj {
-                    ranges.push((M(ge_maj), Some((true, ge))));
-                    ranges.extend((ge_maj + 1..lt_maj).map(|maj| (M(maj), None)));
-                    ranges.push((M(lt_maj), Some((false, lt))));
+                let (ge_maj, ge_min, _ge_pat) = ge.mmp();
+
+                if ge_maj + 1 == lt_maj && lt_min == 0 && lt_pat == 0 {
+                    // upper bound doesn't restrict lower bound further if we include the major
+                    // part
+                    ranges.push((Some(M(ge_maj)), true, ge));
+                } else if ge_maj < lt_maj {
+                    // different major versions, unversioned package needs to satisfy
+                    ranges.push((None, true, ge));
+                    ranges.push((None, false, lt));
                 } else {
                     assert_eq!(ge_maj, lt_maj);
-                    if ge_min < lt_min {
-                        ranges.push((MM(ge_maj, ge_min), Some((true, ge))));
-                        ranges.extend((ge_min + 1..lt_min).map(|min| (MM(ge_maj, min), None)));
-                        ranges.push((MM(lt_maj, lt_min), Some((false, lt))));
+                    if ge_maj == 0 && ge_min + 1 == lt_min && lt_pat == 0 {
+                        // upper bound doesn't restrict lower bound further if we include 0.X
+                        ranges.push((Some(MM(ge_maj, ge_min)), true, ge));
+                    } else if ge_maj == 0 && ge_min < lt_min {
+                        // different 0.X versions, unversioned package needs to satisfy
+                        ranges.push((None, true, ge));
+                        ranges.push((None, false, lt));
+                    } else if ge_min < lt_min {
+                        // different minor versions within a major version, any package with the
+                        // corresponding major version can potentially satisfy
+                        ranges.push((Some(M(ge_maj)), true, ge));
+                        ranges.push((Some(M(lt_maj)), false, lt));
                     } else {
+                        // just the patch level differs, but both ends restricted
+                        // any package with the corresponding major.minor version can potentially
+                        // satisfy
                         assert_eq!(ge_min, lt_min);
-                        ranges.push((MMP(ge_maj, ge_min, ge_pat), Some((true, ge))));
-                        ranges.extend(
-                            (ge_pat + 1..lt_pat).map(|pat| (MMP(ge_maj, ge_min, pat), None)),
-                        );
-                        ranges.push((MMP(lt_maj, lt_min, lt_pat), Some((false, lt))));
+                        ranges.push((Some(MM(ge_maj, ge_min)), true, ge));
+                        ranges.push((Some(MM(lt_maj, lt_min)), false, lt));
                     }
                 };
-                // reverse the order so higher versions go first
-                // this helps sbuild find build-deps, it does not resolve alternatives by default
+                // unversioned package name is only provided by the non semver-suffixed packages
+                // if a range is only satisfiable by semver-suffixed variants in the archive, it
+                // needs to be collapsed/reduced accordingly
                 Ok(ranges
                     .iter()
-                    .rev()
-                    .filter_map(|(ver, cons)| match cons {
-                        None => Some(format!("{}-{}{}", base, ver, suffix)),
-                        Some((true, c)) => {
+                    .filter_map(|(ver, greater, cons)| match (ver, greater, cons) {
+                        (None, true, c) => Some(format!("{}{} (>= {}-~~)", base, suffix, c)),
+                        (None, false, c) => Some(format!("{}{} (<< {}-~~)", base, suffix, c)),
+                        (Some(ver), true, c) => {
                             if c == &ver {
                                 // A-x >= x is redundant, drop the >=
                                 Some(format!("{}-{}{}", base, ver, suffix))
@@ -149,7 +163,7 @@ impl VRange {
                                 Some(format!("{}-{}{} (>= {}-~~)", base, ver, suffix, c))
                             }
                         }
-                        Some((false, c)) => {
+                        (Some(ver), false, c) => {
                             if c == &ver {
                                 // A-x << x is unsatisfiable, drop it
                                 None
@@ -158,7 +172,7 @@ impl VRange {
                             }
                         }
                     })
-                    .join(" | "))
+                    .join(", "))
             }
         }
     }
@@ -301,7 +315,7 @@ pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // resu
             let op = coerce_unacceptable_predicate(dep, p, config.allow_prerelease_deps)?;
             generate_version_constraints(&mut vr, dep, p, op)?;
         }
-        deps.push(vr.to_deb_or_clause(&base, &suffix)?);
+        deps.push(vr.to_deb_clause(&base, &suffix)?);
     }
     Ok(deps)
 }

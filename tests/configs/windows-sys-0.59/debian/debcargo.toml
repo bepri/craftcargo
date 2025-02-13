@@ -1,4 +1,3 @@
-semver_suffix = true
 overlay = "."
 
 [packages.lib]

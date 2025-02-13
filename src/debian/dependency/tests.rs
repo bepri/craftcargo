@@ -65,12 +65,12 @@ fn test_v_range() {
 }
 
 #[test]
-fn test_v_range_to_deb_or_clause_empty() {
+fn test_v_range_to_deb_clause_empty() {
     let vr = VRange::new();
 
     assert_eq!(
         "base+feature",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
@@ -83,7 +83,7 @@ fn test_v_range_to_deb_ge_only() {
 
     assert_eq!(
         "base+feature (>= 0.9-~~)",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
@@ -96,12 +96,12 @@ fn test_v_range_to_deb_lt_only() {
 
     assert_eq!(
         "base+feature (<< 0.10-~~)",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
 #[test]
-fn test_v_range_to_deb_or_clause_minor_one_apart() {
+fn test_v_range_to_deb_clause_minor_one_apart() {
     let v1 = V::new(&semver::Comparator::parse("0.9").unwrap()).unwrap();
     let v2 = V::new(&semver::Comparator::parse("0.10").unwrap()).unwrap();
 
@@ -111,12 +111,12 @@ fn test_v_range_to_deb_or_clause_minor_one_apart() {
 
     assert_eq!(
         "base-0.9+feature",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
 #[test]
-fn test_v_range_to_deb_or_clause_minor_two_apart() {
+fn test_v_range_to_deb_clause_minor_two_apart() {
     let v1 = V::new(&semver::Comparator::parse("0.9").unwrap()).unwrap();
     let v2 = V::new(&semver::Comparator::parse("0.11").unwrap()).unwrap();
 
@@ -125,13 +125,58 @@ fn test_v_range_to_deb_or_clause_minor_two_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-0.10+feature | base-0.9+feature",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        "base+feature (>= 0.9-~~), base+feature (<< 0.11-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
 #[test]
-fn test_v_range_to_deb_or_clause_major_one_apart() {
+fn test_v_range_to_deb_clause_minor_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 0.1.2").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("0.4").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base+feature (>= 0.1.2-~~), base+feature (<< 0.4-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_clause_minor_complicated() {
+    let v1 = V::new(&semver::Comparator::parse(">= 0.1.2").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("0.1.5").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-0.1+feature (>= 0.1.2-~~), base-0.1+feature (<< 0.1.5-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_clause_minor_more_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 0.1.2").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("0.4.5").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base+feature (>= 0.1.2-~~), base+feature (<< 0.4.5-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_clause_major_one_apart() {
     let v1 = V::new(&semver::Comparator::parse("9.0").unwrap()).unwrap();
     let v2 = V::new(&semver::Comparator::parse("10.0").unwrap()).unwrap();
 
@@ -141,12 +186,12 @@ fn test_v_range_to_deb_or_clause_major_one_apart() {
 
     assert_eq!(
         "base-9+feature",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
 #[test]
-fn test_v_range_to_deb_or_clause_major_two_apart() {
+fn test_v_range_to_deb_clause_major_two_apart() {
     let v1 = V::new(&semver::Comparator::parse("9.0").unwrap()).unwrap();
     let v2 = V::new(&semver::Comparator::parse("11.0").unwrap()).unwrap();
 
@@ -155,13 +200,58 @@ fn test_v_range_to_deb_or_clause_major_two_apart() {
     vr.constrain_lt(v2);
 
     assert_eq!(
-        "base-10+feature | base-9+feature",
-        vr.to_deb_or_clause("base", "+feature").unwrap()
+        "base+feature (>= 9.0-~~), base+feature (<< 11.0-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
     )
 }
 
 #[test]
-fn test_v_range_to_deb_or_clause_bad_range() {
+fn test_v_range_to_deb_clause_major_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 1.2.3").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("4.0").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base+feature (>= 1.2.3-~~), base+feature (<< 4.0-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_clause_major_complicated() {
+    let v1 = V::new(&semver::Comparator::parse(">= 1.2.3").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("1.9.9").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base-1+feature (>= 1.2.3-~~), base-1+feature (<< 1.9.9-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_clause_major_more_complicated_apart() {
+    let v1 = V::new(&semver::Comparator::parse(">= 1.2.3").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("4.5.6").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        "base+feature (>= 1.2.3-~~), base+feature (<< 4.5.6-~~)",
+        vr.to_deb_clause("base", "+feature").unwrap()
+    )
+}
+
+#[test]
+fn test_v_range_to_deb_clause_bad_range() {
     let v1 = V::new(&semver::Comparator::parse("9.0").unwrap()).unwrap();
     let v2 = V::new(&semver::Comparator::parse("11.0").unwrap()).unwrap();
 
@@ -169,7 +259,7 @@ fn test_v_range_to_deb_or_clause_bad_range() {
     vr.constrain_ge(v2);
     vr.constrain_lt(v1);
 
-    let err = vr.to_deb_or_clause("base", "+feature");
+    let err = vr.to_deb_clause("base", "+feature");
     assert!(err.is_err());
     assert_eq!(
         "bad version range: >= 11.0, << 9.0",
