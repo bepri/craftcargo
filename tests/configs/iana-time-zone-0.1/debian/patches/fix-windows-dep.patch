@@ -1,0 +1,10 @@
+Index: iana-time-zone-0.1.60/Cargo.toml
+===================================================================
+--- iana-time-zone-0.1.60.orig/Cargo.toml
++++ iana-time-zone-0.1.60/Cargo.toml
+@@ -54,4 +54,4 @@ version = "0.1.5"
+ version = "0.1.1"
+ 
+ [target."cfg(target_os = \"windows\")".dependencies.windows-core]
+-version = ">=0.50, <=0.52"
++version = "0.52"
