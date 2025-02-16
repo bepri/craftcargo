@@ -19,7 +19,9 @@ use tar::{Archive, Builder};
 use tempfile;
 
 use crate::config::{package_field_for_feature, testing_ignore_debpolv, Config, PackageKey};
-use crate::crates::{show_dep, transitive_deps, CrateDepInfo, CrateInfo};
+use crate::crates::{
+    all_dependencies_and_features, show_dep, transitive_deps, CrateDepInfo, CrateInfo,
+};
 use crate::errors::*;
 use crate::util::{self, copy_tree, expect_success, get_transitive_val, traverse_depth};
 
@@ -630,8 +632,8 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         .map(String::as_str)
         .collect();
 
-    let features_with_deps = crate_info.all_dependencies_and_features();
-    let dev_depends = deb_deps(config, &crate_info.dev_dependencies())?;
+    let features_with_deps = all_dependencies_and_features(crate_info.manifest());
+    let dev_depends = deb_deps(config.allow_prerelease_deps, &crate_info.dev_dependencies())?;
     let has_dev_deps = !dev_depends.is_empty();
     log::trace!(
         "features_with_deps: {:?}",
@@ -676,7 +678,6 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     };
 
     let build_deps = {
-        let rustc = rustc_dep(&crate_info.rust_version(), true);
         let build_deps = ["debhelper-compat (= 13)", "dh-sequence-cargo"]
             .iter()
             .map(|x| x.to_string());
@@ -689,14 +690,10 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             PackageKey::feature("default"),
             &default_features,
         );
-        let build_deps_extra = [
-            "cargo:native".into(),
-            rustc.clone(),
-            "libstd-rust-dev".into(),
-        ]
-        .into_iter()
-        .chain(deb_deps(config, &default_deps)?)
-        .chain(extra_override_deps);
+        let build_deps_extra = toolchain_deps(&crate_info.rust_version())
+            .into_iter()
+            .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
+            .chain(extra_override_deps);
         if !bins.is_empty() {
             build_deps.chain(build_deps_extra).collect()
         } else {
@@ -948,7 +945,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                     Some(feature)
                 },
                 f_deps,
-                deb_deps(config, &o_deps)?,
+                deb_deps(config.allow_prerelease_deps, &o_deps)?,
                 f_provides.clone(),
                 if feature.is_empty() {
                     recommends.clone()
@@ -1183,6 +1180,11 @@ fn reduce_provides(
         .collect::<BTreeMap<_, _>>();
 
     (provides, features_with_deps)
+}
+
+pub(crate) fn toolchain_deps(min_rust_version: &Option<String>) -> Vec<String> {
+    let rustc = rustc_dep(min_rust_version, true);
+    ["cargo:native".into(), rustc, "libstd-rust-dev".into()].into()
 }
 
 fn rustc_dep(min_ver: &Option<String>, native: bool) -> String {

@@ -4,7 +4,7 @@ use itertools::Itertools;
 use std::cmp;
 use std::fmt;
 
-use crate::config::{testing_ignore_debpolv, Config};
+use crate::config::testing_ignore_debpolv;
 use crate::debian::{self, control::base_deb_name, Package};
 use crate::errors::*;
 
@@ -293,7 +293,7 @@ fn generate_version_constraints(
 }
 
 /// Translates a Cargo dependency into a Debian package dependency.
-pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // result is an AND-clause
+pub fn deb_dep(allow_prerelease_deps: bool, dep: &Dependency) -> Result<Vec<String>> // result is an AND-clause
 {
     let dep_dashed = base_deb_name(&dep.package_name());
     let mut suffixes = Vec::new();
@@ -312,7 +312,7 @@ pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // resu
         let base = format!("{}-{}", Package::pkg_prefix(), dep_dashed);
         let mut vr = VRange::new();
         for p in &req.comparators {
-            let op = coerce_unacceptable_predicate(dep, p, config.allow_prerelease_deps)?;
+            let op = coerce_unacceptable_predicate(dep, p, allow_prerelease_deps)?;
             generate_version_constraints(&mut vr, dep, p, op)?;
         }
         deps.push(vr.to_deb_clause(&base, &suffix)?);
@@ -320,11 +320,15 @@ pub fn deb_dep(config: &Config, dep: &Dependency) -> Result<Vec<String>> // resu
     Ok(deps)
 }
 
-pub fn deb_deps(config: &Config, cdeps: &[Dependency]) -> Result<Vec<String>> // result is an AND-clause
+pub fn deb_deps(allow_prerelease_deps: bool, cdeps: &[Dependency]) -> Result<Vec<String>> // result is an AND-clause
 {
     let mut deps = Vec::new();
     for dep in cdeps {
-        deps.extend(deb_dep(config, dep)?.iter().map(String::to_string));
+        deps.extend(
+            deb_dep(allow_prerelease_deps, dep)?
+                .iter()
+                .map(String::to_string),
+        );
     }
     deps.sort();
     deps.dedup();
