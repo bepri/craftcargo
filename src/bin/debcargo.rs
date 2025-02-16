@@ -1,73 +1,16 @@
 use ansi_term::Colour::Red;
-use clap::{builder::styling::AnsiColor, builder::Styles, crate_version, Parser, Subcommand};
+use clap::{crate_version, Parser};
 use itertools::Itertools;
 
+use debcargo::cli::{Cli, Opt};
 use debcargo::crates::CrateInfo;
 use debcargo::debian::DebInfo;
 use debcargo::errors::Result;
 use debcargo::package::*;
 use debcargo::{
-    build_order::{build_order, BuildOrderArgs},
-    crates::invalidate_crates_io_cache,
-    deb_dependencies::{deb_dependencies, DebDependenciesArgs},
+    build_order::build_order, crates::invalidate_crates_io_cache,
+    deb_dependencies::deb_dependencies,
 };
-
-const CLI_STYLE: Styles = Styles::styled()
-    .header(AnsiColor::Yellow.on_default())
-    .usage(AnsiColor::Green.on_default())
-    .literal(AnsiColor::Green.on_default())
-    .placeholder(AnsiColor::Green.on_default());
-
-#[derive(Debug, Clone, Parser)]
-#[command(name = "debcargo", about = "Package Rust crates for Debian.")]
-#[command(version)]
-#[command(styles = CLI_STYLE)]
-struct Cli {
-    #[command(subcommand)]
-    command: Opt,
-}
-
-#[derive(Debug, Clone, Subcommand)]
-enum Opt {
-    /// Update the user's default crates.io index, outside of a workspace.
-    Update,
-    /// Print the Debian package name for a crate.
-    DebSrcName {
-        /// Name of the crate to package.
-        crate_name: String,
-        /// Version of the crate to package; may contain dependency operators.
-        /// If empty string, resolves to the latest version. If given here,
-        /// i.e. not omitted then print the package name as if the config
-        /// option semver_suffix was set to true.
-        version: Option<String>,
-    },
-    /// Extract only a crate, without any other transformations.
-    Extract {
-        #[command(flatten)]
-        init: PackageInitArgs,
-        #[command(flatten)]
-        extract: PackageExtractArgs,
-    },
-    /// Package a Rust crate for Debian.
-    Package {
-        #[command(flatten)]
-        init: PackageInitArgs,
-        #[command(flatten)]
-        extract: PackageExtractArgs,
-        #[command(flatten)]
-        finish: PackageExecuteArgs,
-    },
-    /// Print the transitive dependencies of a package in topological order.
-    BuildOrder {
-        #[command(flatten)]
-        args: BuildOrderArgs,
-    },
-    /// Print the dependencies of a package in d/control format
-    DebDependencies {
-        #[command(flatten)]
-        args: DebDependenciesArgs,
-    },
-}
 
 #[test]
 fn verify_app() {

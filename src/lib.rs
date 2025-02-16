@@ -1,5 +1,6 @@
 #[macro_use]
 pub mod errors;
+pub mod cli;
 pub mod config;
 pub mod crates;
 pub mod debian;
