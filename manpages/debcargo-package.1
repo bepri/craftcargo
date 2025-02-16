@@ -1,0 +1,34 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH debcargo-package 1  "package " 
+.SH NAME
+debcargo\-package \- Package a Rust crate for Debian
+.SH SYNOPSIS
+\fBdebcargo package\fR [\fB\-\-config\fR] [\fB\-\-directory\fR] [\fB\-\-changelog\-ready\fR] [\fB\-\-copyright\-guess\-harder\fR] [\fB\-\-no\-overlay\-write\-back\fR] [\fB\-h\fR|\fB\-\-help\fR] <\fICRATE_NAME\fR> [\fIVERSION\fR] 
+.SH DESCRIPTION
+Package a Rust crate for Debian
+.SH OPTIONS
+.TP
+\fB\-\-config\fR=\fICONFIG\fR
+TOML file providing package\-specific options
+.TP
+\fB\-\-directory\fR=\fIDIRECTORY\fR
+Output directory for the package. The orig tarball is named according to Debian conventions in the parent directory of this directory
+.TP
+\fB\-\-changelog\-ready\fR
+Assume the changelog is already bumped, and leave it alone
+.TP
+\fB\-\-copyright\-guess\-harder\fR
+Guess extra values for d/copyright. Might be slow
+.TP
+\fB\-\-no\-overlay\-write\-back\fR
+Don\*(Aqt write back hint files or d/changelog to the source overlay directory
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.TP
+<\fICRATE_NAME\fR>
+Name of the crate to package
+.TP
+[\fIVERSION\fR]
+Version of the crate to package; may contain dependency operators. If empty string or omitted, resolves to the latest version

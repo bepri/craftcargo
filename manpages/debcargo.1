@@ -1,0 +1,37 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH debcargo 1  "debcargo 2.7.8+alpha.0" 
+.SH NAME
+debcargo \- Package Rust crates for Debian.
+.SH SYNOPSIS
+\fBdebcargo\fR [\fB\-h\fR|\fB\-\-help\fR] [\fB\-V\fR|\fB\-\-version\fR] <\fIsubcommands\fR>
+.SH DESCRIPTION
+Package Rust crates for Debian.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Print version
+.SH SUBCOMMANDS
+.TP
+debcargo\-update(1)
+Update the user\*(Aqs default crates.io index, outside of a workspace
+.TP
+debcargo\-deb\-src\-name(1)
+Print the Debian package name for a crate
+.TP
+debcargo\-extract(1)
+Extract only a crate, without any other transformations
+.TP
+debcargo\-package(1)
+Package a Rust crate for Debian
+.TP
+debcargo\-build\-order(1)
+Print the transitive dependencies of a package in topological order
+.TP
+debcargo\-deb\-dependencies(1)
+Print the dependencies of a package in d/control format
+.SH VERSION
+v2.7.8+alpha.0

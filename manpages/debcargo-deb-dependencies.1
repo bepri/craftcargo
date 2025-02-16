@@ -1,0 +1,28 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH debcargo-deb-dependencies 1  "deb-dependencies " 
+.SH NAME
+debcargo\-deb\-dependencies \- Print the dependencies of a package in d/control format
+.SH SYNOPSIS
+\fBdebcargo deb\-dependencies\fR [\fB\-\-features\fR] [\fB\-\-all\-features\fR] [\fB\-\-no\-default\-features\fR] [\fB\-\-allow\-prerelease\-deps\fR] [\fB\-h\fR|\fB\-\-help\fR] <\fICARGO_TOML\fR> 
+.SH DESCRIPTION
+Print the dependencies of a package in d/control format
+.SH OPTIONS
+.TP
+\fB\-\-features\fR=\fIFEATURES\fR
+Features to include in dependencies
+.TP
+\fB\-\-all\-features\fR
+Include all features in dependencies
+.TP
+\fB\-\-no\-default\-features\fR
+Do not include default feature in dependencies
+.TP
+\fB\-\-allow\-prerelease\-deps\fR
+Allow prerelease versions of dependencies
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.TP
+<\fICARGO_TOML\fR>
+Cargo.toml for generating dependencies

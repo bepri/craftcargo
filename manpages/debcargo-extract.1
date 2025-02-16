@@ -1,0 +1,25 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH debcargo-extract 1  "extract " 
+.SH NAME
+debcargo\-extract \- Extract only a crate, without any other transformations
+.SH SYNOPSIS
+\fBdebcargo extract\fR [\fB\-\-config\fR] [\fB\-\-directory\fR] [\fB\-h\fR|\fB\-\-help\fR] <\fICRATE_NAME\fR> [\fIVERSION\fR] 
+.SH DESCRIPTION
+Extract only a crate, without any other transformations
+.SH OPTIONS
+.TP
+\fB\-\-config\fR=\fICONFIG\fR
+TOML file providing package\-specific options
+.TP
+\fB\-\-directory\fR=\fIDIRECTORY\fR
+Output directory for the package. The orig tarball is named according to Debian conventions in the parent directory of this directory
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.TP
+<\fICRATE_NAME\fR>
+Name of the crate to package
+.TP
+[\fIVERSION\fR]
+Version of the crate to package; may contain dependency operators. If empty string or omitted, resolves to the latest version
