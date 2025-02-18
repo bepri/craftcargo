@@ -10,6 +10,7 @@ use std::str::FromStr;
 
 use anyhow::format_err;
 use chrono::{self, Datelike};
+use control::BuildDeps;
 use flate2::read::GzDecoder;
 use flate2::write::GzEncoder;
 use flate2::Compression;
@@ -678,9 +679,14 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     };
 
     let build_deps = {
-        let build_deps = ["debhelper-compat (= 13)", "dh-sequence-cargo"]
-            .iter()
-            .map(|x| x.to_string());
+        let mut build_deps = BuildDeps::default();
+        // these are needed for the clean target
+        build_deps.build_depends.extend(
+            ["debhelper-compat (= 13)", "dh-sequence-cargo"]
+                .iter()
+                .map(|x| x.to_string()),
+        );
+
         // note: please keep this in sync with build_order::dep_features
         let (default_features, default_deps) = transitive_deps(&features_with_deps, "default")?;
         //debcargo_info!("default_features: {:?}", default_features);
@@ -690,18 +696,19 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             PackageKey::feature("default"),
             &default_features,
         );
-        let build_deps_extra = toolchain_deps(&crate_info.rust_version())
+        let build_deps_arch = toolchain_deps(&crate_info.rust_version())
             .into_iter()
             .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
             .chain(extra_override_deps);
         if !bins.is_empty() {
-            build_deps.chain(build_deps_extra).collect()
+            build_deps.build_depends_arch.extend(build_deps_arch);
         } else {
             assert!(lib);
             build_deps
-                .chain(build_deps_extra.map(|d| deb_dep_add_nocheck(&d)))
-                .collect()
+                .build_depends_arch
+                .extend(build_deps_arch.map(|d| deb_dep_add_nocheck(&d)));
         }
+        build_deps
     };
     let test_deps: Vec<String> = Some(rustc_dep(&crate_info.rust_version(), false))
         .into_iter()

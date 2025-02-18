@@ -8,6 +8,13 @@ use textwrap::fill;
 use crate::config::{self, Config, PackageKey};
 use crate::errors::*;
 
+#[derive(Default, Debug)]
+pub struct BuildDeps {
+    pub(crate) build_depends: Vec<String>,
+    pub(crate) build_depends_indep: Vec<String>,
+    pub(crate) build_depends_arch: Vec<String>,
+}
+
 pub struct Source {
     name: String,
     section: String,
@@ -15,7 +22,7 @@ pub struct Source {
     maintainer: String,
     uploaders: Vec<String>,
     standards: String,
-    build_deps: Vec<String>,
+    build_deps: BuildDeps,
     vcs_git: String,
     vcs_browser: String,
     homepage: String,
@@ -64,7 +71,27 @@ impl fmt::Display for Source {
         writeln!(f, "Source: {}", self.name)?;
         writeln!(f, "Section: {}", self.section)?;
         writeln!(f, "Priority: {}", self.priority)?;
-        writeln!(f, "Build-Depends: {}", self.build_deps.join(",\n "))?;
+        if !self.build_deps.build_depends.is_empty() {
+            writeln!(
+                f,
+                "Build-Depends: {}",
+                self.build_deps.build_depends.join(",\n ")
+            )?;
+        }
+        if !self.build_deps.build_depends_arch.is_empty() {
+            writeln!(
+                f,
+                "Build-Depends-Arch: {}",
+                self.build_deps.build_depends_arch.join(",\n ")
+            )?;
+        }
+        if !self.build_deps.build_depends_indep.is_empty() {
+            writeln!(
+                f,
+                "Build-Depends-Indep: {}",
+                self.build_deps.build_depends_indep.join(",\n ")
+            )?;
+        }
         writeln!(f, "Maintainer: {}", self.maintainer)?;
         if !self.uploaders.is_empty() {
             writeln!(f, "Uploaders:\n {}", self.uploaders.join(",\n "))?;
@@ -182,7 +209,7 @@ impl Source {
         lib: bool,
         maintainer: String,
         uploaders: Vec<String>,
-        build_deps: Vec<String>,
+        build_deps: BuildDeps,
         _requires_root: String,
     ) -> Result<Source> {
         let pkgbase = match name_suffix {
@@ -232,7 +259,7 @@ impl Source {
             self.standards = policy.to_string();
         }
 
-        self.build_deps.extend(
+        self.build_deps.build_depends.extend(
             config
                 .build_depends()
                 .into_iter()
@@ -243,7 +270,17 @@ impl Source {
             .build_depends_excludes()
             .map(Vec::as_slice)
             .unwrap_or(&[]);
-        self.build_deps.retain(|x| !bdeps_ex.contains(x));
+        self.build_deps
+            .build_depends
+            .retain(|x| !bdeps_ex.contains(x));
+
+        self.build_deps
+            .build_depends_arch
+            .retain(|x| !bdeps_ex.contains(x));
+
+        self.build_deps
+            .build_depends_indep
+            .retain(|x| !bdeps_ex.contains(x));
 
         if let Some(homepage) = config.homepage() {
             self.homepage = homepage.to_string();

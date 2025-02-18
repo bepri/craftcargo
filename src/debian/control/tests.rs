@@ -2,7 +2,10 @@ use super::{
     base_deb_name, deb_feature_name, deb_name, deb_upstream_version, dsc_name, Description,
     Package, PkgTest, Source,
 };
-use crate::config::{Config, SourceOverride};
+use crate::{
+    config::{Config, SourceOverride},
+    debian::BuildDeps,
+};
 use semver::{Prerelease, Version};
 
 #[test]
@@ -15,12 +18,12 @@ fn source_to_string() {
         true,
         "Jelmer Vernooĳ <jelmer@debian.org>".to_owned(),
         vec!["Jelmer Vernooĳ <jelmer@debian.org>".to_owned()],
-        vec![],
+        BuildDeps::default(),
         "no".to_owned(),
     )
     .unwrap();
 
-    let expected = "Source: rust-rsa\nSection: rust\nPriority: optional\nBuild-Depends: \nMaintainer: Jelmer Vernooĳ <jelmer@debian.org>\nUploaders:\n Jelmer Vernooĳ <jelmer@debian.org>\nStandards-Version: 4.7.0\nVcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/rsa]\nVcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/rsa\nHomepage: https://github.com/RustCrypto/RSA\nX-Cargo-Crate: rsa\nRules-Requires-Root: no\n";
+    let expected = "Source: rust-rsa\nSection: rust\nPriority: optional\nMaintainer: Jelmer Vernooĳ <jelmer@debian.org>\nUploaders:\n Jelmer Vernooĳ <jelmer@debian.org>\nStandards-Version: 4.7.0\nVcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/rsa]\nVcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/rsa\nHomepage: https://github.com/RustCrypto/RSA\nX-Cargo-Crate: rsa\nRules-Requires-Root: no\n";
 
     assert_eq!(expected, instance.to_string());
 }
@@ -54,10 +57,13 @@ fn test_apply_overrides() {
         true,
         "Jelmer Vernooĳ <jelmer@debian.org>".to_owned(),
         vec!["Jelmer Vernooĳ <jelmer@debian.org>".to_owned()],
-        vec![
-            "rust-const-oid".to_owned(),
-            "rust-num-bigint-dig".to_owned(),
-        ],
+        BuildDeps {
+            build_depends: vec![
+                "rust-const-oid".to_owned(),
+                "rust-num-bigint-dig".to_owned(),
+            ],
+            ..BuildDeps::default()
+        },
         "no".to_owned(),
     )
     .unwrap();
@@ -65,7 +71,7 @@ fn test_apply_overrides() {
     assert_eq!("rust", instance.section);
     assert_eq!(
         vec!["rust-const-oid", "rust-num-bigint-dig"],
-        instance.build_deps
+        instance.build_deps.build_depends
     );
     assert_eq!("https://github.com/RustCrypto/RSA", instance.homepage);
     assert_eq!(
@@ -84,7 +90,7 @@ fn test_apply_overrides() {
     assert_eq!("", instance.section);
     assert_eq!(
         vec!["rust-num-bigint-dig", "rust-digest"],
-        instance.build_deps
+        instance.build_deps.build_depends
     );
     assert_eq!("", instance.homepage);
     assert_eq!("", instance.vcs_git);

@@ -163,7 +163,9 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 # want to include them to support cross-compiling, and they should cause no
 # problems since they are just source code. If our test "cargo build" fails for
 # one of those dependencies, it should be handled in that package by disabling
-# the failing test on the architectures that they are expected to fail on.
+# the failing test on the architectures that they are expected to fail on. This
+# field applies to all three categories of build dependencies (Build-Depends,
+# Build-Depends-Arch and Build-Depends-Indep)
 #build_depends_excludes = ["PLACEHOLDER", "PLACEHOLDER"]
 
 # Binary package overrides.
@@ -194,7 +196,7 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 # used to pull in system libraries for crates that need them to build. You'll
 # want the -dev versions of the library packages, since our crate packages are
 # development packages and not runtime packages. These will be automatically
-# added to the source packages `Build-Depends` field as well.
+# added to the source packages `Build-Depends-Arch` field as well.
 #depends = ["PLACEHOLDER", "PLACEHOLDER"]
 
 # We generate an autopkgtest (post-install test) for every feature, and also
