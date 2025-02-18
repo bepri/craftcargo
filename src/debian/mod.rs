@@ -1184,7 +1184,7 @@ fn reduce_provides(
 
 pub(crate) fn toolchain_deps(min_rust_version: &Option<String>) -> Vec<String> {
     let rustc = rustc_dep(min_rust_version, true);
-    ["cargo:native".into(), rustc, "libstd-rust-dev".into()].into()
+    ["cargo:native".into(), rustc].into()
 }
 
 fn rustc_dep(min_ver: &Option<String>, native: bool) -> String {
