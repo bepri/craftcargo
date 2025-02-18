@@ -266,6 +266,20 @@ impl Source {
                 .flatten()
                 .map(String::to_string),
         );
+        self.build_deps.build_depends_arch.extend(
+            config
+                .build_depends_arch()
+                .into_iter()
+                .flatten()
+                .map(String::to_string),
+        );
+        self.build_deps.build_depends_indep.extend(
+            config
+                .build_depends_indep()
+                .into_iter()
+                .flatten()
+                .map(String::to_string),
+        );
         let bdeps_ex = config
             .build_depends_excludes()
             .map(Vec::as_slice)

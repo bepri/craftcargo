@@ -41,6 +41,8 @@ pub struct SourceOverride {
     vcs_git: Option<String>,
     vcs_browser: Option<String>,
     build_depends: Option<Vec<String>>,
+    build_depends_arch: Option<Vec<String>>,
+    build_depends_indep: Option<Vec<String>>,
     build_depends_excludes: Option<Vec<String>>,
 }
 
@@ -52,6 +54,8 @@ impl SourceOverride {
         vcs_git: Option<String>,
         vcs_browser: Option<String>,
         build_depends: Option<Vec<String>>,
+        build_depends_arch: Option<Vec<String>>,
+        build_depends_indep: Option<Vec<String>>,
         build_depends_excludes: Option<Vec<String>>,
     ) -> Self {
         Self {
@@ -61,6 +65,8 @@ impl SourceOverride {
             vcs_git,
             vcs_browser,
             build_depends,
+            build_depends_arch,
+            build_depends_indep,
             build_depends_excludes,
         }
     }
@@ -171,6 +177,14 @@ impl Config {
 
     pub fn build_depends(&self) -> Option<&Vec<String>> {
         self.source.as_ref()?.build_depends.as_ref()
+    }
+
+    pub fn build_depends_arch(&self) -> Option<&Vec<String>> {
+        self.source.as_ref()?.build_depends_arch.as_ref()
+    }
+
+    pub fn build_depends_indep(&self) -> Option<&Vec<String>> {
+        self.source.as_ref()?.build_depends_indep.as_ref()
     }
 
     pub fn build_depends_excludes(&self) -> Option<&Vec<String>> {
