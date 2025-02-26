@@ -1,0 +1,17 @@
+[package]
+name = "foobar"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0.96"
+futures = { version = ">= 0.2, < 0.4", optional = true }
+thiserror = { version = "2", optional = true, default-features = false }
+
+[dev-dependencies]
+futures = "0.3.31"
+
+[features]
+somefeature = ["dep:thiserror"]
+someotherfeature = ["somefeature", "futures"]

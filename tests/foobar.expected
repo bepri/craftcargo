@@ -1,0 +1,83 @@
+Source: rust-foobar
+Section: rust
+Priority: optional
+Build-Depends: debhelper-compat (= 13),
+ dh-sequence-cargo,
+ cargo:native <!nocheck>,
+ rustc:native <!nocheck>,
+ libstd-rust-dev <!nocheck>,
+ librust-anyhow-1+default-dev (>= 1.0.96-~~) <!nocheck>
+Maintainer: Debian Rust Maintainers <pkg-rust-maintainers@alioth-lists.debian.net>
+Standards-Version: 4.7.0
+Vcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/foobar]
+Vcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/foobar
+X-Cargo-Crate: foobar
+Rules-Requires-Root: no
+
+Package: librust-foobar-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-anyhow-1+default-dev (>= 1.0.96-~~)
+Suggests:
+ librust-foobar+futures-dev (= ${binary:Version}),
+ librust-foobar+somefeature-dev (= ${binary:Version}),
+ librust-foobar+someotherfeature-dev (= ${binary:Version})
+Provides:
+ librust-foobar+default-dev (= ${binary:Version}),
+ librust-foobar-0-dev (= ${binary:Version}),
+ librust-foobar-0+default-dev (= ${binary:Version}),
+ librust-foobar-0.1-dev (= ${binary:Version}),
+ librust-foobar-0.1+default-dev (= ${binary:Version}),
+ librust-foobar-0.1.0-dev (= ${binary:Version}),
+ librust-foobar-0.1.0+default-dev (= ${binary:Version})
+Description: Rust crate "foobar" - Rust source code
+ Source code for Debianized Rust crate "foobar"
+
+Package: librust-foobar+futures-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-foobar-dev (= ${binary:Version}),
+ librust-futures+default-dev (>= 0.2-~~), librust-futures+default-dev (<< 0.4-~~)
+Provides:
+ librust-foobar-0+futures-dev (= ${binary:Version}),
+ librust-foobar-0.1+futures-dev (= ${binary:Version}),
+ librust-foobar-0.1.0+futures-dev (= ${binary:Version})
+Description: Rust crate "foobar" - feature "futures"
+ This metapackage enables feature "futures" for the Rust foobar crate, by
+ pulling in any additional dependencies needed by that feature.
+
+Package: librust-foobar+somefeature-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-foobar-dev (= ${binary:Version}),
+ librust-thiserror-2-dev,
+ some-dependency-for-lib-with-feature
+Provides:
+ librust-foobar-0+somefeature-dev (= ${binary:Version}),
+ librust-foobar-0.1+somefeature-dev (= ${binary:Version}),
+ librust-foobar-0.1.0+somefeature-dev (= ${binary:Version})
+Description: Rust crate "foobar" - feature "somefeature"
+ This metapackage enables feature "somefeature" for the Rust foobar crate, by
+ pulling in any additional dependencies needed by that feature.
+
+Package: librust-foobar+someotherfeature-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-foobar-dev (= ${binary:Version}),
+ librust-foobar+somefeature-dev (= ${binary:Version}),
+ librust-foobar+futures-dev (= ${binary:Version})
+Provides:
+ librust-foobar-0+someotherfeature-dev (= ${binary:Version}),
+ librust-foobar-0.1+someotherfeature-dev (= ${binary:Version}),
+ librust-foobar-0.1.0+someotherfeature-dev (= ${binary:Version})
+Description: Rust crate "foobar" - feature "someotherfeature"
+ This metapackage enables feature "someotherfeature" for the Rust foobar crate,
+ by pulling in any additional dependencies needed by that feature.
