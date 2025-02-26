@@ -1184,6 +1184,7 @@ fn reduce_provides(
 
 pub(crate) fn toolchain_deps(min_rust_version: &Option<String>) -> Vec<String> {
     let rustc = rustc_dep(min_rust_version, true);
+    // libstd-rust-dev here is needed to pick up the right arch variant for cross-builds!
     ["cargo:native".into(), rustc, "libstd-rust-dev".into()].into()
 }
 
