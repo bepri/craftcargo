@@ -80,6 +80,9 @@ pub struct PackageOverride {
     recommends: Option<Vec<String>>,
     suggests: Option<Vec<String>>,
     provides: Option<Vec<String>>,
+    breaks: Option<Vec<String>>,
+    replaces: Option<Vec<String>>,
+    conflicts: Option<Vec<String>>,
     extra_lines: Option<Vec<String>>,
     test_is_broken: Option<bool>,
     test_architecture: Option<Vec<String>>,
@@ -230,6 +233,18 @@ impl Config {
 
     pub fn package_provides(&self, key: PackageKey) -> Option<&Vec<String>> {
         self.with_package(key, |pkg| pkg.provides.as_ref())
+    }
+
+    pub fn package_breaks(&self, key: PackageKey) -> Option<&Vec<String>> {
+        self.with_package(key, |pkg| pkg.breaks.as_ref())
+    }
+
+    pub fn package_replaces(&self, key: PackageKey) -> Option<&Vec<String>> {
+        self.with_package(key, |pkg| pkg.replaces.as_ref())
+    }
+
+    pub fn package_conflicts(&self, key: PackageKey) -> Option<&Vec<String>> {
+        self.with_package(key, |pkg| pkg.conflicts.as_ref())
     }
 
     pub fn package_extra_lines(&self, key: PackageKey) -> Option<&Vec<String>> {

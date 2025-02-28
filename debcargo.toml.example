@@ -250,9 +250,13 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 
 # More additional fields. This is mostly useful for binary packages that might
 # relate to other external programs, e.g. debcargo Recommends cargo.
+# The values here will extend those set by debcargo automatically.
 #recommends = ["PLACEHOLDER", "PLACEHOLDER"]
 #suggests = ["PLACEHOLDER", "PLACEHOLDER"]
 #provides = ["PLACEHOLDER", "PLACEHOLDER"]
+#breaks = ["PLACEHOLDER", "PLACEHOLDER"]
+#replaces = ["PLACEHOLDER", "PLACEHOLDER"]
+#conflicts = ["PLACEHOLDER", "PLACEHOLDER"]
 
 # Extra lines to include in the stanza, freeform. Use this to include things
 # that debcargo doesn't handle, such as Breaks, Conflicts, Replaces.

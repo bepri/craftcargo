@@ -5,6 +5,11 @@ semver_suffix = true
 
 [packages.lib]
 depends = ["some-dependency-for-lib"]
+breaks = ["broken-by-everything"]
+replaces = ["replaced-by-everything"]
+conflicts = ["global-conflict"]
 
 [packages."lib+somefeature"]
 depends = ["some-dependency-for-lib-with-feature"]
+breaks = ["broken-by-somefeature"]
+replaces = ["replaced-by-somefeature"]

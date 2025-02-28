@@ -39,6 +39,9 @@ pub struct Package {
     recommends: Vec<String>,
     suggests: Vec<String>,
     provides: Vec<String>,
+    breaks: Vec<String>,
+    replaces: Vec<String>,
+    conflicts: Vec<String>,
     summary: Description,
     description: Description,
     extra_lines: Vec<String>,
@@ -137,6 +140,15 @@ impl fmt::Display for Package {
         }
         if !self.provides.is_empty() {
             writeln!(f, "Provides:\n {}", self.provides.join(",\n "))?;
+        }
+        if !self.replaces.is_empty() {
+            writeln!(f, "Replaces:\n {}", self.replaces.join(",\n "))?;
+        }
+        if !self.breaks.is_empty() {
+            writeln!(f, "Breaks:\n {}", self.breaks.join(",\n "))?;
+        }
+        if !self.conflicts.is_empty() {
+            writeln!(f, "Conflicts:\n {}", self.conflicts.join(",\n "))?;
         }
 
         for line in &self.extra_lines {
@@ -399,6 +411,18 @@ impl Package {
         }
         depends.extend(f_deps.into_iter().map(deb_feature));
         depends.extend(o_deps);
+        let mut breaks = vec![];
+        let mut replaces = vec![];
+        if name_suffix.is_some() && feature.is_none() {
+            // B+R needs to be set on "real" package, not virtual ones
+            // constrain by "next" version, so that it is possible to install a newer,
+            // non-suffixed package at the same time
+            let mut next_version = version.clone();
+            next_version.patch += 1;
+            breaks.push(format!("{} (<< {}~)", deb_name(basename), next_version));
+            replaces.push(format!("{} (<< {}~)", deb_name(basename), next_version));
+        }
+        let conflicts = vec![];
 
         Ok(Package {
             name: match feature {
@@ -432,22 +456,12 @@ impl Package {
             recommends,
             suggests,
             provides,
+            breaks,
+            replaces,
+            conflicts,
             summary,
             description,
-            extra_lines: match (name_suffix, feature) {
-                (Some(_), None) => {
-                    // B+R needs to be set on "real" package, not virtual ones
-                    // constrain by "next" version, so that it is possible to install a newer,
-                    // non-suffixed package at the same time
-                    let mut next_version = version.clone();
-                    next_version.patch += 1;
-                    vec![
-                        format!("Replaces: {} (<< {}~)", deb_name(basename), next_version),
-                        format!("Breaks: {} (<< {}~)", deb_name(basename), next_version),
-                    ]
-                }
-                (_, _) => vec![],
-            },
+            extra_lines: vec![],
         })
     }
 
@@ -479,6 +493,9 @@ impl Package {
             recommends: vec!["${cargo:Recommends}".to_string()],
             suggests: vec!["${cargo:Suggests}".to_string()],
             provides,
+            breaks: vec![],
+            replaces: vec![],
+            conflicts: vec![],
             summary,
             description,
             extra_lines: vec![
@@ -546,7 +563,21 @@ impl Package {
             key,
             &f_provides,
         ));
-
+        self.breaks.extend(config::package_field_for_feature(
+            &|x| config.package_breaks(x),
+            key,
+            &f_provides,
+        ));
+        self.replaces.extend(config::package_field_for_feature(
+            &|x| config.package_replaces(x),
+            key,
+            &f_provides,
+        ));
+        self.conflicts.extend(config::package_field_for_feature(
+            &|x| config.package_conflicts(x),
+            key,
+            &f_provides,
+        ));
         self.extra_lines.extend(
             config
                 .package_extra_lines(key)

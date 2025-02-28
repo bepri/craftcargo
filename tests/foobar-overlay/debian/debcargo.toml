@@ -4,6 +4,9 @@ build_depends = ["some-build-dependency"]
 
 [packages.lib]
 depends = ["some-dependency-for-lib"]
+conflicts = ["global-conflict"]
 
 [packages."lib+somefeature"]
 depends = ["some-dependency-for-lib-with-feature"]
+breaks = ["broken-by-somefeature"]
+replaces = ["replaced-by-somefeature"]

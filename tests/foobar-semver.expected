@@ -32,8 +32,14 @@ Provides:
  librust-foobar-semver-0.1+default-dev (= ${binary:Version}),
  librust-foobar-semver-0.1.0-dev (= ${binary:Version}),
  librust-foobar-semver-0.1.0+default-dev (= ${binary:Version})
-Replaces: librust-foobar-semver-dev (<< 0.1.1~)
-Breaks: librust-foobar-semver-dev (<< 0.1.1~)
+Replaces:
+ librust-foobar-semver-dev (<< 0.1.1~),
+ replaced-by-everything
+Breaks:
+ librust-foobar-semver-dev (<< 0.1.1~),
+ broken-by-everything
+Conflicts:
+ global-conflict
 Description: Rust crate "foobar-semver" - Rust source code
  Source code for Debianized Rust crate "foobar-semver"
 
@@ -62,6 +68,10 @@ Depends:
 Provides:
  librust-foobar-semver-0+somefeature-dev (= ${binary:Version}),
  librust-foobar-semver-0.1.0+somefeature-dev (= ${binary:Version})
+Replaces:
+ replaced-by-somefeature
+Breaks:
+ broken-by-somefeature
 Description: Rust crate "foobar-semver" - feature "somefeature"
  This metapackage enables feature "somefeature" for the Rust foobar-semver
  crate, by pulling in any additional dependencies needed by that feature.

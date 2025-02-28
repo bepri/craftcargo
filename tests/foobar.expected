@@ -34,6 +34,8 @@ Provides:
  librust-foobar-0.1+default-dev (= ${binary:Version}),
  librust-foobar-0.1.0-dev (= ${binary:Version}),
  librust-foobar-0.1.0+default-dev (= ${binary:Version})
+Conflicts:
+ global-conflict
 Description: Rust crate "foobar" - Rust source code
  Source code for Debianized Rust crate "foobar"
 
@@ -64,6 +66,10 @@ Provides:
  librust-foobar-0+somefeature-dev (= ${binary:Version}),
  librust-foobar-0.1+somefeature-dev (= ${binary:Version}),
  librust-foobar-0.1.0+somefeature-dev (= ${binary:Version})
+Replaces:
+ replaced-by-somefeature
+Breaks:
+ broken-by-somefeature
 Description: Rust crate "foobar" - feature "somefeature"
  This metapackage enables feature "somefeature" for the Rust foobar crate, by
  pulling in any additional dependencies needed by that feature.
