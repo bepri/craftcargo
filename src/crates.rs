@@ -26,7 +26,6 @@ use tempfile;
 
 use std::collections::{BTreeMap, HashSet};
 use std::fs;
-use std::hash::{Hash, Hasher};
 use std::io::{self, Read};
 use std::path::Path;
 use std::{self, ffi::OsStr};
@@ -54,13 +53,6 @@ pub type CrateDepInfo = BTreeMap<
         Vec<Dependency>,
     ),
 >;
-
-fn hash<H: Hash>(hashable: &H) -> u64 {
-    #![allow(deprecated)]
-    let mut hasher = std::hash::SipHasher::new();
-    hashable.hash(&mut hasher);
-    hasher.finish()
-}
 
 fn fetch_candidates(registry: &mut PackageRegistry, dep: &Dependency) -> Result<Vec<IndexSummary>> {
     let mut summaries = match registry.query_vec(dep, QueryKind::Exact) {
@@ -272,9 +264,9 @@ impl CrateInfo {
 
         let source_id = SourceId::crates_io_maybe_sparse_http(&context)?;
         let registry_name = format!(
-            "{}-{:016x}",
+            "{}-{}",
             source_id.url().host_str().unwrap_or(""),
-            hash(&source_id).swap_bytes()
+            cargo::util::hex::short_hash(&source_id)
         );
         let get_package_info = |context: &GlobalContext,
                                 possibly_yanked_ver: Option<&Version>|
