@@ -40,7 +40,8 @@ fn generate_package_with_crate_src() {
         .post_package_checks()
         .expect("Post-package-checks shouldn't fail");
 
-    let control = std::fs::read_to_string(tempdir.path().join("output/debian/control")).expect("Should be able to read generated debian/control file");
+    let control = std::fs::read_to_string(tempdir.path().join("output/debian/control"))
+        .expect("Should be able to read generated debian/control file");
 
     eprintln!("{control}");
 
