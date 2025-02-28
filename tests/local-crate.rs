@@ -24,7 +24,7 @@ fn local_package_test(crate_name: &str, version: &str) -> String {
         copyright_guess_harder: false,
         no_overlay_write_back: true,
     };
-    let mut process = PackageProcess::init(init_args).expect("SHould be able to init packaging");
+    let mut process = PackageProcess::init(init_args).expect("Should be able to init packaging");
     process
         .extract(extract_args)
         .expect("Should be able to extract crate");
