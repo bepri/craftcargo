@@ -1,6 +1,8 @@
+#[cfg(not(test))]
 use std::env::{self, VarError};
 use std::fmt::{self, Write};
 
+#[cfg(not(test))]
 use anyhow::{format_err, Error};
 use semver::Version;
 use textwrap::fill;
@@ -663,6 +665,7 @@ pub fn deb_feature_name(name: &str, feature: &str) -> String {
 
 /// Retrieve one of a series of environment variables, and provide a friendly error message for
 /// non-UTF-8 values.
+#[cfg(not(test))]
 fn get_envs(keys: &[&str]) -> Result<Option<String>> {
     for key in keys {
         match env::var(key) {
@@ -679,7 +682,13 @@ fn get_envs(keys: &[&str]) -> Result<Option<String>> {
     Ok(None)
 }
 
+#[cfg(test)]
+pub(crate) fn get_deb_author() -> Result<String> {
+    Ok("Debcargo Test <debcargo@example.com>".to_string())
+}
+
 /// Determine a name and email address from environment variables.
+#[cfg(not(test))]
 pub fn get_deb_author() -> Result<String> {
     let name = get_envs(&["DEBFULLNAME", "NAME"])?.ok_or_else(|| {
         format_err!("Unable to determine your name; please set $DEBFULLNAME or $NAME")
