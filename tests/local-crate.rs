@@ -54,3 +54,13 @@ fn generate_package_with_crate_src() {
     let expected = include_str!("foobar.expected");
     assert_eq!(actual, expected);
 }
+
+#[test]
+fn generate_package_with_semver_crate_src() {
+    let out_dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
+    let actual = local_package_test("foobar-semver", "0.1.0");
+    std::fs::write(out_dir.join("foobar-semver.actual"), &actual)
+        .expect("Should be able to write out generate control contents");
+    let expected = include_str!("foobar-semver.expected");
+    assert_eq!(actual, expected);
+}

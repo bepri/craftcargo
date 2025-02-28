@@ -1,0 +1,82 @@
+Source: rust-foobar-semver-0.1
+Section: rust
+Priority: optional
+Build-Depends: debhelper-compat (= 13),
+ dh-sequence-cargo
+Build-Depends-Arch: cargo:native <!nocheck>,
+ rustc:native <!nocheck>,
+ libstd-rust-dev <!nocheck>,
+ librust-anyhow-1+default-dev (>= 1.0.96-~~) <!nocheck>,
+ some-dependency-for-lib <!nocheck>
+Maintainer: Debian Rust Maintainers <pkg-rust-maintainers@alioth-lists.debian.net>
+Standards-Version: 4.7.0
+Vcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/foobar-semver-0.1]
+Vcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/foobar-semver-0.1
+X-Cargo-Crate: foobar-semver
+Rules-Requires-Root: no
+
+Package: librust-foobar-semver-0.1-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-anyhow-1+default-dev (>= 1.0.96-~~),
+ some-dependency-for-lib
+Suggests:
+ librust-foobar-semver-0.1+futures-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1+somefeature-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1+someotherfeature-dev (= ${binary:Version})
+Provides:
+ librust-foobar-semver-0-dev (= ${binary:Version}),
+ librust-foobar-semver-0+default-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1+default-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1.0-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1.0+default-dev (= ${binary:Version})
+Replaces: librust-foobar-semver-dev (<< 0.1.1~)
+Breaks: librust-foobar-semver-dev (<< 0.1.1~)
+Description: Rust crate "foobar-semver" - Rust source code
+ Source code for Debianized Rust crate "foobar-semver"
+
+Package: librust-foobar-semver-0.1+futures-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-foobar-semver-0.1-dev (= ${binary:Version}),
+ librust-futures+default-dev (>= 0.2-~~), librust-futures+default-dev (<< 0.4-~~)
+Provides:
+ librust-foobar-semver-0+futures-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1.0+futures-dev (= ${binary:Version})
+Description: Rust crate "foobar-semver" - feature "futures"
+ This metapackage enables feature "futures" for the Rust foobar-semver crate, by
+ pulling in any additional dependencies needed by that feature.
+
+Package: librust-foobar-semver-0.1+somefeature-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-foobar-semver-0.1-dev (= ${binary:Version}),
+ librust-thiserror-2-dev,
+ some-dependency-for-lib-with-feature
+Provides:
+ librust-foobar-semver-0+somefeature-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1.0+somefeature-dev (= ${binary:Version})
+Description: Rust crate "foobar-semver" - feature "somefeature"
+ This metapackage enables feature "somefeature" for the Rust foobar-semver
+ crate, by pulling in any additional dependencies needed by that feature.
+
+Package: librust-foobar-semver-0.1+someotherfeature-dev
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ librust-foobar-semver-0.1-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1+somefeature-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1+futures-dev (= ${binary:Version})
+Provides:
+ librust-foobar-semver-0+someotherfeature-dev (= ${binary:Version}),
+ librust-foobar-semver-0.1.0+someotherfeature-dev (= ${binary:Version})
+Description: Rust crate "foobar-semver" - feature "someotherfeature"
+ This metapackage enables feature "someotherfeature" for the Rust foobar-semver
+ crate, by pulling in any additional dependencies needed by that feature.

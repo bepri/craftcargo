@@ -1,0 +1,10 @@
+overlay = "."
+crate_src_path = "../../foobar-semver"
+build_depends = ["some-build-dependency"]
+semver_suffix = true
+
+[packages.lib]
+depends = ["some-dependency-for-lib"]
+
+[packages."lib+somefeature"]
+depends = ["some-dependency-for-lib-with-feature"]

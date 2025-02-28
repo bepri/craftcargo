@@ -2,6 +2,7 @@
 /tmp
 
 /tests/foobar/target
+/tests/foobar-semver/target
 
 # editor files
 *~
