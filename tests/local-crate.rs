@@ -1,11 +1,11 @@
 extern crate debcargo;
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
-fn local_package_test(crate_name: &str, version: &str) -> String {
+fn local_package_test(tmpdir: &Path, crate_name: &str, version: &str) -> String {
     let tempdir = tempfile::Builder::new()
         .prefix("debcargo")
-        .tempdir_in(".")
+        .tempdir_in(tmpdir)
         .expect("Should be able to create temporary directory");
     let output = std::process::Command::new(env!("CARGO_BIN_EXE_debcargo"))
         .env("DEBFULLNAME", "Debcargo Test")
@@ -30,7 +30,7 @@ fn local_package_test(crate_name: &str, version: &str) -> String {
 #[test]
 fn generate_package_with_crate_src() {
     let out_dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
-    let actual = local_package_test("foobar", "0.1.0");
+    let actual = local_package_test(&out_dir, "foobar", "0.1.0");
     std::fs::write(out_dir.join("foobar.actual"), &actual)
         .expect("Should be able to write out generate control contents");
     let expected = include_str!("foobar.expected");
@@ -40,7 +40,7 @@ fn generate_package_with_crate_src() {
 #[test]
 fn generate_package_with_semver_crate_src() {
     let out_dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
-    let actual = local_package_test("foobar-semver", "0.1.0");
+    let actual = local_package_test(&out_dir, "foobar-semver", "0.1.0");
     std::fs::write(out_dir.join("foobar-semver.actual"), &actual)
         .expect("Should be able to write out generate control contents");
     let expected = include_str!("foobar-semver.expected");
