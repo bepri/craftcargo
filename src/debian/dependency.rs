@@ -102,12 +102,12 @@ impl VRange {
         self
     }
 
-    fn to_deb_clause(&self, base: &str, suffix: &str) -> Result<String> {
+    fn to_deb_clause(&self, base: &str, suffix: &str) -> Result<Vec<String>> {
         use debian::dependency::V::*;
         match (&self.ge, &self.lt) {
-            (None, None) => Ok(format!("{}{}", base, suffix)),
-            (Some(ge), None) => Ok(format!("{}{} (>= {}-~~)", base, suffix, ge)),
-            (None, Some(lt)) => Ok(format!("{}{} (<< {}-~~)", base, suffix, lt)),
+            (None, None) => Ok(vec![format!("{}{}", base, suffix)]),
+            (Some(ge), None) => Ok(vec![format!("{}{} (>= {}-~~)", base, suffix, ge)]),
+            (None, Some(lt)) => Ok(vec![format!("{}{} (<< {}-~~)", base, suffix, lt)]),
             (Some(ge), Some(lt)) => {
                 if ge >= lt {
                     debcargo_bail!("bad version range: >= {}, << {}", ge, lt);
@@ -172,7 +172,7 @@ impl VRange {
                             }
                         }
                     })
-                    .join(", "))
+                    .collect())
             }
         }
     }
@@ -293,8 +293,7 @@ fn generate_version_constraints(
 }
 
 /// Translates a Cargo dependency into a Debian package dependency.
-pub fn deb_dep(allow_prerelease_deps: bool, dep: &Dependency) -> Result<Vec<String>> // result is an AND-clause
-{
+pub fn deb_dep(allow_prerelease_deps: bool, dep: &Dependency) -> Result<Vec<String>> {
     let dep_dashed = base_deb_name(&dep.package_name());
     let mut suffixes = Vec::new();
     if dep.uses_default_features() {
@@ -315,7 +314,7 @@ pub fn deb_dep(allow_prerelease_deps: bool, dep: &Dependency) -> Result<Vec<Stri
             let op = coerce_unacceptable_predicate(dep, p, allow_prerelease_deps)?;
             generate_version_constraints(&mut vr, dep, p, op)?;
         }
-        deps.push(vr.to_deb_clause(&base, &suffix)?);
+        deps.extend(vr.to_deb_clause(&base, &suffix)?);
     }
     Ok(deps)
 }

@@ -45,7 +45,8 @@ Multi-Arch: same
 Depends:
  ${misc:Depends},
  librust-foobar-dev (= ${binary:Version}),
- librust-futures+default-dev (>= 0.2-~~), librust-futures+default-dev (<< 0.4-~~)
+ librust-futures+default-dev (<< 0.4-~~),
+ librust-futures+default-dev (>= 0.2-~~)
 Provides:
  librust-foobar-0+futures-dev (= ${binary:Version}),
  librust-foobar-0.1+futures-dev (= ${binary:Version}),
