@@ -485,7 +485,7 @@ impl Package {
         Package {
             name,
             arch: "any".to_string(),
-            multi_arch: "allowed".to_string(),
+            multi_arch: "foreign".to_string(),
             section: section.map(|s| s.to_string()),
             depends: vec![
                 "${misc:Depends}".to_string(),

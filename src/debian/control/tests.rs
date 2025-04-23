@@ -167,7 +167,7 @@ fn test_package_new_bin() {
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
     assert_eq!("any", instance.arch);
-    assert_eq!("allowed", instance.multi_arch);
+    assert_eq!("foreign", instance.multi_arch);
     assert_eq!(Some("rust".to_owned()), instance.section);
     assert_eq!(
         vec!["${misc:Depends}", "${shlibs:Depends}", "${cargo:Depends}"],
@@ -201,7 +201,7 @@ fn test_package_display() {
     );
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
-    let expected = "Package: rsa\nArchitecture: any\nMulti-Arch: allowed\nSection: rust\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
+    let expected = "Package: rsa\nArchitecture: any\nMulti-Arch: foreign\nSection: rust\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
 
     assert_eq!(expected, instance.to_string());
 }
