@@ -76,6 +76,7 @@ pub struct PackageOverride {
     section: Option<String>,
     summary: Option<String>,
     description: Option<String>,
+    multi_arch: Option<String>,
     depends: Option<Vec<String>>,
     recommends: Option<Vec<String>>,
     suggests: Option<Vec<String>>,
@@ -217,6 +218,10 @@ impl Config {
 
     pub fn package_description(&self, key: PackageKey) -> Option<&str> {
         self.with_package(key, |pkg| pkg.description.as_deref())
+    }
+
+    pub fn package_multi_arch(&self, key: PackageKey) -> Option<&str> {
+        self.with_package(key, |pkg| pkg.multi_arch.as_deref())
     }
 
     pub fn package_depends(&self, key: PackageKey) -> Option<&Vec<String>> {

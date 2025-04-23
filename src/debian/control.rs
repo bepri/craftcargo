@@ -587,6 +587,9 @@ impl Package {
                 .flatten()
                 .map(|s| s.to_string()),
         );
+        if let Some(multi_arch) = config.package_multi_arch(key) {
+            self.multi_arch = multi_arch.to_owned();
+        }
     }
 }
 
