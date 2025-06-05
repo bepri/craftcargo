@@ -26,7 +26,7 @@ fn source_package_override() {
 
     assert_eq!(config.section().unwrap(), "rust");
 
-    assert_eq!(config.packages.len(), 1);
+    assert_eq!(config.packages.len(), 2);
     assert_eq!(
         config.package_summary(PackageKey::Bin).unwrap(),
         "Tool to create Debian package from Rust crate"
@@ -39,6 +39,18 @@ This package provides debcargo a tool to create Debian source package from Rust
 crate. The package created by this tool is as per the packaging policy set by
 Debian Rust team.
 "
+    );
+
+    let extra = PackageKey::Extra("libblake3-0");
+    assert_eq!(config.package_architecture(extra).unwrap(), &vec!["any"]);
+    assert_eq!(config.package_section(extra).unwrap(), "libs");
+    assert_eq!(
+        config.package_depends(extra).unwrap(),
+        &vec!["${misc:Depends}", "${shlibs:Depends}"]
+    );
+    assert_eq!(
+        config.package_description(extra).unwrap(),
+        "BLAKE3 hash function - C library"
     );
 }
 

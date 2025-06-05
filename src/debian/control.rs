@@ -508,6 +508,25 @@ impl Package {
         }
     }
 
+    pub fn new_extra(name: String) -> Self {
+        Package {
+            name,
+            arch: Default::default(),
+            multi_arch: Default::default(),
+            section: Default::default(),
+            depends: Default::default(),
+            recommends: Default::default(),
+            suggests: Default::default(),
+            provides: Default::default(),
+            breaks: Default::default(),
+            replaces: Default::default(),
+            conflicts: Default::default(),
+            summary: Description::new(Default::default(), Default::default()),
+            description: Description::new(Default::default(), Default::default()),
+            extra_lines: Default::default(),
+        }
+    }
+
     pub fn name(&self) -> &str {
         self.name.as_str()
     }

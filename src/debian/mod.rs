@@ -1085,6 +1085,14 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         write!(control, "\n{}", bin_pkg)?;
     }
 
+    for configured in config.configured_packages() {
+        if let PackageKey::Extra(package) = configured {
+            let mut extra_pkg = Package::new_extra(package.to_string());
+            extra_pkg.apply_overrides(config, configured, vec![]);
+            write!(control, "\n{}", extra_pkg)?;
+        }
+    }
+
     Ok((source, has_dev_deps, test_is_broken("default")?))
 }
 

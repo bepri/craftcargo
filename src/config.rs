@@ -151,6 +151,12 @@ impl Config {
             }
         }
 
+        for field in config.packages.keys() {
+            if PackageKey::from_key(field).is_none() {
+                unknown_fields.push(format!("packages.{}", field));
+            }
+        }
+
         for (name, package) in &config.packages {
             for field in package.unknown_fields.keys() {
                 unknown_fields.push(format!("packages.{}.{}", name, field));
@@ -170,10 +176,7 @@ impl Config {
     }
 
     pub fn build_bin_package(&self) -> bool {
-        match self.bin {
-            None => !self.semver_suffix,
-            Some(b) => b,
-        }
+        self.bin.unwrap_or(!self.semver_suffix)
     }
 
     pub fn overlay_dir(&self, config_path: Option<&Path>) -> Option<PathBuf> {
@@ -246,7 +249,11 @@ impl Config {
         self.source.as_ref()?.skip_nocheck
     }
 
-    // Packages shortcuts
+    // Packages accessors
+
+    pub fn configured_packages(&self) -> impl Iterator<Item = PackageKey> {
+        self.packages.keys().flat_map(|k| PackageKey::from_key(k))
+    }
 
     fn with_package<'a, T, F: FnOnce(&'a PackageOverride) -> Option<T>>(
         &'a self,
@@ -338,6 +345,7 @@ pub enum PackageKey<'a> {
     Bin,
     BareLib,
     FeatureLib(&'a str),
+    Extra(&'a str),
 }
 
 impl<'a> PackageKey<'a> {
@@ -350,12 +358,30 @@ impl<'a> PackageKey<'a> {
         }
     }
 
+    pub fn from_key(k: &'a str) -> Option<PackageKey<'a>> {
+        use self::PackageKey::*;
+        Some(match k {
+            "bin" => Bin,
+            "lib" => BareLib,
+            _ => {
+                if let Some(feature) = k.strip_prefix("lib+") {
+                    FeatureLib(feature)
+                } else if let Some(package) = k.strip_prefix("extra+") {
+                    Extra(package)
+                } else {
+                    return None;
+                }
+            }
+        })
+    }
+
     fn key_string(&self) -> Cow<'static, str> {
         use self::PackageKey::*;
         match self {
             Bin => "bin".into(),
             BareLib => "lib".into(),
             FeatureLib(feature) => format!("lib+{}", feature).into(),
+            Extra(package) => format!("extra+{}", package).into(),
         }
     }
 }
