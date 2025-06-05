@@ -30,7 +30,7 @@ pub struct Config {
     pub requires_root: Option<String>,
 
     pub source: Option<SourceOverride>,
-    pub packages: Option<HashMap<String, PackageOverride>>,
+    pub packages: HashMap<String, PackageOverride>,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -108,7 +108,7 @@ impl Default for Config {
             uploaders: None,
             collapse_features: false,
             source: None,
-            packages: None,
+            packages: HashMap::new(),
             requires_root: None,
         }
     }
@@ -203,10 +203,7 @@ impl Config {
         key: PackageKey,
         f: F,
     ) -> Option<T> {
-        self.packages
-            .as_ref()?
-            .get(&package_key_string(key))
-            .and_then(f)
+        self.packages.get(&package_key_string(key)).and_then(f)
     }
 
     pub fn package_section(&self, key: PackageKey) -> Option<&str> {
