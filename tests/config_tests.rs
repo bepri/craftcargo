@@ -125,3 +125,73 @@ Debian Rust team.
 "
     );
 }
+
+#[test]
+fn unknown_fields_captured_with_warning() {
+    use std::fs::File;
+    use std::io::Write;
+    use tempfile::tempdir;
+
+    let dir = tempdir().unwrap();
+    let file_path = dir.path().join("test_debcargo.toml");
+
+    // Test unknown field at top level
+    let mut file = File::create(&file_path).unwrap();
+    writeln!(
+        file,
+        r#"
+semver_suffix = true
+overlay = "."
+verlay = "typo"  # This should be captured as an unknown field
+"#
+    )
+    .unwrap();
+    drop(file);
+
+    let result = Config::parse(&file_path);
+    assert!(result.is_ok());
+    let config = result.unwrap();
+    assert!(config.unknown_fields.contains_key("verlay"));
+
+    // Test unknown field in source section
+    let mut file = File::create(&file_path).unwrap();
+    writeln!(
+        file,
+        r#"
+[source]
+section = "rust"
+unknown_field = "value"
+"#
+    )
+    .unwrap();
+    drop(file);
+
+    let result = Config::parse(&file_path);
+    assert!(result.is_ok());
+    let config = result.unwrap();
+    assert!(config.source.is_some());
+    if let Some(source) = config.source {
+        assert!(source.unknown_fields.contains_key("unknown_field"));
+    }
+
+    // Test unknown field in packages section
+    let mut file = File::create(&file_path).unwrap();
+    writeln!(
+        file,
+        r#"
+[packages.lib]
+section = "libs"
+unknwon_field = "value"
+"#
+    )
+    .unwrap();
+    drop(file);
+
+    let result = Config::parse(&file_path);
+    assert!(result.is_ok());
+    let config = result.unwrap();
+    assert!(config.packages.contains_key("lib"));
+    if let Some(lib_package) = config.packages.get("lib") {
+        assert!(lib_package.unknown_fields.contains_key("unknwon_field"));
+    }
+}

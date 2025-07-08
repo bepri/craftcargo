@@ -2,7 +2,8 @@ Source: rust-foobar-semver-0.1
 Section: rust
 Priority: optional
 Build-Depends: debhelper-compat (= 13),
- dh-sequence-cargo
+ dh-sequence-cargo,
+ some-build-dependency
 Build-Depends-Arch: cargo:native <!nocheck>,
  rustc:native <!nocheck>,
  libstd-rust-dev <!nocheck>,

@@ -31,6 +31,9 @@ pub struct Config {
 
     pub source: Option<SourceOverride>,
     pub packages: HashMap<String, PackageOverride>,
+
+    #[serde(flatten)]
+    pub unknown_fields: HashMap<String, toml::Value>,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -44,6 +47,9 @@ pub struct SourceOverride {
     build_depends_arch: Option<Vec<String>>,
     build_depends_indep: Option<Vec<String>>,
     build_depends_excludes: Option<Vec<String>>,
+
+    #[serde(flatten)]
+    pub unknown_fields: HashMap<String, toml::Value>,
 }
 
 impl SourceOverride {
@@ -68,6 +74,7 @@ impl SourceOverride {
             build_depends_arch,
             build_depends_indep,
             build_depends_excludes,
+            unknown_fields: HashMap::new(),
         }
     }
 }
@@ -89,6 +96,9 @@ pub struct PackageOverride {
     test_is_broken: Option<bool>,
     test_architecture: Option<Vec<String>>,
     test_depends: Option<Vec<String>>,
+
+    #[serde(flatten)]
+    pub unknown_fields: HashMap<String, toml::Value>,
 }
 
 impl Default for Config {
@@ -110,6 +120,7 @@ impl Default for Config {
             source: None,
             packages: HashMap::new(),
             requires_root: None,
+            unknown_fields: HashMap::new(),
         }
     }
 }
@@ -120,7 +131,36 @@ impl Config {
         let mut content = String::new();
         config_file.read_to_string(&mut content)?;
 
-        Ok(toml::from_str(&content)?)
+        let config: Config = toml::from_str(&content)?;
+
+        let mut unknown_fields = Vec::new();
+
+        for field in config.unknown_fields.keys() {
+            unknown_fields.push(field.clone());
+        }
+
+        if let Some(ref source) = config.source {
+            for field in source.unknown_fields.keys() {
+                unknown_fields.push(format!("source.{}", field));
+            }
+        }
+
+        for (name, package) in &config.packages {
+            for field in package.unknown_fields.keys() {
+                unknown_fields.push(format!("packages.{}.{}", name, field));
+            }
+        }
+
+        if !unknown_fields.is_empty() {
+            eprintln!(
+                "Warning: Unknown fields in {}: {:?}",
+                src.display(),
+                unknown_fields
+            );
+            eprintln!("         These fields will be ignored. Please check for typos.");
+        }
+
+        Ok(config)
     }
 
     pub fn build_bin_package(&self) -> bool {

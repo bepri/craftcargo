@@ -1,5 +1,7 @@
 overlay = "."
 crate_src_path = "../../foobar"
+
+[source]
 build_depends = ["some-build-dependency"]
 
 [packages.lib]
