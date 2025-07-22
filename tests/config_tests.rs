@@ -63,6 +63,40 @@ Debian Rust team.
 }
 
 #[test]
+fn binary_package_override() {
+    let filepath = Path::new("tests/tiny-dfr_override.toml");
+    let config = Config::parse(filepath);
+    assert!(config.is_ok());
+
+    let config = config.unwrap();
+
+    assert!(config.packages.is_some());
+
+    assert_eq!(
+        config.package_summary(PackageKey::Bin),
+        Some("dynamic touch bar daemon")
+    );
+
+    assert_eq!(
+        config.package_description(PackageKey::Bin),
+        Some(
+            "\
+    This package contains tiny-dfr, the userland touch bar daemon.
+
+tiny-dfr shows the function row and media control keys (brightness,
+volume, backlight, play, etc) on your touch bar. Currently supported
+platforms are Apple Silicon and T2 Macs.
+"
+        )
+    );
+
+    assert_eq!(
+        config.package_architecture(PackageKey::Bin),
+        Some(&vec!["arm64".to_string(), "amd64".to_string()])
+    );
+}
+
+#[test]
 fn sd_top_level() {
     let filepath = Path::new("tests/debcargo_override_top_level.toml");
     let config = Config::parse(filepath);

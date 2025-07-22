@@ -196,6 +196,12 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 #PLACEHOLDER
 #"""
 
+# Value for the Architecture field of the package. If omitted, debcargo will
+# set "any" for both 'bin' and 'lib' packages.
+# Note that 'lib' packages should not be "Architecture: all". For reference,
+# see https://rust-team.pages.debian.net/book/policy.html#why-architecture-any
+#architecture = ["PLACEHOLDER", "PLACEHOLDER"]
+
 # Value for the Multi-Arch field of the package. If omitted, debcargo will
 # automatically set 'foreign' for 'bin', and 'same' for all 'lib' packages.
 #multi_arch = "no|same|foreign|allowed"
