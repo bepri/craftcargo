@@ -207,6 +207,24 @@ fn test_package_display() {
 }
 
 #[test]
+fn test_package_display_arch() {
+    let basename: &str = "tiny-dfr";
+    let name_suffix: Option<&str> = None;
+    let section = Some("utils");
+    let summary: Description = Description::new("".to_owned(), "".to_owned());
+    let description: Description = Description::new(
+        "description_start\n\nempty lines\n\ndescription_stop".to_owned(),
+        "".to_owned(),
+    );
+    let mut instance = Package::new_bin(basename, name_suffix, section, summary, description);
+    instance.arch = "arm64 amd64".to_string();
+
+    let expected = "Package: tiny-dfr\nArchitecture: arm64 amd64\nMulti-Arch: foreign\nSection: utils\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
+
+    assert_eq!(expected, instance.to_string());
+}
+
+#[test]
 fn test_package_summary_check_len() {
     let basename: &str = "rsa";
     let name_suffix: Option<&str> = None;

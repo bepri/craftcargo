@@ -4,7 +4,7 @@ use anyhow::Context;
 
 use clap::{crate_version, Parser};
 
-use crate::config::Config;
+use crate::config::{Config, PackageKey};
 use crate::crates::CrateInfo;
 use crate::debian::{self, DebInfo};
 use crate::errors::Result;
@@ -244,6 +244,17 @@ impl PackageProcess {
                     debcargo_warn!("\t •  Add or edit files in your overlay directory:");
                     debcargo_warn!("\t    {}", util::rel_p(&p, &curdir));
                 }
+            }
+        }
+        if let Some(architecture) = self.config.package_architecture(PackageKey::BareLib) {
+            if architecture == &vec!["all"] {
+                debcargo_warn!("");
+                debcargo_warn!(
+                    "'Architecture: all' override found for library package. This potentially breaks Multi-Arch,"
+                );
+                debcargo_warn!(
+                    "see https://rust-team.pages.debian.net/book/policy.html#why-architecture-any."
+                );
             }
         }
         Ok(())

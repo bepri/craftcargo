@@ -1,0 +1,16 @@
+overlay = "."
+uploaders = ["Andreas Henriksson <andreas@fatal.se>", "NoisyCoil <noisycoil@tutanota.com>"]
+
+[source]
+section = "utils"
+
+[packages.bin]
+summary = "dynamic touch bar daemon"
+description = """
+This package contains tiny-dfr, the userland touch bar daemon.
+
+tiny-dfr shows the function row and media control keys (brightness,
+volume, backlight, play, etc) on your touch bar. Currently supported
+platforms are Apple Silicon and T2 Macs.
+"""
+architecture = ["arm64", "amd64"]
