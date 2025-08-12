@@ -35,7 +35,7 @@ pub struct Source {
 pub struct Package {
     name: String,
     arch: String,
-    multi_arch: String,
+    multi_arch: Option<String>,
     section: Option<String>,
     depends: Vec<String>,
     recommends: Vec<String>,
@@ -126,7 +126,10 @@ impl fmt::Display for Package {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "Package: {}", self.name)?;
         writeln!(f, "Architecture: {}", self.arch)?;
-        writeln!(f, "Multi-Arch: {}", self.multi_arch)?;
+        if let Some(ref multi_arch) = self.multi_arch {
+            writeln!(f, "Multi-Arch: {}", multi_arch)?;
+        }
+
         if let Some(section) = &self.section {
             writeln!(f, "Section: {}", section)?;
         }
@@ -452,7 +455,7 @@ impl Package {
             // duplicate packages in the Debian archive. For very large crates we
             // will eventually want to make debcargo generate -data packages that
             // are arch:all and have the arch:any -dev packages depend on it.
-            multi_arch: "same".to_string(),
+            multi_arch: Some("same".to_string()),
             section: None,
             depends,
             recommends,
@@ -485,7 +488,7 @@ impl Package {
         Package {
             name,
             arch: "any".to_string(),
-            multi_arch: "foreign".to_string(),
+            multi_arch: None,
             section: section.map(|s| s.to_string()),
             depends: vec![
                 "${misc:Depends}".to_string(),
@@ -591,7 +594,7 @@ impl Package {
             self.arch = architecture.join(" ");
         }
         if let Some(multi_arch) = config.package_multi_arch(key) {
-            self.multi_arch = multi_arch.to_owned();
+            self.multi_arch = Some(multi_arch.to_owned());
         }
     }
 }

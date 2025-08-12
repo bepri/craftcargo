@@ -136,7 +136,7 @@ fn test_package_new() {
     assert!(instance.is_ok());
     let instance = instance.unwrap();
     assert_eq!("any", instance.arch);
-    assert_eq!("same", instance.multi_arch);
+    assert_eq!(Some("same".to_string()), instance.multi_arch);
     assert_eq!(None, instance.section);
     assert_eq!(vec!["${misc:Depends}"], instance.depends);
     assert_eq!(Vec::<String>::new(), instance.recommends);
@@ -167,7 +167,7 @@ fn test_package_new_bin() {
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
     assert_eq!("any", instance.arch);
-    assert_eq!("foreign", instance.multi_arch);
+    assert_eq!(None, instance.multi_arch);
     assert_eq!(Some("rust".to_owned()), instance.section);
     assert_eq!(
         vec!["${misc:Depends}", "${shlibs:Depends}", "${cargo:Depends}"],
@@ -201,7 +201,7 @@ fn test_package_display() {
     );
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
-    let expected = "Package: rsa\nArchitecture: any\nMulti-Arch: foreign\nSection: rust\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
+    let expected = "Package: rsa\nArchitecture: any\nSection: rust\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
 
     assert_eq!(expected, instance.to_string());
 }
@@ -219,7 +219,7 @@ fn test_package_display_arch() {
     let mut instance = Package::new_bin(basename, name_suffix, section, summary, description);
     instance.arch = "arm64 amd64".to_string();
 
-    let expected = "Package: tiny-dfr\nArchitecture: arm64 amd64\nMulti-Arch: foreign\nSection: utils\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
+    let expected = "Package: tiny-dfr\nArchitecture: arm64 amd64\nSection: utils\nDepends:\n ${misc:Depends},\n ${shlibs:Depends},\n ${cargo:Depends}\nRecommends:\n ${cargo:Recommends}\nSuggests:\n ${cargo:Suggests}\nProvides:\n ${cargo:Provides}\nBuilt-Using: ${cargo:Built-Using}\nStatic-Built-Using: ${cargo:Static-Built-Using}\nDescription: \n description_start\n .\n empty lines\n .\n description_stop\n";
 
     assert_eq!(expected, instance.to_string());
 }
