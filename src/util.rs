@@ -89,9 +89,7 @@ pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
 }
 
 pub fn rel_p<'a>(path: &'a Path, base: &'a Path) -> Cow<'a, str> {
-    path.strip_prefix(base)
-        .unwrap_or(path)
-        .to_string_lossy()
+    path.strip_prefix(base).unwrap_or(path).to_string_lossy()
 }
 
 pub fn copy_tree(oldtree: &Path, newtree: &Path) -> Result<(), Error> {
