@@ -104,8 +104,7 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 # should not enable this just because "somebody told you so".
 #collapse_features = false
 
-# Set the Rules-Requires-Root field in debian/control; by default, this is set
-# to "no"
+# Set the Rules-Requires-Root field in debian/control; by default, this unset.
 #requires_root = "yes"
 
 [source]
