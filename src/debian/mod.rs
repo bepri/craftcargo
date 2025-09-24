@@ -369,22 +369,26 @@ pub fn prepare_debian_folder(
                     .uscan_version_pattern
                     .as_ref()
                     .map_or_else(|| "@ANY_VERSION@".to_string(), |ref s| s.to_string());
-                writeln!(watch, "version=4")?;
+                writeln!(watch, "Version: 5\n")?;
                 writeln!(
                     watch,
-                    r"opts=filenamemangle=s/.*\/(.*)\/download/{name}-$1\.tar\.gz/g,\",
-                    name = upstream_name
+                    "Source: https://qa.debian.org/cgi-bin/fakeupstream.cgi?upstream=crates.io/{name}",
+                    name = upstream_name,
                 )?;
                 writeln!(
                     watch,
-                    r"uversionmangle=s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/ \"
-                )?;
-                writeln!(
-                    watch,
-                    "https://qa.debian.org/cgi-bin/fakeupstream.cgi?upstream=crates.io/{name} \
-                     .*/crates/{name}/{version_pattern}/download",
+                    "Matching-Pattern:  .*/crates/{name}/{version_pattern}/download",
                     name = upstream_name,
                     version_pattern = uscan_version_pattern
+                )?;
+                writeln!(
+                    watch,
+                    r"Filenamemangle: s/.*\/(.*)\/download/{name}-$1\.tar\.gz/g",
+                    name = upstream_name,
+                )?;
+                writeln!(
+                    watch,
+                    r"Uversionmangle: s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/"
                 )?;
             }
         };
