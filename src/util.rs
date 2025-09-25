@@ -66,7 +66,7 @@ pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
                     }
                     Err(e) => {
                         debcargo_warn!(
-                            "Warning: Could not read line from file {:?}: {}",
+                            "Warning: Could not check for FIXMEs in file {:?}: {}",
                             rel_p(entry.path(), srcdir),
                             e
                         );
