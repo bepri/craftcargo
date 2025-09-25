@@ -13,7 +13,7 @@ fn source_package_override() {
     let config = config.unwrap();
 
     assert!(config.source.is_some());
-    assert!(config.packages.is_some());
+    assert_eq!(config.packages.len(), 1);
 
     let policy = config.policy_version();
     assert!(policy.is_some());
@@ -38,7 +38,7 @@ fn source_package_override() {
     assert!(section.is_some());
     assert_eq!(section.unwrap(), "rust");
 
-    assert!(config.packages.is_some());
+    assert_eq!(config.packages.len(), 1);
     let sd = config.package_summary(PackageKey::Bin);
     assert!(sd.is_some());
 
@@ -70,7 +70,7 @@ fn binary_package_override() {
 
     let config = config.unwrap();
 
-    assert!(config.packages.is_some());
+    assert_eq!(config.packages.len(), 1);
 
     assert_eq!(
         config.package_summary(PackageKey::Bin),
