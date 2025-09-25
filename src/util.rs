@@ -70,6 +70,7 @@ pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
                             rel_p(entry.path(), srcdir),
                             e
                         );
+                        break;
                     }
                 }
             }
