@@ -219,7 +219,7 @@ impl PackageProcess {
             util::rel_p(output_dir, &curdir),
             util::rel_p(orig_tarball, &curdir)
         );
-        let fixmes = util::lookup_fixmes(output_dir.join("debian").as_path())?;
+        let fixmes = util::lookup_fixmes(output_dir)?;
         if !fixmes.is_empty() {
             debcargo_warn!("FIXME found in the following files.");
             for f in fixmes {

@@ -49,7 +49,8 @@ pub fn hint_file_for(file: &Path) -> Option<Cow<'_, Path>> {
 
 pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
     let mut fixmes = BTreeSet::new();
-    for entry in WalkDir::new(srcdir) {
+    let debiandir = srcdir.join("debian");
+    for entry in WalkDir::new(debiandir) {
         let entry = entry?;
         if entry.file_type().is_file() {
             let file = fs::File::open(entry.path())?;
