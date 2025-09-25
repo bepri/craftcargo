@@ -57,9 +57,20 @@ pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
             // If we find one FIXME we break the loop and check next file. Idea
             // is only to find files with FIXME strings in it.
             for line in reader.lines() {
-                if line?.contains("FIXME") {
-                    fixmes.insert(entry.path().to_path_buf());
-                    break;
+                match line {
+                    Ok(line_content) => {
+                        if line_content.contains("FIXME") {
+                            fixmes.insert(entry.path().to_path_buf());
+                            break;
+                        }
+                    }
+                    Err(e) => {
+                        debcargo_warn!(
+                            "Warning: Could not read line from file {:?}: {}",
+                            rel_p(entry.path(), srcdir),
+                            e
+                        );
+                    }
                 }
             }
         }
@@ -77,8 +88,8 @@ pub fn lookup_fixmes(srcdir: &Path) -> Result<BTreeSet<PathBuf>, Error> {
     Ok(fixmes)
 }
 
-pub fn rel_p<'a>(path: &'a Path, base: &'a Path) -> &'a str {
-    path.strip_prefix(base).unwrap_or(path).to_str().unwrap()
+pub fn rel_p<'a>(path: &'a Path, base: &'a Path) -> Cow<'a, str> {
+    path.strip_prefix(base).unwrap_or(path).to_string_lossy()
 }
 
 pub fn copy_tree(oldtree: &Path, newtree: &Path) -> Result<(), Error> {
