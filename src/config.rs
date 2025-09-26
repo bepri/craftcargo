@@ -152,12 +152,12 @@ impl Config {
         }
 
         if !unknown_fields.is_empty() {
-            eprintln!(
+            debcargo_warn!(
                 "Warning: Unknown fields in {}: {:?}",
                 src.display(),
                 unknown_fields
             );
-            eprintln!("         These fields will be ignored. Please check for typos.");
+            debcargo_warn!("         These fields will be ignored. Please check for typos.");
         }
 
         Ok(config)
