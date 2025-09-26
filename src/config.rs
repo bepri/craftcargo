@@ -252,7 +252,7 @@ impl Config {
         key: PackageKey,
         f: F,
     ) -> Option<T> {
-        self.packages.get(&package_key_string(key)[..]).and_then(f)
+        self.packages.get(&key.key_string()[..]).and_then(f)
     }
 
     pub fn package_section(&self, key: PackageKey) -> Option<&str> {
@@ -349,14 +349,14 @@ impl<'a> PackageKey<'a> {
             FeatureLib(f)
         }
     }
-}
 
-fn package_key_string(key: PackageKey) -> Cow<'static, str> {
-    use self::PackageKey::*;
-    match key {
-        Bin => "bin".into(),
-        BareLib => "lib".into(),
-        FeatureLib(feature) => format!("lib+{}", feature).into(),
+    fn key_string(&self) -> Cow<'static, str> {
+        use self::PackageKey::*;
+        match self {
+            Bin => "bin".into(),
+            BareLib => "lib".into(),
+            FeatureLib(feature) => format!("lib+{}", feature).into(),
+        }
     }
 }
 
