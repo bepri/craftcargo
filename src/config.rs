@@ -3,7 +3,9 @@ use toml;
 
 use crate::errors::*;
 
+use std::borrow::Cow;
 use std::collections::HashMap;
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
@@ -250,7 +252,7 @@ impl Config {
         key: PackageKey,
         f: F,
     ) -> Option<T> {
-        self.packages.get(&package_key_string(key)).and_then(f)
+        self.packages.get(&package_key_string(key)[..]).and_then(f)
     }
 
     pub fn package_section(&self, key: PackageKey) -> Option<&str> {
@@ -349,19 +351,20 @@ impl<'a> PackageKey<'a> {
     }
 }
 
-fn package_key_string(key: PackageKey) -> String {
+fn package_key_string(key: PackageKey) -> Cow<'static, str> {
     use self::PackageKey::*;
     match key {
-        Bin => "bin".to_string(),
-        BareLib => "lib".to_string(),
-        FeatureLib(feature) => format!("lib+{}", feature),
+        Bin => "bin".into(),
+        BareLib => "lib".into(),
+        FeatureLib(feature) => format!("lib+{}", feature).into(),
     }
 }
 
 pub fn testing_ignore_debpolv() -> bool {
-    std::env::var("DEBCARGO_TESTING_IGNORE_DEBIAN_POLICY_VIOLATION") == Ok("1".to_string())
+    std::env::var_os("DEBCARGO_TESTING_IGNORE_DEBIAN_POLICY_VIOLATION").as_deref()
+        == Some(OsStr::new("1"))
 }
 
 pub fn testing_ruzt() -> bool {
-    std::env::var("DEBCARGO_TESTING_RUZT") == Ok("1".to_string())
+    std::env::var_os("DEBCARGO_TESTING_RUZT").as_deref() == Some(OsStr::new("1"))
 }
