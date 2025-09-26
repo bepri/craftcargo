@@ -1,3 +1,4 @@
+use serde::de::IgnoredAny;
 use serde::Deserialize;
 use toml;
 
@@ -35,7 +36,7 @@ pub struct Config {
     pub packages: HashMap<String, PackageOverride>,
 
     #[serde(flatten)]
-    pub unknown_fields: HashMap<String, toml::Value>,
+    pub unknown_fields: HashMap<String, IgnoredAny>,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -52,7 +53,7 @@ pub struct SourceOverride {
     skip_nocheck: Option<bool>,
 
     #[serde(flatten)]
-    pub unknown_fields: HashMap<String, toml::Value>,
+    pub unknown_fields: HashMap<String, IgnoredAny>,
 }
 
 impl SourceOverride {
@@ -103,7 +104,7 @@ pub struct PackageOverride {
     test_depends: Option<Vec<String>>,
 
     #[serde(flatten)]
-    pub unknown_fields: HashMap<String, toml::Value>,
+    pub unknown_fields: HashMap<String, IgnoredAny>,
 }
 
 impl Default for Config {
