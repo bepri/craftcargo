@@ -899,6 +899,11 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             }
         }
 
+        let mut no_features_edge_case = BTreeMap::new();
+        no_features_edge_case.insert("", (vec![], vec![]));
+        no_features_edge_case.insert("default", (vec![""], vec![]));
+        let no_features_edge_case = features_with_deps == no_features_edge_case;
+
         for (feature, (f_deps, o_deps)) in reduced_features_with_deps.into_iter() {
             let pk = PackageKey::feature(feature);
             let f_provides = provides.remove(feature).unwrap();
@@ -998,44 +1003,47 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             }
 
             // Generate tests for all features in this package
-            for f in crate_features {
-                let (feature_deps, _) = transitive_deps(&features_with_deps, f)?;
+            if !no_features_edge_case {
+                for f in crate_features {
+                    let (feature_deps, _) = transitive_deps(&features_with_deps, f)?;
 
-                // args
-                let mut args = if f == "default" || feature_deps.contains(&"default") {
-                    vec![]
-                } else {
-                    vec!["--no-default-features"]
-                };
-                // --features default sometimes fails, see
-                // https://github.com/rust-lang/cargo/issues/8164
-                if !f.is_empty() && f != "default" {
-                    args.push("--features");
-                    args.push(f);
-                }
-
-                // deps
-                let test_depends = generate_test_dependencies(f, &feature_deps, config, &test_deps);
-                let test_arch = match test_architecture(f)? {
-                    Some(v) => v.to_owned(),
-                    None => Vec::new(),
-                };
-                let test_arch: Vec<&str> = test_arch.iter().map(AsRef::as_ref).collect();
-                let pkgtest = PkgTest::new(
-                    package.name(),
-                    crate_name,
-                    f,
-                    deb_upstream_version,
-                    args,
-                    &test_depends,
-                    if test_is_broken(f)? {
-                        vec!["flaky"]
-                    } else {
+                    // args
+                    let mut args = if f == "default" || feature_deps.contains(&"default") {
                         vec![]
-                    },
-                    test_arch.deref(),
-                )?;
-                write!(testctl, "\n{}", pkgtest)?;
+                    } else {
+                        vec!["--no-default-features"]
+                    };
+                    // --features default sometimes fails, see
+                    // https://github.com/rust-lang/cargo/issues/8164
+                    if !f.is_empty() && f != "default" {
+                        args.push("--features");
+                        args.push(f);
+                    }
+
+                    // deps
+                    let test_depends =
+                        generate_test_dependencies(f, &feature_deps, config, &test_deps);
+                    let test_arch = match test_architecture(f)? {
+                        Some(v) => v.to_owned(),
+                        None => Vec::new(),
+                    };
+                    let test_arch: Vec<&str> = test_arch.iter().map(AsRef::as_ref).collect();
+                    let pkgtest = PkgTest::new(
+                        package.name(),
+                        crate_name,
+                        f,
+                        deb_upstream_version,
+                        args,
+                        &test_depends,
+                        if test_is_broken(f)? {
+                            vec!["flaky"]
+                        } else {
+                            vec![]
+                        },
+                        test_arch.deref(),
+                    )?;
+                    write!(testctl, "\n{}", pkgtest)?;
+                }
             }
         }
         assert!(provides.is_empty());
