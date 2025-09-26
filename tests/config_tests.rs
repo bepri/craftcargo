@@ -98,10 +98,7 @@ Debian Rust team.
 
 #[test]
 fn unknown_fields_captured_with_warning() {
-    use tempfile::tempdir;
-
-    let dir = tempdir().unwrap();
-    let file_path = dir.path().join("test_debcargo.toml");
+    let file_path = Path::new(env!("CARGO_TARGET_TMPDIR")).join("test_debcargo.toml");
 
     // Test unknown field at top level
     std::fs::write(
