@@ -20,7 +20,7 @@ cargo = "0.86"
 cargo-util = "0.2.14"
 cargo-util-schemas = "0.7"
 clap = { version = "4.5", features = ["cargo", "derive", "wrap_help"] }
-clap_mangen = { version = "0.2" }
+clap_mangen = { version = "0.2.29" }
 chrono = "0.4.31"
 env_logger = "0.11"
 filetime = "0.2"
