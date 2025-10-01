@@ -47,6 +47,7 @@ pub struct SourceOverride {
     build_depends_arch: Option<Vec<String>>,
     build_depends_indep: Option<Vec<String>>,
     build_depends_excludes: Option<Vec<String>>,
+    skip_nocheck: Option<bool>,
 
     #[serde(flatten)]
     pub unknown_fields: HashMap<String, toml::Value>,
@@ -63,6 +64,7 @@ impl SourceOverride {
         build_depends_arch: Option<Vec<String>>,
         build_depends_indep: Option<Vec<String>>,
         build_depends_excludes: Option<Vec<String>>,
+        skip_nocheck: Option<bool>,
     ) -> Self {
         Self {
             section,
@@ -74,6 +76,7 @@ impl SourceOverride {
             build_depends_arch,
             build_depends_indep,
             build_depends_excludes,
+            skip_nocheck,
             unknown_fields: HashMap::new(),
         }
     }
@@ -234,6 +237,10 @@ impl Config {
 
     pub fn build_depends_excludes(&self) -> Option<&Vec<String>> {
         self.source.as_ref()?.build_depends_excludes.as_ref()
+    }
+
+    pub fn skip_nocheck(&self) -> Option<bool> {
+        self.source.as_ref()?.skip_nocheck
     }
 
     // Packages shortcuts

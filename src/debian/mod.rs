@@ -710,7 +710,13 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             assert!(lib);
             build_deps
                 .build_depends_arch
-                .extend(build_deps_arch.map(|d| deb_dep_add_nocheck(&d)));
+                .extend(build_deps_arch.map(|d| {
+                    if config.skip_nocheck().unwrap_or(false) {
+                        d
+                    } else {
+                        deb_dep_add_nocheck(&d)
+                    }
+                }));
         }
         build_deps
     };

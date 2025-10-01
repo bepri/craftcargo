@@ -39,6 +39,7 @@ fn empty_source_overrides() -> SourceOverride {
         Some(vec!["".to_owned()]),
         Some(vec!["".to_owned()]),
         Some(vec!["rust-const-oid".to_owned()]),
+        Some(false),
     )
 }
 
