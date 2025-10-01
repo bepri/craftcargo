@@ -5,6 +5,7 @@ requires_root = "no"
 
 [source]
 build_depends = ["some-build-dependency"]
+skip_nocheck = true
 
 [packages.lib]
 depends = ["some-dependency-for-lib"]
