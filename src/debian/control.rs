@@ -29,6 +29,7 @@ pub struct Source {
     vcs_browser: String,
     homepage: String,
     crate_name: String,
+    requires_root: Option<String>,
 }
 
 pub struct Package {
@@ -115,6 +116,9 @@ impl fmt::Display for Source {
         //   b) "utf-8" crate at version latest with semver_suffix = false.
         // dh-cargo assumes (a) which is wrong for the "utf-8" crate
         writeln!(f, "X-Cargo-Crate: {}", self.crate_name)?;
+        if let Some(ref rrr) = self.requires_root {
+            writeln!(f, "Rules-Requires-Root: {}", rrr)?;
+        }
 
         Ok(())
     }
@@ -225,6 +229,7 @@ impl Source {
         maintainer: String,
         uploaders: Vec<String>,
         build_deps: BuildDeps,
+        requires_root: Option<String>,
     ) -> Result<Source> {
         let pkgbase = match name_suffix {
             None => basename.to_string(),
@@ -256,6 +261,7 @@ impl Source {
             vcs_browser,
             homepage: home.to_string(),
             crate_name: crate_name.to_string(),
+            requires_root,
         })
     }
 

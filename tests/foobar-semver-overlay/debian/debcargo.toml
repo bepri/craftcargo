@@ -1,6 +1,7 @@
 overlay = "."
 crate_src_path = "../../foobar-semver"
 semver_suffix = true
+requires_root = "no"
 
 [source]
 build_depends = ["some-build-dependency"]

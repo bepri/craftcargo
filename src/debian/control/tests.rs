@@ -19,7 +19,7 @@ fn source_to_string() {
         "Jelmer Vernooĳ <jelmer@debian.org>".to_owned(),
         vec!["Jelmer Vernooĳ <jelmer@debian.org>".to_owned()],
         BuildDeps::default(),
-        "no".to_owned(),
+        None,
     )
     .unwrap();
 
@@ -67,7 +67,7 @@ fn test_apply_overrides() {
             ],
             ..BuildDeps::default()
         },
-        "no".to_owned(),
+        Some("no".to_owned()),
     )
     .unwrap();
 

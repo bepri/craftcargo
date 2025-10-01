@@ -741,11 +741,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         maintainer.to_string(),
         uploaders.iter().map(|s| s.to_string()).collect(),
         build_deps,
-        if requires_root.is_some() {
-            requires_root.as_ref().unwrap().to_string()
-        } else {
-            "no".to_string()
-        },
+        requires_root.cloned(),
     )?;
 
     // If source overrides are present update related parts.
