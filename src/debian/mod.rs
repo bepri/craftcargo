@@ -696,7 +696,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         //debcargo_info!("default_features: {:?}", default_features);
         //debcargo_info!("default_deps: {:?}", deb_deps(config, &default_deps)?);
         let extra_override_deps = package_field_for_feature(
-            &|x| config.package_depends(x),
+            |x| config.package_depends(x),
             PackageKey::feature("default"),
             &default_features,
         );

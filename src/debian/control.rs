@@ -547,37 +547,37 @@ impl Package {
             .apply_overrides(&config.description, config.package_description(key));
 
         self.depends.extend(config::package_field_for_feature(
-            &|x| config.package_depends(x),
+            |x| config.package_depends(x),
             key,
             &f_provides,
         ));
         self.recommends.extend(config::package_field_for_feature(
-            &|x| config.package_recommends(x),
+            |x| config.package_recommends(x),
             key,
             &f_provides,
         ));
         self.suggests.extend(config::package_field_for_feature(
-            &|x| config.package_suggests(x),
+            |x| config.package_suggests(x),
             key,
             &f_provides,
         ));
         self.provides.extend(config::package_field_for_feature(
-            &|x| config.package_provides(x),
+            |x| config.package_provides(x),
             key,
             &f_provides,
         ));
         self.breaks.extend(config::package_field_for_feature(
-            &|x| config.package_breaks(x),
+            |x| config.package_breaks(x),
             key,
             &f_provides,
         ));
         self.replaces.extend(config::package_field_for_feature(
-            &|x| config.package_replaces(x),
+            |x| config.package_replaces(x),
             key,
             &f_provides,
         ));
         self.conflicts.extend(config::package_field_for_feature(
-            &|x| config.package_conflicts(x),
+            |x| config.package_conflicts(x),
             key,
             &f_provides,
         ));

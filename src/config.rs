@@ -321,17 +321,16 @@ impl Config {
     }
 }
 
-pub fn package_field_for_feature<'a>(
-    get_field: &'a dyn Fn(PackageKey) -> Option<&'a Vec<String>>,
-    feature: PackageKey,
-    f_provides: &[&str],
-) -> Vec<String> {
+pub fn package_field_for_feature<'a, 'b, F: Fn(PackageKey) -> Option<&'a Vec<String>>>(
+    get_field: F,
+    feature: PackageKey<'b>,
+    f_provides: &'b [&'b str],
+) -> impl Iterator<Item = String> + use<'a, 'b, F> {
     Some(feature)
         .into_iter()
         .chain(f_provides.iter().map(|s| PackageKey::feature(s)))
         .flat_map(move |f| get_field(f).into_iter().flatten())
         .map(|s| s.to_string())
-        .collect()
 }
 
 #[derive(Clone, Copy)]
