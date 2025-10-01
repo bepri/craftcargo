@@ -7,68 +7,45 @@ use std::path::Path;
 fn source_package_override() {
     let filepath = Path::new("tests/clap_override.toml");
 
-    let config = Config::parse(filepath);
-    assert!(config.is_ok());
-
-    let config = config.unwrap();
+    let config = Config::parse(filepath).unwrap();
 
     assert!(config.source.is_some());
     assert_eq!(config.packages.len(), 1);
 
-    let policy = config.policy_version();
-    assert!(policy.is_some());
-    assert_eq!(policy.unwrap(), "4.0.0");
+    assert_eq!(config.policy_version().unwrap(), "4.0.0");
 
-    let homepage = config.homepage();
-    assert!(homepage.is_some());
-    assert_eq!(homepage.unwrap(), "https://clap.rs");
+    assert_eq!(config.homepage().unwrap(), "https://clap.rs");
 
-    assert!(config.section().is_none());
-    assert!(config.build_depends().is_none());
+    assert_eq!(config.section(), None);
+    assert_eq!(config.build_depends(), None);
 
     let filepath = Path::new("tests/debcargo_override.toml");
-    let config = Config::parse(filepath);
-    assert!(config.is_ok());
-
-    let config = config.unwrap();
+    let config = Config::parse(filepath).unwrap();
 
     assert!(config.source.is_some());
 
-    let section = config.section();
-    assert!(section.is_some());
-    assert_eq!(section.unwrap(), "rust");
+    assert_eq!(config.section().unwrap(), "rust");
 
     assert_eq!(config.packages.len(), 1);
-    let sd = config.package_summary(PackageKey::Bin);
-    assert!(sd.is_some());
+    assert_eq!(
+        config.package_summary(PackageKey::Bin).unwrap(),
+        "Tool to create Debian package from Rust crate"
+    );
 
-    if let Some(s) = sd {
-        assert_eq!(s, "Tool to create Debian package from Rust crate");
-    }
-
-    let sd = config.package_description(PackageKey::Bin);
-    assert!(sd.is_some());
-    if let Some(d) = sd {
-        assert_eq!(
-            d,
-            "\
-This package provides debcargo a tool to create Debian source package from \
-                    Rust
-crate. The package created by this tool is as per the packaging policy \
-                    set by
+    assert_eq!(
+        config.package_description(PackageKey::Bin).unwrap(),
+        "\
+This package provides debcargo a tool to create Debian source package from Rust
+crate. The package created by this tool is as per the packaging policy set by
 Debian Rust team.
 "
-        );
-    }
+    );
 }
 
 #[test]
 fn binary_package_override() {
     let filepath = Path::new("tests/tiny-dfr_override.toml");
-    let config = Config::parse(filepath);
-    assert!(config.is_ok());
-
-    let config = config.unwrap();
+    let config = Config::parse(filepath).unwrap();
 
     assert_eq!(config.packages.len(), 1);
 
@@ -99,16 +76,11 @@ platforms are Apple Silicon and T2 Macs.
 #[test]
 fn sd_top_level() {
     let filepath = Path::new("tests/debcargo_override_top_level.toml");
-    let config = Config::parse(filepath);
-    assert!(config.is_ok());
-
-    let config = config.unwrap();
+    let config = Config::parse(filepath).unwrap();
 
     assert!(config.source.is_some());
 
-    let section = config.section();
-    assert!(section.is_some());
-    assert_eq!(section.unwrap(), "rust");
+    assert_eq!(config.section().unwrap(), "rust");
 
     assert_eq!(
         config.summary.unwrap(),
@@ -117,10 +89,8 @@ fn sd_top_level() {
     assert_eq!(
         config.description.unwrap(),
         "\
-This package provides debcargo a tool to create Debian source package from \
-                    Rust
-crate. The package created by this tool is as per the packaging policy \
-                    set by
+This package provides debcargo a tool to create Debian source package from Rust
+crate. The package created by this tool is as per the packaging policy set by
 Debian Rust team.
 "
     );
@@ -128,70 +98,52 @@ Debian Rust team.
 
 #[test]
 fn unknown_fields_captured_with_warning() {
-    use std::fs::File;
-    use std::io::Write;
     use tempfile::tempdir;
 
     let dir = tempdir().unwrap();
     let file_path = dir.path().join("test_debcargo.toml");
 
     // Test unknown field at top level
-    let mut file = File::create(&file_path).unwrap();
-    writeln!(
-        file,
-        r#"
+    std::fs::write(
+        &file_path,
+        br#"
 semver_suffix = true
 overlay = "."
 verlay = "typo"  # This should be captured as an unknown field
-"#
+"#,
     )
     .unwrap();
-    drop(file);
 
-    let result = Config::parse(&file_path);
-    assert!(result.is_ok());
-    let config = result.unwrap();
+    let config = Config::parse(&file_path).unwrap();
     assert!(config.unknown_fields.contains_key("verlay"));
 
     // Test unknown field in source section
-    let mut file = File::create(&file_path).unwrap();
-    writeln!(
-        file,
+    std::fs::write(
+        &file_path,
         r#"
 [source]
 section = "rust"
 unknown_field = "value"
-"#
+"#,
     )
     .unwrap();
-    drop(file);
 
-    let result = Config::parse(&file_path);
-    assert!(result.is_ok());
-    let config = result.unwrap();
-    assert!(config.source.is_some());
-    if let Some(source) = config.source {
-        assert!(source.unknown_fields.contains_key("unknown_field"));
-    }
+    let config = Config::parse(&file_path).unwrap();
+    let source = config.source.unwrap();
+    assert!(source.unknown_fields.contains_key("unknown_field"));
 
     // Test unknown field in packages section
-    let mut file = File::create(&file_path).unwrap();
-    writeln!(
-        file,
+    std::fs::write(
+        &file_path,
         r#"
 [packages.lib]
 section = "libs"
 unknwon_field = "value"
-"#
+"#,
     )
     .unwrap();
-    drop(file);
 
-    let result = Config::parse(&file_path);
-    assert!(result.is_ok());
-    let config = result.unwrap();
-    assert!(config.packages.contains_key("lib"));
-    if let Some(lib_package) = config.packages.get("lib") {
-        assert!(lib_package.unknown_fields.contains_key("unknwon_field"));
-    }
+    let config = Config::parse(&file_path).unwrap();
+    let lib_package = config.packages.get("lib").unwrap();
+    assert!(lib_package.unknown_fields.contains_key("unknwon_field"));
 }
