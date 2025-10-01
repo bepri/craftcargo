@@ -326,7 +326,6 @@ impl Source {
         if let Some(vcs_browser) = config.vcs_browser() {
             self.vcs_browser = vcs_browser.to_string();
         }
-
     }
 }
 
