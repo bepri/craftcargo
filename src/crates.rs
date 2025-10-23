@@ -713,9 +713,9 @@ impl CrateInfo {
             for entry in archive.entries()? {
                 let mut entry = entry?;
                 let entry_path = entry.path()?;
-                let components = entry_path.iter();
+                let mut components = entry_path.iter();
                 if components.clone().count() == 2
-                    && components.last() == Some(OsStr::new("Cargo.toml"))
+                    && components.next_back() == Some(OsStr::new("Cargo.toml"))
                 {
                     entry.unpack(&toml_path)?;
                     break;
