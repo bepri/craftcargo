@@ -5,7 +5,7 @@ use cargo::{
         Dependency, EitherManifest, FeatureValue, Manifest, Package, PackageId, Registry, SourceId,
         Summary, Target, TargetKind, Workspace,
     },
-    ops::{self, PackageOpts, Packages},
+    ops::{self, PackageMessageFormat, PackageOpts, Packages},
     sources::{
         source::{MaybePackage, QueryKind, Source},
         IndexSummary, RegistrySource, SourceConfigMap,
@@ -209,6 +209,9 @@ impl CrateInfo {
                     to_package: Packages::Default,
                     keep_going: false,
                     reg_or_index: None,
+                    dry_run: false,
+                    include_lockfile: false,
+                    fmt: PackageMessageFormat::Human,
                 };
                 ops::package(&workspace, &opts)?;
 
@@ -253,8 +256,8 @@ impl CrateInfo {
                 0,
                 false,
                 None,
-                context.frozen(),
-                context.locked(),
+                false,
+                false,
                 true, // offline
                 &context.target_dir()?.map(|x| x.into_path_unlocked()),
                 &[],
@@ -697,6 +700,9 @@ impl CrateInfo {
                 targets: Vec::new(),
                 cli_features: CliFeatures::new_all(true),
                 reg_or_index: None,
+                dry_run: false,
+                include_lockfile: false,
+                fmt: PackageMessageFormat::Human,
             };
             let files = ops::package(&ws, &opts)?;
             let file = files
