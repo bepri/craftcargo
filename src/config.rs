@@ -251,7 +251,7 @@ impl Config {
 
     // Packages accessors
 
-    pub fn configured_packages(&self) -> impl Iterator<Item = PackageKey> {
+    pub fn configured_packages(&'_ self) -> impl Iterator<Item = PackageKey<'_>> {
         self.packages.keys().flat_map(|k| PackageKey::from_key(k))
     }
 
