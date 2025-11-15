@@ -179,9 +179,10 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 # Binary package overrides.
 #
 # Different values for KEY selects different binary packages:
-# lib           - the package for the library crate
-# "lib+FEATURE" - the metapackage for feature FEATURE
-# bin           - the package for the binary crate
+# lib                 - the package for the library crate
+# "lib+FEATURE"       - the metapackage for feature FEATURE
+# bin                 - the package for the binary crate
+# "extra+PACKAGENAME" - extra package, e.g. for a cdylib
 #
 [packages.KEY]
 
