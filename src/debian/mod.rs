@@ -696,7 +696,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         //debcargo_info!("default_features: {:?}", default_features);
         //debcargo_info!("default_deps: {:?}", deb_deps(config, &default_deps)?);
         let extra_override_deps = package_field_for_feature(
-            &|x| config.package_depends(x),
+            |x| config.package_depends(x),
             PackageKey::feature("default"),
             &default_features,
         );
@@ -1083,6 +1083,14 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         // Binary package overrides.
         bin_pkg.apply_overrides(config, PackageKey::Bin, vec![]);
         write!(control, "\n{}", bin_pkg)?;
+    }
+
+    for configured in config.configured_packages() {
+        if let PackageKey::Extra(package) = configured {
+            let mut extra_pkg = Package::new_extra(package.to_string());
+            extra_pkg.apply_overrides(config, configured, vec![]);
+            write!(control, "\n{}", extra_pkg)?;
+        }
     }
 
     Ok((source, has_dev_deps, test_is_broken("default")?))

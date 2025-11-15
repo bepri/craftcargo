@@ -1,9 +1,12 @@
+use serde::de::IgnoredAny;
 use serde::Deserialize;
 use toml;
 
 use crate::errors::*;
 
+use std::borrow::Cow;
 use std::collections::HashMap;
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
@@ -33,7 +36,7 @@ pub struct Config {
     pub packages: HashMap<String, PackageOverride>,
 
     #[serde(flatten)]
-    pub unknown_fields: HashMap<String, toml::Value>,
+    pub unknown_fields: HashMap<String, IgnoredAny>,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -50,7 +53,7 @@ pub struct SourceOverride {
     skip_nocheck: Option<bool>,
 
     #[serde(flatten)]
-    pub unknown_fields: HashMap<String, toml::Value>,
+    pub unknown_fields: HashMap<String, IgnoredAny>,
 }
 
 impl SourceOverride {
@@ -101,7 +104,7 @@ pub struct PackageOverride {
     test_depends: Option<Vec<String>>,
 
     #[serde(flatten)]
-    pub unknown_fields: HashMap<String, toml::Value>,
+    pub unknown_fields: HashMap<String, IgnoredAny>,
 }
 
 impl Default for Config {
@@ -148,6 +151,12 @@ impl Config {
             }
         }
 
+        for field in config.packages.keys() {
+            if PackageKey::from_key(field).is_none() {
+                unknown_fields.push(format!("packages.{}", field));
+            }
+        }
+
         for (name, package) in &config.packages {
             for field in package.unknown_fields.keys() {
                 unknown_fields.push(format!("packages.{}.{}", name, field));
@@ -167,10 +176,7 @@ impl Config {
     }
 
     pub fn build_bin_package(&self) -> bool {
-        match self.bin {
-            None => !self.semver_suffix,
-            Some(b) => b,
-        }
+        self.bin.unwrap_or(!self.semver_suffix)
     }
 
     pub fn overlay_dir(&self, config_path: Option<&Path>) -> Option<PathBuf> {
@@ -243,14 +249,18 @@ impl Config {
         self.source.as_ref()?.skip_nocheck
     }
 
-    // Packages shortcuts
+    // Packages accessors
+
+    pub fn configured_packages(&self) -> impl Iterator<Item = PackageKey> {
+        self.packages.keys().flat_map(|k| PackageKey::from_key(k))
+    }
 
     fn with_package<'a, T, F: FnOnce(&'a PackageOverride) -> Option<T>>(
         &'a self,
         key: PackageKey,
         f: F,
     ) -> Option<T> {
-        self.packages.get(&package_key_string(key)).and_then(f)
+        self.packages.get(&key.key_string()[..]).and_then(f)
     }
 
     pub fn package_section(&self, key: PackageKey) -> Option<&str> {
@@ -318,17 +328,16 @@ impl Config {
     }
 }
 
-pub fn package_field_for_feature<'a>(
-    get_field: &'a dyn Fn(PackageKey) -> Option<&'a Vec<String>>,
-    feature: PackageKey,
-    f_provides: &[&str],
-) -> Vec<String> {
+pub fn package_field_for_feature<'a, 'b, F: Fn(PackageKey) -> Option<&'a Vec<String>>>(
+    get_field: F,
+    feature: PackageKey<'b>,
+    f_provides: &'b [&'b str],
+) -> impl Iterator<Item = String> + use<'a, 'b, F> {
     Some(feature)
         .into_iter()
         .chain(f_provides.iter().map(|s| PackageKey::feature(s)))
         .flat_map(move |f| get_field(f).into_iter().flatten())
         .map(|s| s.to_string())
-        .collect()
 }
 
 #[derive(Clone, Copy)]
@@ -336,6 +345,7 @@ pub enum PackageKey<'a> {
     Bin,
     BareLib,
     FeatureLib(&'a str),
+    Extra(&'a str),
 }
 
 impl<'a> PackageKey<'a> {
@@ -347,21 +357,40 @@ impl<'a> PackageKey<'a> {
             FeatureLib(f)
         }
     }
-}
 
-fn package_key_string(key: PackageKey) -> String {
-    use self::PackageKey::*;
-    match key {
-        Bin => "bin".to_string(),
-        BareLib => "lib".to_string(),
-        FeatureLib(feature) => format!("lib+{}", feature),
+    pub fn from_key(k: &'a str) -> Option<PackageKey<'a>> {
+        use self::PackageKey::*;
+        Some(match k {
+            "bin" => Bin,
+            "lib" => BareLib,
+            _ => {
+                if let Some(feature) = k.strip_prefix("lib+") {
+                    FeatureLib(feature)
+                } else if let Some(package) = k.strip_prefix("extra+") {
+                    Extra(package)
+                } else {
+                    return None;
+                }
+            }
+        })
+    }
+
+    fn key_string(&self) -> Cow<'static, str> {
+        use self::PackageKey::*;
+        match self {
+            Bin => "bin".into(),
+            BareLib => "lib".into(),
+            FeatureLib(feature) => format!("lib+{}", feature).into(),
+            Extra(package) => format!("extra+{}", package).into(),
+        }
     }
 }
 
 pub fn testing_ignore_debpolv() -> bool {
-    std::env::var("DEBCARGO_TESTING_IGNORE_DEBIAN_POLICY_VIOLATION") == Ok("1".to_string())
+    std::env::var_os("DEBCARGO_TESTING_IGNORE_DEBIAN_POLICY_VIOLATION").as_deref()
+        == Some(OsStr::new("1"))
 }
 
 pub fn testing_ruzt() -> bool {
-    std::env::var("DEBCARGO_TESTING_RUZT") == Ok("1".to_string())
+    std::env::var_os("DEBCARGO_TESTING_RUZT").as_deref() == Some(OsStr::new("1"))
 }

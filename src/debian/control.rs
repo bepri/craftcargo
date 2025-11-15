@@ -508,6 +508,25 @@ impl Package {
         }
     }
 
+    pub fn new_extra(name: String) -> Self {
+        Package {
+            name,
+            arch: Default::default(),
+            multi_arch: Default::default(),
+            section: Default::default(),
+            depends: Default::default(),
+            recommends: Default::default(),
+            suggests: Default::default(),
+            provides: Default::default(),
+            breaks: Default::default(),
+            replaces: Default::default(),
+            conflicts: Default::default(),
+            summary: Description::new(Default::default(), Default::default()),
+            description: Description::new(Default::default(), Default::default()),
+            extra_lines: Default::default(),
+        }
+    }
+
     pub fn name(&self) -> &str {
         self.name.as_str()
     }
@@ -547,37 +566,37 @@ impl Package {
             .apply_overrides(&config.description, config.package_description(key));
 
         self.depends.extend(config::package_field_for_feature(
-            &|x| config.package_depends(x),
+            |x| config.package_depends(x),
             key,
             &f_provides,
         ));
         self.recommends.extend(config::package_field_for_feature(
-            &|x| config.package_recommends(x),
+            |x| config.package_recommends(x),
             key,
             &f_provides,
         ));
         self.suggests.extend(config::package_field_for_feature(
-            &|x| config.package_suggests(x),
+            |x| config.package_suggests(x),
             key,
             &f_provides,
         ));
         self.provides.extend(config::package_field_for_feature(
-            &|x| config.package_provides(x),
+            |x| config.package_provides(x),
             key,
             &f_provides,
         ));
         self.breaks.extend(config::package_field_for_feature(
-            &|x| config.package_breaks(x),
+            |x| config.package_breaks(x),
             key,
             &f_provides,
         ));
         self.replaces.extend(config::package_field_for_feature(
-            &|x| config.package_replaces(x),
+            |x| config.package_replaces(x),
             key,
             &f_provides,
         ));
         self.conflicts.extend(config::package_field_for_feature(
-            &|x| config.package_conflicts(x),
+            |x| config.package_conflicts(x),
             key,
             &f_provides,
         ));

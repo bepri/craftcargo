@@ -12,3 +12,9 @@ This package provides debcargo a tool to create Debian source package from Rust
 crate. The package created by this tool is as per the packaging policy set by
 Debian Rust team.
 """
+
+[packages."extra+libblake3-0"]
+architecture = ["any"]
+section = "libs"
+depends = ["${misc:Depends}", "${shlibs:Depends}"]
+description = "BLAKE3 hash function - C library"

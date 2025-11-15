@@ -1,6 +1,6 @@
 extern crate debcargo;
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 fn local_package_test(tmpdir: &Path, crate_name: &str, version: &str) -> Option<String> {
     let tempdir = tempfile::Builder::new()
@@ -8,7 +8,7 @@ fn local_package_test(tmpdir: &Path, crate_name: &str, version: &str) -> Option<
         .tempdir_in(tmpdir)
         .expect("Should be able to create temporary directory");
     let manifest_dir = env!("CARGO_MANIFEST_DIR");
-    let crate_dir = PathBuf::from(manifest_dir).join("tests").join(crate_name);
+    let crate_dir = Path::new(manifest_dir).join("tests").join(crate_name);
     if !crate_dir.exists() {
         return None;
     }
@@ -38,7 +38,7 @@ fn local_package_test(tmpdir: &Path, crate_name: &str, version: &str) -> Option<
 
 #[test]
 fn generate_package_with_crate_src() {
-    let out_dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
+    let out_dir = Path::new(env!("CARGO_TARGET_TMPDIR"));
     if let Some(actual) = local_package_test(&out_dir, "foobar", "0.1.0") {
         std::fs::write(out_dir.join("foobar.actual"), &actual)
             .expect("Should be able to write out generate control contents");
@@ -49,7 +49,7 @@ fn generate_package_with_crate_src() {
 
 #[test]
 fn generate_package_with_semver_crate_src() {
-    let out_dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
+    let out_dir = Path::new(env!("CARGO_TARGET_TMPDIR"));
     if let Some(actual) = local_package_test(&out_dir, "foobar-semver", "0.1.0") {
         std::fs::write(out_dir.join("foobar-semver.actual"), &actual)
             .expect("Should be able to write out generate control contents");
