@@ -738,12 +738,22 @@ impl CrateInfo {
 /// Collect information about the dependency structure of features and
 /// their external crate dependencies, in a simple output format.
 pub fn all_dependencies_and_features(manifest: &Manifest) -> CrateDepInfo {
+    all_dependencies_and_features_filtered(manifest, false)
+}
+
+/// Collect information about the dependency structure of features and
+/// their external crate dependencies, in a simple output format.
+/// If include_dev_dependencies is true, dev-dependencies will be included.
+pub fn all_dependencies_and_features_filtered(
+    manifest: &Manifest,
+    include_dev_dependencies: bool,
+) -> CrateDepInfo {
     use cargo::core::dependency::DepKind;
 
     let mut deps_by_name: BTreeMap<&str, Vec<&Dependency>> = BTreeMap::new();
     for dep in manifest.dependencies() {
         // we treat build-dependencies also as dependencies in Debian
-        if dep.kind() != DepKind::Development {
+        if include_dev_dependencies || dep.kind() != DepKind::Development {
             let s = dep.name_in_toml().as_str();
             deps_by_name.entry(s).or_default().push(dep);
         }

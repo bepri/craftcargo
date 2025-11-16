@@ -9,7 +9,7 @@ use cargo::GlobalContext;
 use anyhow::Error;
 use clap::Parser;
 
-use crate::crates::all_dependencies_and_features;
+use crate::crates::all_dependencies_and_features_filtered;
 use crate::crates::transitive_deps;
 use crate::debian::deb_deps;
 use crate::debian::toolchain_deps;
@@ -30,6 +30,9 @@ pub struct DebDependenciesArgs {
     /// Allow prerelease versions of dependencies
     #[clap(long)]
     allow_prerelease_deps: bool,
+    /// Include dev-dependencies
+    #[clap(long)]
+    include_dev_dependencies: bool,
 }
 
 pub fn deb_dependencies(
@@ -45,7 +48,8 @@ pub fn deb_dependencies(
         debcargo_bail!("Manifest lacks project and package sections")
     };
 
-    let deps_and_features = all_dependencies_and_features(&manifest);
+    let deps_and_features =
+        all_dependencies_and_features_filtered(&manifest, args.include_dev_dependencies);
 
     let features = {
         let mut features: std::collections::HashSet<_> = if args.all_features {
