@@ -725,12 +725,25 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         .chain(dev_depends)
         .collect();
 
-    // prefer Cargo.toml homepage, fallback to Cargo.toml repository
+    let homepage_fallback = if config.crate_src_path.is_some() {
+        // If debcargo.toml's crate_src_path is set, assume this is not
+        // a crate published to crates.io
+        String::new()
+    } else {
+        format!(
+            "https://crates.io/crates/{}/{}",
+            crate_info.manifest().name(),
+            crate_info.manifest().version(),
+        )
+    };
+
+    // prefer Cargo.toml homepage, fallback to Cargo.toml repository, or crates.io page as a last
+    // resort
     let homepage = meta
         .homepage
         .as_deref()
         .or(meta.repository.as_deref())
-        .unwrap_or("");
+        .unwrap_or(homepage_fallback.as_str());
 
     let mut source = Source::new(
         base_pkgname,
