@@ -1,6 +1,6 @@
-use ansi_term::Colour::Red;
 use clap::{crate_version, Parser};
 use itertools::Itertools;
+use nu_ansi_term::Color::Red;
 
 use debcargo::cli::{Cli, Opt};
 use debcargo::crates::CrateInfo;
