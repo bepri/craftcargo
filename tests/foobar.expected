@@ -1,6 +1,5 @@
 Source: rust-foobar
 Section: rust
-Priority: optional
 Build-Depends: debhelper-compat (= 13),
  dh-sequence-cargo,
  some-build-dependency
