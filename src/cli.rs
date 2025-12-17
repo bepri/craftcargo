@@ -6,6 +6,9 @@ use crate::{
     package::{PackageExecuteArgs, PackageExtractArgs, PackageInitArgs},
 };
 
+#[cfg(feature = "update-dependencies")]
+use crate::update_dependencies::UpdateDependenciesArgs;
+
 const CLI_STYLE: Styles = Styles::styled()
     .header(AnsiColor::Yellow.on_default())
     .usage(AnsiColor::Green.on_default())
@@ -60,5 +63,11 @@ pub enum Opt {
     DebDependencies {
         #[command(flatten)]
         args: DebDependenciesArgs,
+    },
+    /// Update debian/control Build-Depends from workspace Cargo.toml files
+    #[cfg(feature = "update-dependencies")]
+    UpdateDependencies {
+        #[command(flatten)]
+        args: UpdateDependenciesArgs,
     },
 }

@@ -35,10 +35,18 @@ pub struct DebDependenciesArgs {
     include_dev_dependencies: bool,
 }
 
-pub fn deb_dependencies(
-    args: DebDependenciesArgs,
+/// Core function to get Debian dependencies for a Cargo.toml
+///
+/// This is the internal implementation that can be reused by multiple commands.
+pub fn get_deb_dependencies(
+    cargo_toml: PathBuf,
+    features: Vec<String>,
+    all_features: bool,
+    uses_default_features: bool,
+    allow_prerelease_deps: bool,
+    include_dev_dependencies: bool,
 ) -> Result<(Vec<String>, BTreeSet<String>), Error> {
-    let cargo_toml = args.cargo_toml.canonicalize()?;
+    let cargo_toml = cargo_toml.canonicalize()?;
     let EitherManifest::Real(manifest) = read_manifest(
         &cargo_toml,
         SourceId::for_path(cargo_toml.parent().unwrap())?,
@@ -49,13 +57,13 @@ pub fn deb_dependencies(
     };
 
     let deps_and_features =
-        all_dependencies_and_features_filtered(&manifest, args.include_dev_dependencies);
+        all_dependencies_and_features_filtered(&manifest, include_dev_dependencies);
 
-    let features = {
-        let mut features: std::collections::HashSet<_> = if args.all_features {
+    let feature_set = {
+        let mut feature_set: std::collections::HashSet<_> = if all_features {
             deps_and_features.keys().copied().collect()
         } else {
-            args.features
+            features
                 .iter()
                 .flat_map(|s| s.split_whitespace())
                 .flat_map(|s| s.split(','))
@@ -63,25 +71,38 @@ pub fn deb_dependencies(
                 .collect()
         };
 
-        if args.uses_default_features {
-            features.insert("default");
+        if uses_default_features {
+            feature_set.insert("default");
         }
 
-        features.insert("");
+        feature_set.insert("");
 
-        features
+        feature_set
     };
     let dependencies = {
         let mut dependencies = BTreeSet::<String>::new();
-        for feature in features.iter() {
+        for feature in feature_set.iter() {
             if !deps_and_features.contains_key(feature) {
                 debcargo_bail!("Unknown feature: {}", feature);
             }
             let (_, feature_deps) = transitive_deps(&deps_and_features, feature)?;
-            dependencies.extend(deb_deps(args.allow_prerelease_deps, &feature_deps)?);
+            dependencies.extend(deb_deps(allow_prerelease_deps, &feature_deps)?);
         }
         dependencies
     };
     let toolchain_deps = toolchain_deps(&manifest.rust_version().map(|x| x.to_string()));
     Ok((toolchain_deps, dependencies))
+}
+
+pub fn deb_dependencies(
+    args: DebDependenciesArgs,
+) -> Result<(Vec<String>, BTreeSet<String>), Error> {
+    get_deb_dependencies(
+        args.cargo_toml,
+        args.features,
+        args.all_features,
+        args.uses_default_features,
+        args.allow_prerelease_deps,
+        args.include_dev_dependencies,
+    )
 }
