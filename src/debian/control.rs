@@ -251,7 +251,7 @@ impl Source {
             section: section.to_string(),
             maintainer,
             uploaders,
-            standards: "4.7.2".to_string(),
+            standards: "4.7.3".to_string(),
             build_deps,
             vcs_git,
             vcs_browser,

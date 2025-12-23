@@ -23,7 +23,7 @@ fn source_to_string() {
     )
     .unwrap();
 
-    let expected = "Source: rust-rsa\nSection: rust\nMaintainer: Jelmer Vernooĳ <jelmer@debian.org>\nUploaders:\n Jelmer Vernooĳ <jelmer@debian.org>\nStandards-Version: 4.7.2\nVcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/rsa]\nVcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/rsa\nHomepage: https://github.com/RustCrypto/RSA\nX-Cargo-Crate: rsa\n";
+    let expected = "Source: rust-rsa\nSection: rust\nMaintainer: Jelmer Vernooĳ <jelmer@debian.org>\nUploaders:\n Jelmer Vernooĳ <jelmer@debian.org>\nStandards-Version: 4.7.3\nVcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/rsa]\nVcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/rsa\nHomepage: https://github.com/RustCrypto/RSA\nX-Cargo-Crate: rsa\n";
 
     assert_eq!(expected, instance.to_string());
 }
