@@ -20,7 +20,6 @@ pub struct BuildDeps {
 pub struct Source {
     name: String,
     section: String,
-    priority: String,
     maintainer: String,
     uploaders: Vec<String>,
     standards: String,
@@ -75,7 +74,6 @@ impl fmt::Display for Source {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "Source: {}", self.name)?;
         writeln!(f, "Section: {}", self.section)?;
-        writeln!(f, "Priority: {}", self.priority)?;
         if !self.build_deps.build_depends.is_empty() {
             writeln!(
                 f,
@@ -240,7 +238,6 @@ impl Source {
         } else {
             "FIXME-IN-THE-SOURCE-SECTION"
         };
-        let priority = "optional".to_string();
         let vcs_browser = format!(
             "https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/{}",
             pkgbase
@@ -252,10 +249,9 @@ impl Source {
         Ok(Source {
             name: dsc_name(&pkgbase),
             section: section.to_string(),
-            priority,
             maintainer,
             uploaders,
-            standards: "4.7.2".to_string(),
+            standards: "4.7.3".to_string(),
             build_deps,
             vcs_git,
             vcs_browser,
