@@ -725,18 +725,19 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         .chain(dev_depends)
         .collect();
 
-    // prefer Cargo.toml homepage, fallback to Cargo.toml repository
-    let homepage = meta
-        .homepage
-        .as_deref()
-        .or(meta.repository.as_deref())
-        .unwrap_or("");
+    let homepage = generate_homepage(
+        &crate_info.manifest().name(),
+        crate_info.manifest().version().to_string(),
+        meta.homepage.as_deref(),
+        meta.repository.as_deref(),
+        config.crate_src_path.is_none(),
+    );
 
     let mut source = Source::new(
         base_pkgname,
         name_suffix,
         crate_name,
-        homepage,
+        &homepage,
         lib,
         maintainer.to_string(),
         uploaders.iter().map(|s| s.to_string()).collect(),
@@ -1096,6 +1097,24 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     Ok((source, has_dev_deps, test_is_broken("default")?))
 }
 
+fn generate_homepage(
+    name: &str,
+    version: String,
+    homepage: Option<&str>,
+    repository: Option<&str>,
+    on_crates_io: bool,
+) -> String {
+    let fallback = if on_crates_io {
+        format!("https://crates.io/crates/{}/{}", name, version,)
+    } else {
+        String::new()
+    };
+
+    // prefer Cargo.toml homepage, fallback to Cargo.toml repository, or crates.io page as a last
+    // resort
+    homepage.or(repository).unwrap_or(&fallback).to_owned()
+}
+
 fn generate_test_dependencies(
     f: &str,
     feature_deps: &[&str],
@@ -1260,7 +1279,7 @@ fn changelog_first_last(tempdir: &Path) -> Result<(i32, i32)> {
 
 #[cfg(test)]
 mod test {
-    use super::rustc_dep;
+    use super::{generate_homepage, rustc_dep};
 
     #[test]
     fn rustc_dep_includes_minver() {
@@ -1286,5 +1305,112 @@ mod test {
     #[test]
     fn rustc_dep_excludes_minver_autopkgtest() {
         assert_eq!("rustc", rustc_dep(&None, false));
+    }
+
+    #[test]
+    fn homepage_is_homepage() {
+        assert_eq!(
+            "https://example.com",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                Some("https://example.com"),
+                Some("https://example.com/repo"),
+                true
+            )
+        );
+
+        assert_eq!(
+            "https://example.com",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                Some("https://example.com"),
+                None,
+                true
+            )
+        );
+
+        assert_eq!(
+            "https://example.com",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                Some("https://example.com"),
+                Some("https://example.com/repo"),
+                false
+            )
+        );
+
+        assert_eq!(
+            "https://example.com",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                Some("https://example.com"),
+                None,
+                false
+            )
+        );
+    }
+
+    #[test]
+    fn homepage_is_repository() {
+        assert_eq!(
+            "https://example.com/repo",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                None,
+                Some("https://example.com/repo"),
+                true
+            )
+        );
+
+        assert_eq!(
+            "https://example.com/repo",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                None,
+                Some("https://example.com/repo"),
+                true
+            )
+        );
+
+        assert_eq!(
+            "https://example.com/repo",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                None,
+                Some("https://example.com/repo"),
+                false
+            )
+        );
+
+        assert_eq!(
+            "https://example.com/repo",
+            generate_homepage(
+                "crate",
+                "1.0".into(),
+                None,
+                Some("https://example.com/repo"),
+                false
+            )
+        );
+    }
+
+    #[test]
+    fn homepage_is_fallback() {
+        assert_eq!(
+            "https://crates.io/crates/crate/1.0",
+            generate_homepage("crate", "1.0".into(), None, None, true)
+        );
+
+        assert_eq!(
+            "",
+            generate_homepage("crate", "1.0".into(), None, None, false)
+        );
     }
 }
