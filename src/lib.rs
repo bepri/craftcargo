@@ -9,3 +9,5 @@ mod util;
 pub mod build_order;
 pub mod deb_dependencies;
 pub mod package;
+#[cfg(feature = "update-dependencies")]
+pub mod update_dependencies;

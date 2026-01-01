@@ -12,6 +12,9 @@ use debcargo::{
     deb_dependencies::deb_dependencies,
 };
 
+#[cfg(feature = "update-dependencies")]
+use debcargo::update_dependencies::update_dependencies;
+
 #[test]
 fn verify_app() {
     use clap::CommandFactory;
@@ -71,6 +74,8 @@ fn real_main() -> Result<()> {
             );
             Ok(())
         }
+        #[cfg(feature = "update-dependencies")]
+        UpdateDependencies { args } => update_dependencies(args),
     }
 }
 

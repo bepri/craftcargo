@@ -10,6 +10,9 @@ use textwrap::fill;
 use crate::config::{self, Config, PackageKey};
 use crate::errors::*;
 
+/// Suffix for Rust development packages
+pub const DEV_SUFFIX: &str = "-dev";
+
 #[derive(Default, Debug)]
 pub struct BuildDeps {
     pub(crate) build_depends: Vec<String>,
@@ -673,15 +676,21 @@ pub fn dsc_name(name: &str) -> String {
 }
 
 pub fn deb_name(name: &str) -> String {
-    format!("{}-{}-dev", Package::pkg_prefix(), base_deb_name(name))
+    format!(
+        "{}-{}{}",
+        Package::pkg_prefix(),
+        base_deb_name(name),
+        DEV_SUFFIX
+    )
 }
 
 pub fn deb_feature_name(name: &str, feature: &str) -> String {
     format!(
-        "{}-{}+{}-dev",
+        "{}-{}+{}{}",
         Package::pkg_prefix(),
         base_deb_name(name),
-        base_deb_name(feature)
+        base_deb_name(feature),
+        DEV_SUFFIX
     )
 }
 
