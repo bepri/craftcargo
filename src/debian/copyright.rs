@@ -58,12 +58,20 @@ pub struct DebCopyright {
     upstream: UpstreamInfo,
     files: Vec<Files>,
     licenses: Vec<License>,
+    exclusions: Vec<String>,
 }
 
 impl fmt::Display for DebCopyright {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "Format: {}", self.format)?;
         write!(f, "{}", self.upstream)?;
+        if !self.exclusions.is_empty() {
+            write!(f, "Files-Excluded:")?;
+            for excluded in &self.exclusions {
+                write!(f, "\n {}", excluded)?;
+            }
+            writeln!(f)?;
+        }
 
         for file in &self.files {
             write!(f, "\n{}", file)?;
@@ -78,12 +86,13 @@ impl fmt::Display for DebCopyright {
 }
 
 impl DebCopyright {
-    fn new(u: UpstreamInfo, f: &[Files], l: &[License]) -> DebCopyright {
+    fn new(u: UpstreamInfo, f: &[Files], l: &[License], e: &[String]) -> DebCopyright {
         DebCopyright {
             format: DEB_COPYRIGHT_FORMAT.to_string(),
             upstream: u,
             files: f.to_vec(),
             licenses: l.to_vec(),
+            exclusions: e.to_vec(),
         }
     }
 }
@@ -342,6 +351,7 @@ pub fn debian_copyright(
     uploaders: &[&str],
     year_range: (i32, i32),
     guess_harder: bool,
+    exclusions: &[String],
 ) -> Result<DebCopyright> {
     let meta = manifest.metadata().clone();
     let repository = meta.repository.unwrap_or_default();
@@ -435,7 +445,7 @@ pub fn debian_copyright(
         Files::new("*", notice.as_slice(), &crate_license, &fill(comment, 79)),
     );
 
-    Ok(DebCopyright::new(upstream, &files, &licenses))
+    Ok(DebCopyright::new(upstream, &files, &licenses, exclusions))
 }
 
 #[cfg(test)]

@@ -62,6 +62,7 @@ fn check_debian_copyright_authors() {
             &[],
             (2000, 2020),
             false,
+            &[],
         )
         .unwrap();
         let mut generated = false;

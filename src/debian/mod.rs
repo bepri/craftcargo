@@ -347,6 +347,7 @@ pub fn prepare_debian_folder(
                 Err(_) => (last, last),
             }
         };
+        let excludes = config.excludes.as_deref().unwrap_or_default();
         let dep5_copyright = debian_copyright(
             output_dir,
             crate_info.manifest(),
@@ -355,6 +356,7 @@ pub fn prepare_debian_folder(
             &uploaders,
             year_range,
             copyright_guess_harder,
+            excludes,
         )?;
         write!(copyright, "{}", dep5_copyright)?;
     }
