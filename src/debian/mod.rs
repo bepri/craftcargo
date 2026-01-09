@@ -152,11 +152,14 @@ pub fn prepare_orig_tarball(
             create.open(&temp_archive_path)?,
             Compression::best(),
         ));
+        let mut manifest_handled = false;
 
         for entry in archive.entries()? {
             let entry = entry?;
             let path = entry.path()?.into_owned();
-            if path.ends_with("Cargo.toml") && path.iter().count() == 2 {
+            if (path.ends_with("Cargo.toml") || path.ends_with("Cargo.toml.orig"))
+                && path.iter().count() == 2
+            {
                 // Put the rewritten and original Cargo.toml back into the orig tarball
                 let mut new_archive_append = |name: &str| {
                     let mut header = entry.header().clone();
@@ -166,8 +169,11 @@ pub fn prepare_orig_tarball(
                     header.set_cksum();
                     new_archive.append(&header, fs::File::open(&srcpath)?)
                 };
-                new_archive_append("Cargo.toml")?;
-                new_archive_append("Cargo.toml.orig")?;
+                if !manifest_handled {
+                    new_archive_append("Cargo.toml")?;
+                    new_archive_append("Cargo.toml.orig")?;
+                }
+                manifest_handled = true;
             } else {
                 match crate_info.filter_path(&entry.path()?) {
                     Err(e) => debcargo_bail!(e),
