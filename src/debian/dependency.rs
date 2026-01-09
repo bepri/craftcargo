@@ -108,8 +108,8 @@ impl VRange {
         use debian::dependency::V::{M, MM};
         match (&self.ge, &self.lt) {
             (None, None) => Ok(vec![format!("{}{}", base, suffix)]),
-            (Some(ge), None) => Ok(vec![format!("{}{} (>= {}-~~)", base, suffix, ge)]),
-            (None, Some(lt)) => Ok(vec![format!("{}{} (<< {}-~~)", base, suffix, lt)]),
+            (Some(ge), None) => Ok(vec![format!("{}{} (>= {})", base, suffix, ge)]),
+            (None, Some(lt)) => Ok(vec![format!("{}{} (<< {})", base, suffix, lt)]),
             (Some(ge), Some(lt)) => {
                 if ge >= lt {
                     debcargo_bail!("bad version range: >= {}, << {}", ge, lt);
@@ -155,14 +155,14 @@ impl VRange {
                 Ok(ranges
                     .iter()
                     .filter_map(|(ver, greater, cons)| match (ver, greater, cons) {
-                        (None, true, c) => Some(format!("{base}{suffix} (>= {c}-~~)")),
-                        (None, false, c) => Some(format!("{base}{suffix} (<< {c}-~~)")),
+                        (None, true, c) => Some(format!("{base}{suffix} (>= {c})")),
+                        (None, false, c) => Some(format!("{base}{suffix} (<< {c})")),
                         (Some(ver), true, c) => {
                             if c == &ver {
                                 // A-x >= x is redundant, drop the >=
                                 Some(format!("{base}-{ver}{suffix}"))
                             } else {
-                                Some(format!("{base}-{ver}{suffix} (>= {c}-~~)"))
+                                Some(format!("{base}-{ver}{suffix} (>= {c})"))
                             }
                         }
                         (Some(ver), false, c) => {
@@ -170,7 +170,7 @@ impl VRange {
                                 // A-x << x is unsatisfiable, drop it
                                 None
                             } else {
-                                Some(format!("{base}-{ver}{suffix} (<< {c}-~~)"))
+                                Some(format!("{base}-{ver}{suffix} (<< {c})"))
                             }
                         }
                     })

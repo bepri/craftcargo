@@ -377,7 +377,7 @@ mod tests {
     fn test_filter_local_crate_dependencies_with_version_constraints() {
         let mut deps = BTreeSet::new();
         deps.insert("librust-serde-dev".to_string());
-        deps.insert("librust-foo-0.1+default-dev (>= 0.1.3-~~)".to_string());
+        deps.insert("librust-foo-0.1+default-dev (>= 0.1.3)".to_string());
 
         let mut local_crates = HashSet::new();
         local_crates.insert("foo".to_string());

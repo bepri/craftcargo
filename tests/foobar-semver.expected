@@ -6,7 +6,7 @@ Build-Depends: debhelper-compat (= 13),
 Build-Depends-Arch: cargo:native,
  rustc:native,
  libstd-rust-dev,
- librust-anyhow-1+default-dev (>= 1.0.96-~~),
+ librust-anyhow-1+default-dev (>= 1.0.96),
  some-dependency-for-lib
 Maintainer: Debian Rust Maintainers <pkg-rust-maintainers@alioth-lists.debian.net>
 Standards-Version: 4.7.3
@@ -20,7 +20,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  ${misc:Depends},
- librust-anyhow-1+default-dev (>= 1.0.96-~~),
+ librust-anyhow-1+default-dev (>= 1.0.96),
  some-dependency-for-lib
 Suggests:
  librust-foobar-semver-0.1+futures-dev (= ${binary:Version}),
@@ -49,8 +49,8 @@ Multi-Arch: same
 Depends:
  ${misc:Depends},
  librust-foobar-semver-0.1-dev (= ${binary:Version}),
- librust-futures+default-dev (<< 0.4-~~),
- librust-futures+default-dev (>= 0.2-~~)
+ librust-futures+default-dev (<< 0.4),
+ librust-futures+default-dev (>= 0.2)
 Provides:
  librust-foobar-semver-0+futures-dev (= ${binary:Version}),
  librust-foobar-semver-0.1.0+futures-dev (= ${binary:Version})
