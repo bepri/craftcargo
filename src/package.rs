@@ -19,7 +19,11 @@ pub struct PackageProcess {
     // below state is filled in during the process
     /// Output directory as specified by the user.
     pub output_dir: Option<PathBuf>,
-    pub source_modified: Option<bool>,
+    /// Whether the crate tarball was modified, and whether that included Cargo.toml
+    /// (re)normalization
+    pub source_modified: bool,
+    /// If it was modified, whether that included Cargo.toml normalization
+    pub manifest_normalized: bool,
     /// Tempdir that contains a working copy of the eventual output.
     pub temp_output_dir: Option<tempfile::TempDir>,
     pub orig_tarball: Option<PathBuf>,
@@ -74,7 +78,8 @@ impl PackageProcess {
             config_path,
             config,
             output_dir: None,
-            source_modified: None,
+            source_modified: false,
+            manifest_normalized: false,
             temp_output_dir: None,
             orig_tarball: None,
         })
@@ -104,7 +109,6 @@ impl PackageProcess {
 
     pub fn extract(&mut self, extract: PackageExtractArgs) -> Result<()> {
         assert!(self.output_dir.is_none());
-        assert!(self.source_modified.is_none());
         let Self {
             crate_info,
             deb_info,
@@ -116,11 +120,12 @@ impl PackageProcess {
             .directory
             .unwrap_or_else(|| deb_info.package_source_dir().to_path_buf());
 
-        let source_modified = crate_info.extract_crate(&output_dir)?;
+        let (source_modified, manifest_normalized) = crate_info.extract_crate(&output_dir)?;
 
         // stage finished; set vars
         self.output_dir = Some(output_dir);
-        self.source_modified = Some(source_modified);
+        self.source_modified = source_modified;
+        self.manifest_normalized = manifest_normalized;
         Ok(())
     }
 
@@ -155,17 +160,23 @@ impl PackageProcess {
             deb_info,
             output_dir,
             source_modified,
+            manifest_normalized,
             ..
         } = self;
         let output_dir = output_dir.as_ref().unwrap();
-        let source_modified = source_modified.as_ref().unwrap();
         // vars read; begin stage
 
         let orig_tarball = output_dir
             .parent()
             .unwrap()
             .join(deb_info.orig_tarball_path());
-        debian::prepare_orig_tarball(crate_info, &orig_tarball, *source_modified, output_dir)?;
+        debian::prepare_orig_tarball(
+            crate_info,
+            &orig_tarball,
+            *source_modified,
+            *manifest_normalized,
+            output_dir,
+        )?;
 
         // stage finished; set vars
         self.orig_tarball = Some(orig_tarball);

@@ -572,12 +572,13 @@ impl CrateInfo {
         }
     }
 
-    pub fn extract_crate(&mut self, path: &Path) -> Result<bool> {
+    pub fn extract_crate(&mut self, path: &Path) -> Result<(bool, bool)> {
         let mut archive = Archive::new(GzDecoder::new(self.crate_file.file()));
         let tempdir = tempfile::Builder::new()
             .prefix("debcargo")
             .tempdir_in(".")?;
         let mut source_modified = false;
+        let mut manifest_normalized = false;
         let mut last_mtime = 0;
         let mut err = vec![];
 
@@ -722,6 +723,7 @@ impl CrateInfo {
             fs::write(path.join("Cargo.toml.orig"), orig_toml.as_bytes())?;
             fs::remove_dir_all(path.join("target"))?;
             source_modified = true;
+            manifest_normalized = true;
             // avoid lintian errors about package-contains-ancient-file
             // TODO: do we want to do this for unmodified tarballs? it would
             // force us to modify them, but otherwise we get that ugly warning
@@ -729,7 +731,7 @@ impl CrateInfo {
             set_file_times(toml_path, last_mtime, last_mtime)?;
             debcargo_info!("Cargo.toml manually canonicalized!");
         }
-        Ok(source_modified)
+        Ok((source_modified, manifest_normalized))
     }
 }
 

@@ -131,7 +131,8 @@ impl DebInfo {
 pub fn prepare_orig_tarball(
     crate_info: &CrateInfo,
     tarball: &Path,
-    src_modified: bool,
+    repacked: bool,
+    manifest_normalized: bool,
     output_dir: &Path,
 ) -> Result<()> {
     let crate_file = crate_info.crate_file();
@@ -143,7 +144,7 @@ pub fn prepare_orig_tarball(
     let mut create = fs::OpenOptions::new();
     create.write(true).create_new(true);
 
-    if src_modified {
+    if repacked {
         debcargo_info!("crate tarball was modified; repacking for debian");
         let mut f = crate_file.file();
         f.seek(io::SeekFrom::Start(0))?;
@@ -157,7 +158,8 @@ pub fn prepare_orig_tarball(
         for entry in archive.entries()? {
             let entry = entry?;
             let path = entry.path()?.into_owned();
-            if (path.ends_with("Cargo.toml") || path.ends_with("Cargo.toml.orig"))
+            if manifest_normalized
+                && (path.ends_with("Cargo.toml") || path.ends_with("Cargo.toml.orig"))
                 && path.iter().count() == 2
             {
                 // Put the rewritten and original Cargo.toml back into the orig tarball
@@ -166,6 +168,14 @@ pub fn prepare_orig_tarball(
                     let srcpath = output_dir.join(name);
                     header.set_path(path.parent().unwrap().join(name))?;
                     header.set_size(fs::metadata(&srcpath)?.len());
+                    if name == "Cargo.toml" {
+                        // Cargo.toml has epoch 1
+                        header.set_mtime(1);
+                    } else {
+                        // the rest have epoch tar::headers::DETERMINISTIC_TIMESTAMP
+                        // FIXME once exposed publically in the tar crate
+                        header.set_mtime(1153704088);
+                    }
                     header.set_cksum();
                     new_archive.append(&header, fs::File::open(&srcpath)?)
                 };
@@ -392,6 +402,7 @@ pub fn prepare_debian_folder(
                 watch,
                 r"Uversionmangle: s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/"
             )?;
+            writeln!(watch, r"Dversionmangle: s/@DEB_EXT@//g",)?;
             writeln!(watch, r"Compression: gzip")?;
         }
     }
