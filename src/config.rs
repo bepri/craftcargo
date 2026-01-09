@@ -14,6 +14,8 @@ use std::path::{Path, PathBuf};
 pub const RUST_MAINT: &str =
     "Debian Rust Maintainers <pkg-rust-maintainers@alioth-lists.debian.net>";
 
+pub const DEFAULT_REPACK_SUFFIX: &str = "dfsg";
+
 #[derive(Deserialize, Debug, Clone)]
 #[serde(default)]
 pub struct Config {
@@ -23,6 +25,7 @@ pub struct Config {
     pub overlay: Option<PathBuf>,
     pub excludes: Option<Vec<String>>,
     pub whitelist: Option<Vec<String>>,
+    pub repack_suffix: Option<String>,
     pub allow_prerelease_deps: bool,
     pub crate_src_path: Option<PathBuf>,
     pub summary: Option<String>,
@@ -116,6 +119,7 @@ impl Default for Config {
             semver_suffix: false,
             overlay: None,
             excludes: None,
+            repack_suffix: None,
             whitelist: None,
             allow_prerelease_deps: false,
             crate_src_path: None,
@@ -194,6 +198,12 @@ impl Config {
 
     pub fn orig_tar_whitelist(&self) -> Option<&Vec<String>> {
         self.whitelist.as_ref()
+    }
+
+    pub fn repack_suffix(&self) -> Option<&str> {
+        self.repack_suffix
+            .as_deref()
+            .or_else(|| self.orig_tar_excludes().and(Some(DEFAULT_REPACK_SUFFIX)))
     }
 
     pub fn maintainer(&self) -> &str {

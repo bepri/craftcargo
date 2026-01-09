@@ -22,6 +22,7 @@ pub struct BuildDeps {
 
 pub struct Source {
     name: String,
+    version: String,
     section: String,
     maintainer: String,
     uploaders: Vec<String>,
@@ -117,6 +118,9 @@ impl fmt::Display for Source {
         //   b) "utf-8" crate at version latest with semver_suffix = false.
         // dh-cargo assumes (a) which is wrong for the "utf-8" crate
         writeln!(f, "X-Cargo-Crate: {}", self.crate_name)?;
+        // Needed to get the plain upstream version for encoding it into the
+        // vendor/registry path used as install directory
+        writeln!(f, "X-Cargo-Crate-Version: {}", self.version)?;
         if let Some(ref rrr) = self.requires_root {
             writeln!(f, "Rules-Requires-Root: {rrr}")?;
         }
@@ -191,7 +195,7 @@ impl fmt::Display for PkgTest {
         } else {
             format!(", {}", self.depends.join(", "))
         };
-        writeln!(f, "Depends: dh-cargo (>= 31){depends}, {default_deps}")?;
+        writeln!(f, "Depends: dh-cargo (>= 33~){depends}, {default_deps}")?;
 
         let restricts = if self.extra_restricts.is_empty() {
             String::new()
@@ -224,6 +228,7 @@ impl Source {
         basename: &str,
         name_suffix: Option<&str>,
         crate_name: &str,
+        crate_version: &str,
         home: &str,
         lib: bool,
         maintainer: String,
@@ -246,6 +251,7 @@ impl Source {
             format!("https://salsa.debian.org/rust-team/debcargo-conf.git [src/{pkgbase}]");
         Ok(Source {
             name: dsc_name(&pkgbase),
+            version: crate_version.to_string(),
             section: section.to_string(),
             maintainer,
             uploaders,
@@ -659,10 +665,13 @@ impl PkgTest {
 /// Translates a semver into a Debian-format upstream version.
 /// Omits the build metadata, and uses a ~ before the prerelease version so it
 /// compares earlier than the subsequent release.
-pub fn deb_upstream_version(v: &Version) -> String {
+pub fn deb_upstream_version(v: &Version, repack: Option<&str>) -> String {
     let mut s = format!("{}.{}.{}", v.major, v.minor, v.patch);
     if !v.pre.is_empty() {
         write!(s, "~{}", v.pre.as_str()).unwrap();
+    }
+    if let Some(repack_suffix) = repack {
+        write!(s, "+{repack_suffix}").unwrap();
     }
     s
 }

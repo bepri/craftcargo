@@ -14,6 +14,7 @@ fn source_to_string() {
         "rsa",
         None,
         "rsa",
+        "1.2.3",
         "https://github.com/RustCrypto/RSA",
         true,
         "Jelmer Vernooĳ <jelmer@debian.org>".to_owned(),
@@ -23,7 +24,7 @@ fn source_to_string() {
     )
     .unwrap();
 
-    let expected = "Source: rust-rsa\nSection: rust\nMaintainer: Jelmer Vernooĳ <jelmer@debian.org>\nUploaders:\n Jelmer Vernooĳ <jelmer@debian.org>\nStandards-Version: 4.7.3\nVcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/rsa]\nVcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/rsa\nHomepage: https://github.com/RustCrypto/RSA\nX-Cargo-Crate: rsa\n";
+    let expected = "Source: rust-rsa\nSection: rust\nMaintainer: Jelmer Vernooĳ <jelmer@debian.org>\nUploaders:\n Jelmer Vernooĳ <jelmer@debian.org>\nStandards-Version: 4.7.3\nVcs-Git: https://salsa.debian.org/rust-team/debcargo-conf.git [src/rsa]\nVcs-Browser: https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/rsa\nHomepage: https://github.com/RustCrypto/RSA\nX-Cargo-Crate: rsa\nX-Cargo-Crate-Version: 1.2.3\n";
 
     assert_eq!(expected, instance.to_string());
 }
@@ -56,6 +57,7 @@ fn test_apply_overrides() {
         "rsa",
         None,
         "rsa",
+        "5.1.2",
         "https://github.com/RustCrypto/RSA",
         true,
         "Jelmer Vernooĳ <jelmer@debian.org>".to_owned(),
@@ -303,9 +305,15 @@ fn test_deb_upstream_version_without_pre() {
         build: Default::default(),
     };
 
-    let result = deb_upstream_version(&version);
+    let result = deb_upstream_version(&version, None);
 
     let expected = "0.9.7";
+
+    assert_eq!(expected, result);
+
+    let result = deb_upstream_version(&version, Some("dfsg9"));
+
+    let expected = "0.9.7+dfsg9";
 
     assert_eq!(expected, result);
 }
@@ -320,9 +328,9 @@ fn test_deb_upstream_version_with_pre() {
         build: Default::default(),
     };
 
-    let result = deb_upstream_version(&version);
+    let result = deb_upstream_version(&version, Some("dfsg9"));
 
-    let expected = "0.9.7~alpha";
+    let expected = "0.9.7~alpha+dfsg9";
 
     assert_eq!(expected, result);
 }

@@ -70,7 +70,12 @@ impl PackageProcess {
         config: Config,
     ) -> Result<Self> {
         crate_info.set_includes_excludes(config.orig_tar_excludes(), config.orig_tar_whitelist());
-        let deb_info = DebInfo::new(&crate_info, crate_version!(), config.semver_suffix);
+        let deb_info = DebInfo::new(
+            &crate_info,
+            crate_version!(),
+            config.semver_suffix,
+            config.repack_suffix(),
+        );
 
         Ok(Self {
             crate_info,
@@ -121,6 +126,10 @@ impl PackageProcess {
             .unwrap_or_else(|| deb_info.package_source_dir().to_path_buf());
 
         let (source_modified, manifest_normalized) = crate_info.extract_crate(&output_dir)?;
+
+        if source_modified && self.config.repack_suffix().is_none() {
+            debcargo_bail!("orig tarball has been modified, but no repack_suffix set -> please set repack_suffix in debcargo.toml!");
+        }
 
         // stage finished; set vars
         self.output_dir = Some(output_dir);

@@ -31,7 +31,7 @@ fn real_main() -> Result<()> {
             version,
         } => {
             let crate_info = CrateInfo::new_with_update(&crate_name, version.as_deref(), false)?;
-            let deb_info = DebInfo::new(&crate_info, crate_version!(), version.is_some());
+            let deb_info = DebInfo::new(&crate_info, crate_version!(), version.is_some(), None);
             println!("{}", deb_info.package_name());
             Ok(())
         }

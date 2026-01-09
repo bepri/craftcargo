@@ -53,7 +53,12 @@ pub struct DebInfo {
 }
 
 impl DebInfo {
-    pub fn new(crate_info: &CrateInfo, debcargo_version: &str, semver_suffix: bool) -> Self {
+    pub fn new(
+        crate_info: &CrateInfo,
+        debcargo_version: &str,
+        semver_suffix: bool,
+        repack_suffix: Option<&str>,
+    ) -> Self {
         let upstream_name = crate_info.package_id().name().to_string();
         let name_dashed = base_deb_name(&upstream_name);
         let base_package_name = name_dashed.to_lowercase();
@@ -68,7 +73,7 @@ impl DebInfo {
         } else {
             (None, None, base_package_name.clone())
         };
-        let deb_upstream_version = deb_upstream_version(crate_info.version());
+        let deb_upstream_version = deb_upstream_version(crate_info.version(), repack_suffix);
         let package_source_dir = PathBuf::from(format!(
             "{}-{}-{}",
             Source::pkg_prefix(),
@@ -404,6 +409,10 @@ pub fn prepare_debian_folder(
             )?;
             writeln!(watch, r"Dversionmangle: s/@DEB_EXT@//g",)?;
             writeln!(watch, r"Compression: gzip")?;
+            if let Some(repack_suffix) = config.repack_suffix() {
+                writeln!(watch, r"Repack: yes")?;
+                writeln!(watch, r"Repacksuffix: +{repack_suffix}")?;
+            }
         }
     }
 
@@ -619,7 +628,6 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     mut file: F,
 ) -> Result<(Source, bool, bool)> {
     let crate_name = crate_info.crate_name();
-    let deb_upstream_version = deb_info.deb_upstream_version();
     let base_pkgname = deb_info.base_package_name();
     let name_suffix = deb_info.name_suffix();
 
@@ -746,10 +754,14 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         config.crate_src_path.is_none(),
     );
 
+    // no repack suffix!
+    let plain_upstream_version = control::deb_upstream_version(crate_info.version(), None);
+
     let mut source = Source::new(
         base_pkgname,
         name_suffix,
         crate_name,
+        &plain_upstream_version,
         &homepage,
         lib,
         maintainer.to_string(),
@@ -810,7 +822,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 source.name(),
                 crate_name,
                 "@",
-                deb_upstream_version,
+                &plain_upstream_version,
                 &["--all-features"],
                 &all_features_test_depends,
                 if all_features_test_broken {
@@ -1039,7 +1051,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         package.name(),
                         crate_name,
                         f,
-                        deb_upstream_version,
+                        &plain_upstream_version,
                         &args,
                         &test_depends,
                         if test_is_broken(f)? { &["flaky"] } else { &[] },
