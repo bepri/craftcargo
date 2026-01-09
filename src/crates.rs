@@ -544,7 +544,7 @@ impl CrateInfo {
             return Ok(true);
         }
         let suspicious = match path.extension() {
-            Some(ext) => ext == "c" || ext == "a",
+            Some(ext) => ext == "c" || ext == "a" || ext == "S" || ext == "o" || ext == "so",
             _ => false,
         };
 
