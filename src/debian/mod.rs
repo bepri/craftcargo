@@ -222,7 +222,7 @@ pub fn apply_overlay_and_patches(
         debcargo_warn!(
             "Most of the time you shouldn't overlay debian/control, \
 it's a maintenance burden. Use debcargo.toml instead."
-        )
+        );
     }
     // apply patches to Cargo.toml in case they exist, and re-read it
     if tempdir.path().join("patches").join("series").exists() {

@@ -46,3 +46,4 @@ update-dependencies = ["debian-control"]
 
 [lints.clippy]
 uninlined_format_args = "warn"
+semicolon_if_nothing_returned = "warn"

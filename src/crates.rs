@@ -165,7 +165,7 @@ impl CrateInfo {
                     let mut package_id: Option<PackageId> = None;
                     loop {
                         match source.query(&dep, QueryKind::Exact, &mut |p| {
-                            package_id = Some(p.package_id())
+                            package_id = Some(p.package_id());
                         }) {
                             std::task::Poll::Ready(res) => {
                                 res?;
@@ -455,7 +455,7 @@ impl CrateInfo {
         let mut deps = vec![];
         for dep in self.dependencies() {
             if dep.kind() == DepKind::Development {
-                deps.push(dep.clone())
+                deps.push(dep.clone());
             }
         }
         deps
@@ -769,7 +769,7 @@ pub fn all_dependencies_and_features_filtered(
             match dep {
                 // another feature is a dependency
                 Feature(dep_feature) => {
-                    feature_deps.push(InternedString::new(dep_feature).as_str())
+                    feature_deps.push(InternedString::new(dep_feature).as_str());
                 }
                 // another package is a dependency
                 Dep { dep_name } => {
@@ -838,7 +838,7 @@ pub fn all_dependencies_and_features_filtered(
     for deps in deps_by_name.values() {
         for &dep in deps {
             if !dep.is_optional() {
-                deps_required.push(dep.clone())
+                deps_required.push(dep.clone());
             }
         }
     }

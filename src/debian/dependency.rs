@@ -195,7 +195,7 @@ fn coerce_unacceptable_predicate<'a>(
                 "Coercing removal of prerelease part of dependency: {} {:?}",
                 dep.package_name(),
                 p
-            )
+            );
         } else {
             debcargo_bail!(
                 "Cannot represent prerelease part of dependency: {} {:?}",

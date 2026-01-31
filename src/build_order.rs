@@ -100,7 +100,7 @@ fn dep_features(dep: &Dependency) -> Vec<&'static str> {
         .map(|x| x.as_str())
         .collect::<Vec<_>>();
     if dep.uses_default_features() {
-        feats.push("default")
+        feats.push("default");
     }
     feats.push(""); // bare-bones library with no features
     feats
