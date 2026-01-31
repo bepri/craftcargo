@@ -510,19 +510,19 @@ impl Package {
     pub fn new_extra(name: String) -> Self {
         Package {
             name,
-            arch: Default::default(),
-            multi_arch: Default::default(),
-            section: Default::default(),
-            depends: Default::default(),
-            recommends: Default::default(),
-            suggests: Default::default(),
-            provides: Default::default(),
-            breaks: Default::default(),
-            replaces: Default::default(),
-            conflicts: Default::default(),
-            summary: Description::new(Default::default(), Default::default()),
-            description: Description::new(Default::default(), Default::default()),
-            extra_lines: Default::default(),
+            arch: String::default(),
+            multi_arch: Option::default(),
+            section: Option::default(),
+            depends: Vec::default(),
+            recommends: Vec::default(),
+            suggests: Vec::default(),
+            provides: Vec::default(),
+            breaks: Vec::default(),
+            replaces: Vec::default(),
+            conflicts: Vec::default(),
+            summary: Description::new(String::default(), String::default()),
+            description: Description::new(String::default(), String::default()),
+            extra_lines: Vec::default(),
         }
     }
 
