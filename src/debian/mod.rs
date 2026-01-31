@@ -905,7 +905,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         no_features_edge_case.insert("default", (vec![""], vec![]));
         let no_features_edge_case = features_with_deps == no_features_edge_case;
 
-        for (feature, (f_deps, o_deps)) in reduced_features_with_deps.into_iter() {
+        for (feature, (f_deps, o_deps)) in reduced_features_with_deps {
             let pk = PackageKey::feature(feature);
             let f_provides = provides.remove(feature).unwrap();
             let mut crate_features = f_provides.clone();
@@ -1177,7 +1177,7 @@ fn reduce_provides(
         }
         features_rev_deps.get_mut(dep).unwrap().push(f);
     }
-    for (_, ff) in features_rev_deps.into_iter() {
+    for (_, ff) in features_rev_deps {
         let f0 = ff[0];
         for f in &ff[1..] {
             features_with_deps.insert(f, (vec![f0], vec![]));
