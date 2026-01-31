@@ -725,7 +725,7 @@ impl CrateInfo {
             // avoid lintian errors about package-contains-ancient-file
             // TODO: do we want to do this for unmodified tarballs? it would
             // force us to modify them, but otherwise we get that ugly warning
-            let last_mtime = FileTime::from_unix_time(last_mtime as i64, 0);
+            let last_mtime = FileTime::from_unix_time(i64::try_from(last_mtime)?, 0);
             set_file_times(toml_path, last_mtime, last_mtime)?;
             debcargo_info!("Cargo.toml manually canonicalized!");
         }
