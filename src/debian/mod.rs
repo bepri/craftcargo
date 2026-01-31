@@ -816,7 +816,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             let potential_corner_case = working_features_with_deps
                 .keys()
                 .filter(|x| base_deb_name(x).as_str() != **x)
-                .cloned()
+                .copied()
                 .collect::<Vec<_>>();
             for f in potential_corner_case {
                 let f_ = base_deb_name(f);
