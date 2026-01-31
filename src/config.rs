@@ -253,7 +253,7 @@ impl Config {
     // Packages accessors
 
     pub fn configured_packages(&'_ self) -> impl Iterator<Item = PackageKey<'_>> {
-        self.packages.keys().flat_map(|k| PackageKey::from_key(k))
+        self.packages.keys().filter_map(|k| PackageKey::from_key(k))
     }
 
     fn with_package<'a, T, F: FnOnce(&'a PackageOverride) -> Option<T>>(
