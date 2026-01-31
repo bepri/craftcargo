@@ -765,7 +765,7 @@ pub fn all_dependencies_and_features_filtered(
         let mut feature_deps: Vec<&'static str> = vec![];
         let mut other_deps: Vec<Dependency> = Vec::new();
         for dep in deps {
-            use self::FeatureValue::*;
+            use self::FeatureValue::{Feature, Dep, DepFeature};
             match dep {
                 // another feature is a dependency
                 Feature(dep_feature) => {

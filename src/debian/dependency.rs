@@ -7,8 +7,8 @@ use std::fmt;
 use crate::config::testing_ignore_debpolv;
 use crate::debian::{self, control::base_deb_name, Package};
 use crate::errors::Result;
-use crate::debian::dependency::V::*;
-use semver::Op::*;
+use crate::debian::dependency::V::{M, MM, MMP};
+use semver::Op::{Greater, GreaterEq, Less, LessEq, Exact, Wildcard, Tilde, Caret};
 
 #[derive(Eq, Clone)]
 #[allow(clippy::upper_case_acronyms)]
@@ -20,7 +20,7 @@ enum V {
 
 impl V {
     fn new(p: &semver::Comparator) -> Result<Self> {
-        use self::V::*;
+        use self::V::{M, MM, MMP};
         let mmp = match (p.minor, p.patch) {
             (None, None) => M(p.major),
             (Some(minor), None) => MM(p.major, minor),
@@ -31,7 +31,7 @@ impl V {
     }
 
     fn inclast(&self) -> V {
-        use self::V::*;
+        use self::V::{M, MM, MMP};
         match *self {
             M(major) => M(major + 1),
             MM(major, minor) => MM(major, minor + 1),
@@ -40,7 +40,7 @@ impl V {
     }
 
     fn mmp(&self) -> (u64, u64, u64) {
-        use self::V::*;
+        use self::V::{M, MM, MMP};
         match *self {
             M(major) => (major, 0, 0),
             MM(major, minor) => (major, minor, 0),
@@ -69,7 +69,7 @@ impl PartialEq for V {
 
 impl fmt::Display for V {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use self::V::*;
+        use self::V::{M, MM, MMP};
         match *self {
             M(major) => write!(f, "{major}"),
             MM(major, minor) => write!(f, "{major}.{minor}"),
@@ -105,7 +105,7 @@ impl VRange {
     }
 
     fn to_deb_clause(&self, base: &str, suffix: &str) -> Result<Vec<String>> {
-        use debian::dependency::V::*;
+        use debian::dependency::V::{M, MM};
         match (&self.ge, &self.lt) {
             (None, None) => Ok(vec![format!("{}{}", base, suffix)]),
             (Some(ge), None) => Ok(vec![format!("{}{} (>= {}-~~)", base, suffix, ge)]),

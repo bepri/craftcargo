@@ -351,7 +351,7 @@ pub enum PackageKey<'a> {
 
 impl<'a> PackageKey<'a> {
     pub fn feature(f: &'a str) -> PackageKey<'a> {
-        use self::PackageKey::*;
+        use self::PackageKey::{BareLib, FeatureLib};
         if f.is_empty() {
             BareLib
         } else {
@@ -360,7 +360,7 @@ impl<'a> PackageKey<'a> {
     }
 
     pub fn from_key(k: &'a str) -> Option<PackageKey<'a>> {
-        use self::PackageKey::*;
+        use self::PackageKey::{Bin, BareLib, FeatureLib, Extra};
         Some(match k {
             "bin" => Bin,
             "lib" => BareLib,
@@ -377,7 +377,7 @@ impl<'a> PackageKey<'a> {
     }
 
     fn key_string(&self) -> Cow<'static, str> {
-        use self::PackageKey::*;
+        use self::PackageKey::{Bin, BareLib, FeatureLib, Extra};
         match self {
             Bin => "bin".into(),
             BareLib => "lib".into(),

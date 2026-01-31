@@ -16,7 +16,7 @@ use crate::debian::control::base_deb_name;
 use crate::errors::Result;
 use crate::package::{PackageExtractArgs, PackageProcess};
 use crate::util;
-use ResolveType::*;
+use ResolveType::{SourceForDebianUnstable, BinaryAllForDebianTesting};
 
 
 #[derive(Debug, Clone, Copy, ValueEnum)]

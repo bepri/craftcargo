@@ -14,7 +14,7 @@ use debcargo::{
 
 #[cfg(feature = "update-dependencies")]
 use debcargo::update_dependencies::update_dependencies;
-use Opt::*;
+use Opt::{Update, DebSrcName, Extract, Package, BuildOrder, DebDependencies};
 
 #[test]
 fn verify_app() {
