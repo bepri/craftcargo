@@ -698,7 +698,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             PackageKey::feature("default"),
             &default_features,
         );
-        let build_deps_arch = toolchain_deps(&crate_info.rust_version())
+        let build_deps_arch = toolchain_deps(crate_info.rust_version().as_deref())
             .into_iter()
             .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
             .chain(extra_override_deps);
@@ -718,7 +718,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         }
         build_deps
     };
-    let test_deps: Vec<String> = Some(rustc_dep(&crate_info.rust_version(), false))
+    let test_deps: Vec<String> = Some(rustc_dep(crate_info.rust_version().as_deref(), false))
         .into_iter()
         .chain(dev_depends)
         .collect();
@@ -1228,13 +1228,13 @@ fn reduce_provides(
     (provides, features_with_deps)
 }
 
-pub(crate) fn toolchain_deps(min_rust_version: &Option<String>) -> Vec<String> {
+pub(crate) fn toolchain_deps(min_rust_version: Option<&str>) -> Vec<String> {
     let rustc = rustc_dep(min_rust_version, true);
     // libstd-rust-dev here is needed to pick up the right arch variant for cross-builds!
     ["cargo:native".into(), rustc, "libstd-rust-dev".into()].into()
 }
 
-fn rustc_dep(min_ver: &Option<String>, native: bool) -> String {
+fn rustc_dep(min_ver: Option<&str>, native: bool) -> String {
     let native = if native { ":native" } else { "" };
     if let Some(min_ver) = min_ver {
         format!("rustc{native} (>= {min_ver})")
@@ -1283,26 +1283,26 @@ mod test {
     fn rustc_dep_includes_minver() {
         assert_eq!(
             "rustc:native (>= 1.65)",
-            rustc_dep(&Some("1.65".to_string()), true)
+            rustc_dep(Some("1.65"), true)
         );
     }
 
     #[test]
     fn rustc_dep_excludes_minver() {
-        assert_eq!("rustc:native", rustc_dep(&None, true));
+        assert_eq!("rustc:native", rustc_dep(None, true));
     }
 
     #[test]
     fn rustc_dep_includes_minver_autopkgtest() {
         assert_eq!(
             "rustc (>= 1.65)",
-            rustc_dep(&Some("1.65".to_string()), false)
+            rustc_dep(Some("1.65"), false)
         );
     }
 
     #[test]
     fn rustc_dep_excludes_minver_autopkgtest() {
-        assert_eq!("rustc", rustc_dep(&None, false));
+        assert_eq!("rustc", rustc_dep(None, false));
     }
 
     #[test]

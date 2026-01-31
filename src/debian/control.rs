@@ -560,9 +560,9 @@ impl Package {
             self.section = Some(section.to_string());
         }
         self.summary
-            .apply_overrides(&config.summary, config.package_summary(key));
+            .apply_overrides(config.summary.as_deref(), config.package_summary(key));
         self.description
-            .apply_overrides(&config.description, config.package_description(key));
+            .apply_overrides(config.description.as_deref(), config.package_description(key));
 
         self.depends.extend(config::package_field_for_feature(
             |x| config.package_depends(x),
@@ -616,12 +616,12 @@ impl Package {
 }
 
 impl Description {
-    fn apply_overrides(&mut self, global: &Option<String>, per_package: Option<&str>) {
+    fn apply_overrides(&mut self, global: Option<&str>, per_package: Option<&str>) {
         if let Some(per_package) = per_package {
             self.prefix = per_package.to_string();
             self.suffix = String::new();
-        } else if let Some(global) = &global {
-            self.prefix = global.into();
+        } else if let Some(global) = global {
+            self.prefix = global.to_owned();
         }
     }
 }
