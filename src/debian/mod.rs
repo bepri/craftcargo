@@ -1,7 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::io::{self, ErrorKind, Read, Seek, Write as IoWrite};
-use std::ops::Deref;
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
@@ -802,7 +801,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 } else {
                     &[]
                 },
-                all_features_test_arch.deref(),
+                &all_features_test_arch,
             )?
         )?;
 
@@ -1039,7 +1038,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         } else {
                             &[]
                         },
-                        test_arch.deref(),
+                        &test_arch,
                     )?;
                     write!(testctl, "\n{pkgtest}")?;
                 }
