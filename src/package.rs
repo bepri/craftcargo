@@ -237,7 +237,7 @@ impl PackageProcess {
                     debcargo_warn!("\t •  Add or edit overrides in your config file:");
                     debcargo_warn!("\t    {}", util::rel_p(c, &curdir));
                 }
-            };
+            }
             match config.overlay_dir(config_path.as_deref()) {
                 None => debcargo_warn!("\t •  Create an overlay directory and add it to your config file with overlay = \"/path/to/overlay\""),
                 Some(p) => {

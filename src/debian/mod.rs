@@ -389,7 +389,7 @@ pub fn prepare_debian_folder(
                 )?;
                 writeln!(watch, r"Compression: gzip")?;
             }
-        };
+        }
     }
 
     // debian/source/format

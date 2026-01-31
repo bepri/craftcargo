@@ -90,7 +90,7 @@ impl VRange {
         match self.ge {
             Some(ref ge_) if &ge < ge_ => (),
             _ => self.ge = Some(ge),
-        };
+        }
         self
     }
 
@@ -98,7 +98,7 @@ impl VRange {
         match self.lt {
             Some(ref lt_) if &lt >= lt_ => (),
             _ => self.lt = Some(lt),
-        };
+        }
         self
     }
 
@@ -146,7 +146,7 @@ impl VRange {
                         ranges.push((Some(MM(ge_maj, ge_min)), true, ge));
                         ranges.push((Some(MM(lt_maj, lt_min)), false, lt));
                     }
-                };
+                }
                 // unversioned package name is only provided by the non semver-suffixed packages
                 // if a range is only satisfiable by semver-suffixed variants in the archive, it
                 // needs to be collapsed/reduced accordingly

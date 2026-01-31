@@ -175,7 +175,7 @@ fn resolve_info(
         };
         let dep_info = all_dependencies_and_features(info.manifest());
         e.insert((info, dep_info, config));
-    };
+    }
     Ok(id)
 }
 

@@ -389,7 +389,7 @@ impl Package {
             // don't provide unversioned variants in semver-suffix packages
             if name_suffix.is_some() && suffix.is_empty() {
                 continue;
-            };
+            }
 
             let p = format!("{basename}{suffix}");
             provides.push(deb_feature2(&p, feature.unwrap_or("")));
