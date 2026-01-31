@@ -6,7 +6,7 @@ use std::fmt;
 
 use crate::config::testing_ignore_debpolv;
 use crate::debian::{self, control::base_deb_name, Package};
-use crate::errors::*;
+use crate::errors::Result;
 use crate::debian::dependency::V::*;
 use semver::Op::*;
 

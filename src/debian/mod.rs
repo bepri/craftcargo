@@ -23,7 +23,7 @@ use crate::config::{package_field_for_feature, testing_ignore_debpolv, Config, P
 use crate::crates::{
     all_dependencies_and_features, show_dep, transitive_deps, CrateDepInfo, CrateInfo,
 };
-use crate::errors::*;
+use crate::errors::Result;
 use crate::util::{self, copy_tree, expect_success, get_transitive_val, traverse_depth};
 
 use self::changelog::{ChangelogEntry, ChangelogIterator};

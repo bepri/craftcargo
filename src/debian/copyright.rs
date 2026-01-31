@@ -14,7 +14,7 @@ use std::fs;
 use std::io::{BufRead, BufReader, Read};
 use std::path::Path;
 
-use crate::errors::*;
+use crate::errors::Result;
 
 const DEB_COPYRIGHT_FORMAT: &str = "\
      https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/";

@@ -8,7 +8,7 @@ use semver::Version;
 use textwrap::fill;
 
 use crate::config::{self, Config, PackageKey};
-use crate::errors::*;
+use crate::errors::Result;
 
 /// Suffix for Rust development packages
 pub const DEV_SUFFIX: &str = "-dev";

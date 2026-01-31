@@ -6,7 +6,7 @@ use debcargo::cli::{Cli, Opt};
 use debcargo::crates::CrateInfo;
 use debcargo::debian::DebInfo;
 use debcargo::errors::Result;
-use debcargo::package::*;
+use debcargo::package::PackageProcess;
 use debcargo::{
     build_order::build_order, crates::invalidate_crates_io_cache,
     deb_dependencies::deb_dependencies,

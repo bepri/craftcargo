@@ -31,7 +31,7 @@ use std::path::Path;
 use std::{self, ffi::OsStr};
 use cargo::util::Filesystem;
 use crate::config::testing_ignore_debpolv;
-use crate::errors::*;
+use crate::errors::Result;
 
 pub struct CrateInfo {
     // only used for to_registry_toml in extract_crate. DO NOT USE ELSEWHERE

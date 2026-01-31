@@ -2,7 +2,7 @@ use serde::de::IgnoredAny;
 use serde::Deserialize;
 use toml;
 
-use crate::errors::*;
+use crate::errors::Result;
 
 use std::borrow::Cow;
 use std::collections::HashMap;
