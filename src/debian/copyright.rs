@@ -370,7 +370,7 @@ pub fn debian_copyright(
     let upstream = UpstreamInfo::new(manifest.name().to_string(), authors, &repository);
 
     let mut licenses: Vec<License> = Vec::new();
-    let mut crate_license: String = "".to_string();
+    let mut crate_license: String = String::new();
 
     if let Some(ref license_file_name) = meta.license_file {
         let license_file = manifest_path.with_file_name(license_file_name);

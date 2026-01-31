@@ -170,7 +170,7 @@ impl fmt::Display for Package {
 impl fmt::Display for PkgTest {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let extra_args = if self.extra_test_args.is_empty() {
-            "".into()
+            String::new()
         } else {
             format!(" {}", self.extra_test_args.join(" "))
         };
@@ -187,14 +187,14 @@ impl fmt::Display for PkgTest {
         let default_deps = if cargo_bug_fixed { &self.name } else { "@" };
 
         let depends = if self.depends.is_empty() {
-            "".into()
+            String::new()
         } else {
             format!(", {}", self.depends.join(", "))
         };
         writeln!(f, "Depends: dh-cargo (>= 31){depends}, {default_deps}")?;
 
         let restricts = if self.extra_restricts.is_empty() {
-            "".into()
+            String::new()
         } else {
             format!(", {}", self.extra_restricts.join(", "))
         };
@@ -380,7 +380,7 @@ impl Package {
         // https://wiki.debian.org/Teams/RustPackaging/Policy#Package_provides
         let mut provides = vec![];
         let version_suffixes = [
-            "".to_string(),
+            String::new(),
             format!("-{}", version.major),
             format!("-{}.{}", version.major, version.minor),
             format!("-{}.{}.{}", version.major, version.minor, version.patch),
@@ -616,7 +616,7 @@ impl Description {
     fn apply_overrides(&mut self, global: &Option<String>, per_package: Option<&str>) {
         if let Some(per_package) = per_package {
             self.prefix = per_package.to_string();
-            self.suffix = "".to_string();
+            self.suffix = String::new();
         } else if let Some(global) = &global {
             self.prefix = global.into();
         }
