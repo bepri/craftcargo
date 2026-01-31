@@ -279,9 +279,9 @@ where
         }
     }
     pred.retain(|_, v| !v.is_empty());
-    if !pred.is_empty() {
-        Err(pred)
-    } else {
+    if pred.is_empty() {
         Ok(sort)
+    } else {
+        Err(pred)
     }
 }

@@ -173,14 +173,14 @@ pub fn prepare_orig_tarball(
                 match crate_info.filter_path(&entry.path()?) {
                     Err(e) => debcargo_bail!(e),
                     Ok(r) => {
-                        if !r {
-                            new_archive.append_data(&mut entry.header().clone(), path, entry)?;
-                        } else {
+                        if r {
                             writeln!(
                                 io::stderr(),
                                 "Filtered out files from .orig.tar.gz: {:?}",
                                 &entry.path()?
                             )?;
+                        } else {
+                            new_archive.append_data(&mut entry.header().clone(), path, entry)?;
                         }
                     }
                 }
@@ -702,9 +702,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             .into_iter()
             .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
             .chain(extra_override_deps);
-        if !bins.is_empty() {
-            build_deps.build_depends_arch.extend(build_deps_arch);
-        } else {
+        if bins.is_empty() {
             assert!(lib);
             build_deps
                 .build_depends_arch
@@ -715,6 +713,8 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         deb_dep_add_nocheck(&d)
                     }
                 }));
+        } else {
+            build_deps.build_depends_arch.extend(build_deps_arch);
         }
         build_deps
     };
@@ -1064,10 +1064,10 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             bin_name,
             name_suffix,
             // if not-a-lib then Source section is already FIXME
-            if !lib {
-                None
-            } else {
+            if lib {
                 Some("FIXME-(packages.\"(name)\".section)")
+            } else {
+                None
             },
             Description {
                 prefix: summary_prefix,
