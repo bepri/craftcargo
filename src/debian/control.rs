@@ -295,10 +295,9 @@ impl Source {
                 .flatten()
                 .map(String::to_string),
         );
-        let bdeps_ex = config
+        let bdeps_ex: &[String] = config
             .build_depends_excludes()
-            .map(Vec::as_slice)
-            .unwrap_or(&[]);
+            .map_or(&[], Vec::as_slice);
         self.build_deps
             .build_depends
             .retain(|x| !bdeps_ex.contains(x));
