@@ -657,7 +657,7 @@ impl CrateInfo {
                             "Cargo.toml references non-existing license_file path: {:?}",
                             full_referenced_path
                         );
-                        if let Some((_prefix, file)) = referenced_path.rsplit_once("/") {
+                        if let Some((_prefix, file)) = referenced_path.rsplit_once('/') {
                             if path.join(file).exists() {
                                 debcargo_info!("Replacing reference with '{}'", file);
                                 actual_toml = actual_toml.replace(referenced_path, file);
