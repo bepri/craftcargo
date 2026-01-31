@@ -686,7 +686,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         build_deps.build_depends.extend(
             ["debhelper-compat (= 13)", "dh-sequence-cargo"]
                 .iter()
-                .map(|x| x.to_string()),
+                .map(ToString::to_string),
         );
 
         // note: please keep this in sync with build_order::dep_features
@@ -738,7 +738,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         &homepage,
         lib,
         maintainer.to_string(),
-        uploaders.iter().map(|s| s.to_string()).collect(),
+        uploaders.iter().map(ToString::to_string).collect(),
         build_deps,
         requires_root.cloned(),
     )?;
@@ -1128,7 +1128,7 @@ fn generate_test_dependencies(
                 .into_iter()
                 .flatten()
         })
-        .map(|s| s.to_string())
+        .map(ToString::to_string)
         .chain(test_deps.to_owned())
         .collect::<Vec<_>>()
 }

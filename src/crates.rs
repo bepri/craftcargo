@@ -29,7 +29,7 @@ use std::fs;
 use std::io::{self, Read};
 use std::path::Path;
 use std::{self, ffi::OsStr};
-
+use cargo::util::Filesystem;
 use crate::config::testing_ignore_debpolv;
 use crate::errors::*;
 
@@ -259,7 +259,7 @@ impl CrateInfo {
                 false,
                 false,
                 true, // offline
-                &context.target_dir()?.map(|x| x.into_path_unlocked()),
+                &context.target_dir()?.map(Filesystem::into_path_unlocked),
                 &[],
                 &[],
             )?;
@@ -395,7 +395,7 @@ impl CrateInfo {
     }
 
     pub fn rust_version(&self) -> Option<String> {
-        self.manifest.rust_version().map(|v| v.to_string())
+        self.manifest.rust_version().map(ToString::to_string)
     }
 
     pub fn targets(&self) -> &[Target] {

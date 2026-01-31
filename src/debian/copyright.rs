@@ -150,7 +150,7 @@ impl Files {
         assert!(!notice.is_empty());
         Files {
             files: name.to_string(),
-            copyright: notice.iter().map(|s| s.to_string()).collect(),
+            copyright: notice.iter().map(ToString::to_string).collect(),
             license: license.to_string(),
             comment: comment.to_string(),
         }

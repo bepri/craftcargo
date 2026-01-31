@@ -338,7 +338,7 @@ pub fn package_field_for_feature<'a, 'b, F: Fn(PackageKey) -> Option<&'a Vec<Str
         .into_iter()
         .chain(f_provides.iter().map(|s| PackageKey::feature(s)))
         .flat_map(move |f| get_field(f).into_iter().flatten())
-        .map(|s| s.to_string())
+        .map(ToString::to_string)
 }
 
 #[derive(Clone, Copy)]

@@ -483,7 +483,7 @@ impl Package {
             name,
             arch: "any".to_string(),
             multi_arch: None,
-            section: section.map(|s| s.to_string()),
+            section: section.map(ToString::to_string),
             depends: vec![
                 "${misc:Depends}".to_string(),
                 "${shlibs:Depends}".to_string(),
@@ -601,7 +601,7 @@ impl Package {
                 .package_extra_lines(key)
                 .into_iter()
                 .flatten()
-                .map(|s| s.to_string()),
+                .map(ToString::to_string),
         );
         if let Some(architecture) = config.package_architecture(key) {
             self.arch = architecture.join(" ");
@@ -645,10 +645,10 @@ impl PkgTest {
             crate_name: crate_name.to_string(),
             feature: feature.to_string(),
             version: version.to_string(),
-            extra_test_args: extra_test_args.iter().map(|x| x.to_string()).collect(),
+            extra_test_args: extra_test_args.iter().map(ToString::to_string).collect(),
             depends: depends.to_vec(),
-            extra_restricts: extra_restricts.iter().map(|x| x.to_string()).collect(),
-            architecture: architecture.iter().map(|x| x.to_string()).collect(),
+            extra_restricts: extra_restricts.iter().map(ToString::to_string).collect(),
+            architecture: architecture.iter().map(ToString::to_string).collect(),
         })
     }
 }

@@ -132,7 +132,7 @@ pub fn show_vec<'a, T>(it: impl IntoIterator<Item = &'a T>) -> String
 where
     T: fmt::Display + 'a,
 {
-    show_vec_with(it, std::string::ToString::to_string)
+    show_vec_with(it, ToString::to_string)
 }
 
 pub fn expect_success(cmd: &mut Command, err: &str) -> Result<(), anyhow::Error> {

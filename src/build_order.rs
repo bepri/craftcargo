@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 use anyhow::Context;
 use cargo::core::{Dependency, PackageId};
+use cargo::util::interning::InternedString;
 use clap::{Parser, ValueEnum};
 
 use crate::config::Config;
@@ -97,7 +98,7 @@ fn dep_features(dep: &Dependency) -> Vec<&'static str> {
     let mut feats = dep
         .features()
         .iter()
-        .map(|x| x.as_str())
+        .map(InternedString::as_str)
         .collect::<Vec<_>>();
     if dep.uses_default_features() {
         feats.push("default");

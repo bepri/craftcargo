@@ -81,7 +81,7 @@ impl str::FromStr for ChangelogEntry {
             matches1[4].to_string(),
             matches2[1].to_string(),
             DateTime::parse_from_rfc2822(&matches2[2])?,
-            lines.iter().map(|s| s.to_string()).collect(),
+            lines.iter().map(ToString::to_string).collect(),
         ))
     }
 }
