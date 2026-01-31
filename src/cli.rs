@@ -35,7 +35,7 @@ pub enum Opt {
         /// Version of the crate to package; may contain dependency operators.
         /// If empty string, resolves to the latest version. If given here,
         /// i.e. not omitted then print the package name as if the config
-        /// option semver_suffix was set to true.
+        /// option `semver_suffix` was set to true.
         version: Option<String>,
     },
     /// Extract only a crate, without any other transformations.

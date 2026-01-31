@@ -516,7 +516,7 @@ impl CrateInfo {
         (summary, description)
     }
 
-    /// To be called before extract_crate.
+    /// To be called before `extract_crate`.
     pub fn set_includes_excludes(
         &mut self,
         excludes: Option<&Vec<String>>,
@@ -741,7 +741,7 @@ pub fn all_dependencies_and_features(manifest: &Manifest) -> CrateDepInfo {
 
 /// Collect information about the dependency structure of features and
 /// their external crate dependencies, in a simple output format.
-/// If include_dev_dependencies is true, dev-dependencies will be included.
+/// If `include_dev_dependencies` is true, dev-dependencies will be included.
 pub fn all_dependencies_and_features_filtered(
     manifest: &Manifest,
     include_dev_dependencies: bool,

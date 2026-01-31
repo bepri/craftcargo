@@ -42,7 +42,7 @@ pub struct DebInfo {
     /// Debian package name without `rust-` prefix or any semver suffix
     base_package_name: String,
     /// Package name suffix after the base package name.
-    /// Some implies semver_suffix, i.e. Some("") is different from None
+    /// Some implies `semver_suffix`, i.e. Some("") is different from None
     name_suffix: Option<String>,
     uscan_version_pattern: Option<String>,
     /// Debian package name without `rust-` prefix
