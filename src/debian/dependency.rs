@@ -238,7 +238,7 @@ fn generate_version_constraints(
     // see https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html
     // and https://docs.rs/semver/1/semver/enum.Op.html for semantics
     match (*op, &mmp) {
-        (Less, &M(0)) | (Less, &MM(0, 0)) | (Less, &MMP(0, 0, 0)) => debcargo_bail!(
+        (Less, &M(0) | &MM(0, 0) | &MMP(0, 0, 0)) => debcargo_bail!(
             "Unrepresentable dependency version predicate: {} {:?}",
             dep.package_name(),
             p
@@ -255,11 +255,11 @@ fn generate_version_constraints(
         (GreaterEq, _) => {
             vr.constrain_ge(mmp);
         }
-        (Exact, _) | (Wildcard, _) => {
+        (Exact | Wildcard, _) => {
             vr.constrain_lt(mmp.inclast());
             vr.constrain_ge(mmp);
         }
-        (Tilde, &M(_)) | (Tilde, &MM(_, _)) => {
+        (Tilde, &M(_) | &MM(_, _)) => {
             vr.constrain_lt(mmp.inclast());
             vr.constrain_ge(mmp);
         }
@@ -272,11 +272,11 @@ fn generate_version_constraints(
             vr.constrain_lt(mmp.inclast());
             vr.constrain_ge(mmp);
         }
-        (Caret, &MMP(0, minor, _)) | (Caret, &MM(0, minor)) => {
+        (Caret, &MMP(0, minor, _) | &MM(0, minor)) => {
             vr.constrain_lt(MM(0, minor + 1));
             vr.constrain_ge(mmp);
         }
-        (Caret, &MMP(major, _, _)) | (Caret, &MM(major, _)) | (Caret, &M(major)) => {
+        (Caret, &MMP(major, _, _) | &MM(major, _) | &M(major)) => {
             vr.constrain_lt(M(major + 1));
             vr.constrain_ge(mmp);
         }
