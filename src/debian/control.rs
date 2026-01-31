@@ -118,7 +118,7 @@ impl fmt::Display for Source {
         // dh-cargo assumes (a) which is wrong for the "utf-8" crate
         writeln!(f, "X-Cargo-Crate: {}", self.crate_name)?;
         if let Some(ref rrr) = self.requires_root {
-            writeln!(f, "Rules-Requires-Root: {}", rrr)?;
+            writeln!(f, "Rules-Requires-Root: {rrr}")?;
         }
 
         Ok(())
@@ -130,11 +130,11 @@ impl fmt::Display for Package {
         writeln!(f, "Package: {}", self.name)?;
         writeln!(f, "Architecture: {}", self.arch)?;
         if let Some(ref multi_arch) = self.multi_arch {
-            writeln!(f, "Multi-Arch: {}", multi_arch)?;
+            writeln!(f, "Multi-Arch: {multi_arch}")?;
         }
 
         if let Some(section) = &self.section {
-            writeln!(f, "Section: {}", section)?;
+            writeln!(f, "Section: {section}")?;
         }
 
         if !self.depends.is_empty() {
@@ -160,7 +160,7 @@ impl fmt::Display for Package {
         }
 
         for line in &self.extra_lines {
-            writeln!(f, "{}", line)?;
+            writeln!(f, "{line}")?;
         }
 
         self.write_description(f)
@@ -191,7 +191,7 @@ impl fmt::Display for PkgTest {
         } else {
             format!(", {}", self.depends.join(", "))
         };
-        writeln!(f, "Depends: dh-cargo (>= 31){}, {}", depends, default_deps)?;
+        writeln!(f, "Depends: dh-cargo (>= 31){depends}, {default_deps}")?;
 
         let restricts = if self.extra_restricts.is_empty() {
             "".into()
@@ -200,8 +200,7 @@ impl fmt::Display for PkgTest {
         };
         writeln!(
             f,
-            "Restrictions: allow-stderr, skip-not-installable{}",
-            restricts,
+            "Restrictions: allow-stderr, skip-not-installable{restricts}",
         )?;
         if !self.architecture.is_empty() {
             writeln!(f, "Architecture: {}", self.architecture.join(" "))?;
@@ -234,7 +233,7 @@ impl Source {
     ) -> Result<Source> {
         let pkgbase = match name_suffix {
             None => basename.to_string(),
-            Some(suf) => format!("{}{}", basename, suf),
+            Some(suf) => format!("{basename}{suf}"),
         };
         let section = if lib {
             "rust"
@@ -242,12 +241,10 @@ impl Source {
             "FIXME-IN-THE-SOURCE-SECTION"
         };
         let vcs_browser = format!(
-            "https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/{}",
-            pkgbase
+            "https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/{pkgbase}"
         );
         let vcs_git = format!(
-            "https://salsa.debian.org/rust-team/debcargo-conf.git [src/{}]",
-            pkgbase
+            "https://salsa.debian.org/rust-team/debcargo-conf.git [src/{pkgbase}]"
         );
         Ok(Source {
             name: dsc_name(&pkgbase),
@@ -354,7 +351,7 @@ impl Package {
     ) -> Result<Package> {
         let pkgbase = match name_suffix {
             None => basename.to_string(),
-            Some(suf) => format!("{}{}", basename, suf),
+            Some(suf) => format!("{basename}{suf}"),
         };
         let deb_feature2 = &|p: &str, f: &str| {
             format!(
@@ -394,7 +391,7 @@ impl Package {
                 continue;
             };
 
-            let p = format!("{}{}", basename, suffix);
+            let p = format!("{basename}{suffix}");
             provides.push(deb_feature2(&p, feature.unwrap_or("")));
             provides.extend(f_provides.iter().map(|f| deb_feature2(&p, f)));
         }
@@ -477,7 +474,7 @@ impl Package {
         let (name, mut provides) = match name_suffix {
             None => (basename.to_string(), vec![]),
             Some(suf) => (
-                format!("{}{}", basename, suf),
+                format!("{basename}{suf}"),
                 vec![format!("{} (= ${{binary:Version}})", basename)],
             ),
         };
@@ -538,9 +535,9 @@ impl Package {
             if line.is_empty() {
                 writeln!(out, " .")?;
             } else if line.starts_with("- ") {
-                writeln!(out, "  {}", line)?;
+                writeln!(out, "  {line}")?;
             } else {
-                writeln!(out, " {}", line)?;
+                writeln!(out, " {line}")?;
             }
         }
         Ok(())
@@ -705,7 +702,7 @@ fn get_envs(keys: &[&str]) -> Result<Option<String>> {
             }
             Err(e @ VarError::NotUnicode(_)) => {
                 return Err(Error::from(e)
-                    .context(format!("Environment variable ${} not valid UTF-8", key)));
+                    .context(format!("Environment variable ${key} not valid UTF-8")));
             }
             Err(VarError::NotPresent) => {}
         }
@@ -727,7 +724,7 @@ pub fn get_deb_author() -> Result<String> {
     let email = get_envs(&["DEBEMAIL", "EMAIL"])?.ok_or_else(|| {
         format_err!("Unable to determine your email; please set $DEBEMAIL or $EMAIL")
     })?;
-    Ok(format!("{} <{}>", name, email))
+    Ok(format!("{name} <{email}>"))
 }
 
 #[cfg(test)]

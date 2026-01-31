@@ -122,7 +122,7 @@ fn find_config(config_dir: &Path, id: PackageId) -> Result<(Option<PathBuf>, Con
         let path = config_dir.join(c).join("debian").join("debcargo.toml");
         if path.is_file() {
             let config = Config::parse(&path).context("failed to parse debcargo.toml")?;
-            log::debug!("using config for {}: {:?}", id, path);
+            log::debug!("using config for {id}: {path:?}");
             return Ok((Some(path), config));
         }
     }
@@ -190,7 +190,7 @@ pub fn build_order(args: BuildOrderArgs) -> Result<Vec<PackageId>> {
     let seed_id = resolve_info(&mut infos, &mut cache, config_dir, &seed_dep, true)?;
 
     let mut next = |idf: &PackageIdFeat| -> Result<(Vec<PackageIdFeat>, Vec<PackageIdFeat>)> {
-        log::trace!("{} getting build deps..", idf);
+        log::trace!("{idf} getting build deps..");
         let (hard, soft) = get_build_deps(
             infos
                 .get(&idf.0)
@@ -241,7 +241,7 @@ pub fn build_order(args: BuildOrderArgs) -> Result<Vec<PackageId>> {
 
     let succ_with_features =
         util::graph_from_succ([PackageIdFeat(seed_id, "")], &mut next, &mut log)?;
-    log::trace!("succ_with_features: {:#?}", succ_with_features);
+    log::trace!("succ_with_features: {succ_with_features:#?}");
 
     let succ = util::succ_proj(&succ_with_features, |x| x.0);
     let pred = util::succ_to_pred(&succ);
@@ -274,7 +274,7 @@ pub fn build_order(args: BuildOrderArgs) -> Result<Vec<PackageId>> {
     // sanity check
     for p in build_order.iter() {
         if infos.remove(p).is_none() {
-            log::error!("extra package in build-order not in infos: {}", p);
+            log::error!("extra package in build-order not in infos: {p}");
         }
     }
     for (p, _) in infos {

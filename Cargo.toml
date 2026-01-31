@@ -43,3 +43,6 @@ debian-control = { version = "0.2.14", optional = true, default-features = false
 [features]
 default = []
 update-dependencies = ["debian-control"]
+
+[lints.clippy]
+uninlined_format_args = "warn"

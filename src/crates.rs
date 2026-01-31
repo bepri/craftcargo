@@ -370,8 +370,8 @@ impl CrateInfo {
         match *self.package_id().version() {
             Version {
                 major: 0, minor, ..
-            } => format!("0.{}", minor),
-            Version { major, .. } => format!("{}", major),
+            } => format!("0.{minor}"),
+            Version { major, .. } => format!("{major}"),
         }
     }
 
@@ -551,8 +551,7 @@ impl CrateInfo {
         let debian_dir_pattern = Pattern::new(&format!("{top_level}/debian/*")).unwrap();
         if debian_dir_pattern.matches_path(path) {
             return Err(format!(
-                "Suspicious file or directory, should probably be excluded in debcargo.toml: {:?}",
-                path
+                "Suspicious file or directory, should probably be excluded in debcargo.toml: {path:?}"
             ));
         }
 
@@ -565,8 +564,7 @@ impl CrateInfo {
                 Ok(false)
             } else {
                 Err(format!(
-                    "Suspicious file, should probably be excluded in debcargo.toml: {:?}",
-                    path
+                    "Suspicious file, should probably be excluded in debcargo.toml: {path:?}"
                 ))
             }
         } else {

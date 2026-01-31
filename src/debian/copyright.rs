@@ -68,17 +68,17 @@ impl fmt::Display for DebCopyright {
         if !self.exclusions.is_empty() {
             write!(f, "Files-Excluded:")?;
             for excluded in &self.exclusions {
-                write!(f, "\n {}", excluded)?;
+                write!(f, "\n {excluded}")?;
             }
             writeln!(f)?;
         }
 
         for file in &self.files {
-            write!(f, "\n{}", file)?;
+            write!(f, "\n{file}")?;
         }
 
         for license in &self.licenses {
-            write!(f, "\n{}", license)?;
+            write!(f, "\n{license}")?;
         }
 
         Ok(())
@@ -105,7 +105,7 @@ impl fmt::Display for UpstreamInfo {
             writeln!(f)?;
         }
         for contact in &self.contacts {
-            writeln!(f, " {}", contact)?;
+            writeln!(f, " {contact}")?;
         }
         if !self.source.is_empty() {
             writeln!(f, "Source: {}", self.source)?;
@@ -134,7 +134,7 @@ impl fmt::Display for Files {
             writeln!(f)?;
         }
         for copyright in &self.copyright {
-            writeln!(f, " {}", copyright)?;
+            writeln!(f, " {copyright}")?;
         }
         writeln!(f, "License: {}", self.license)?;
         if !self.comment.is_empty() {
@@ -336,13 +336,14 @@ fn copyright_fromgit(repo_url: &str) -> Result<String> {
         .year();
 
     let notice = match first_year.cmp(latest_year) {
-        Ordering::Equal => format!("{}", first_year),
-        _ => format!("{}-{},", first_year, latest_year),
+        Ordering::Equal => format!("{first_year}"),
+        _ => format!("{first_year}-{latest_year},"),
     };
 
     Ok(notice)
 }
 
+#[expect(clippy::too_many_arguments)]
 pub fn debian_copyright(
     srcdir: &Path,
     manifest: &manifest::Manifest,
@@ -400,12 +401,12 @@ pub fn debian_copyright(
 
     let (y0, y1) = year_range;
     let years = if y0 == y1 {
-        format!("{}", y0)
+        format!("{y0}")
     } else {
-        format!("{}-{}", y0, y1)
+        format!("{y0}-{y1}")
     };
     let mut deb_notice = vec![format!("{} {}", years, maintainer)];
-    deb_notice.extend(uploaders.iter().map(|s| format!("{} {}", years, s)));
+    deb_notice.extend(uploaders.iter().map(|s| format!("{years} {s}")));
     files.push(Files::new("debian/*", &deb_notice, &crate_license, ""));
 
     // Insert catch all block as the first block of copyright file. Capture
@@ -431,7 +432,7 @@ pub fn debian_copyright(
         _ => meta
             .authors
             .iter()
-            .map(|s| format!("{} {}", years, s))
+            .map(|s| format!("{years} {s}"))
             .collect(),
     };
     let comment = concat!(

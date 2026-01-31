@@ -57,6 +57,7 @@ pub struct SourceOverride {
 }
 
 impl SourceOverride {
+    #[expect(clippy::too_many_arguments)]
     pub fn new(
         section: Option<String>,
         policy: Option<String>,
@@ -147,19 +148,19 @@ impl Config {
 
         if let Some(ref source) = config.source {
             for field in source.unknown_fields.keys() {
-                unknown_fields.push(format!("source.{}", field));
+                unknown_fields.push(format!("source.{field}"));
             }
         }
 
         for field in config.packages.keys() {
             if PackageKey::from_key(field).is_none() {
-                unknown_fields.push(format!("packages.{}", field));
+                unknown_fields.push(format!("packages.{field}"));
             }
         }
 
         for (name, package) in &config.packages {
             for field in package.unknown_fields.keys() {
-                unknown_fields.push(format!("packages.{}.{}", name, field));
+                unknown_fields.push(format!("packages.{name}.{field}"));
             }
         }
 
@@ -380,8 +381,8 @@ impl<'a> PackageKey<'a> {
         match self {
             Bin => "bin".into(),
             BareLib => "lib".into(),
-            FeatureLib(feature) => format!("lib+{}", feature).into(),
-            Extra(package) => format!("extra+{}", package).into(),
+            FeatureLib(feature) => format!("lib+{feature}").into(),
+            Extra(package) => format!("extra+{package}").into(),
         }
     }
 }

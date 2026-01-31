@@ -69,9 +69,9 @@ impl fmt::Display for V {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use self::V::*;
         match *self {
-            M(major) => write!(f, "{}", major),
-            MM(major, minor) => write!(f, "{}.{}", major, minor),
-            MMP(major, minor, patch) => write!(f, "{}.{}.{}", major, minor, patch),
+            M(major) => write!(f, "{major}"),
+            MM(major, minor) => write!(f, "{major}.{minor}"),
+            MMP(major, minor, patch) => write!(f, "{major}.{minor}.{patch}"),
         }
     }
 }
@@ -153,14 +153,14 @@ impl VRange {
                 Ok(ranges
                     .iter()
                     .filter_map(|(ver, greater, cons)| match (ver, greater, cons) {
-                        (None, true, c) => Some(format!("{}{} (>= {}-~~)", base, suffix, c)),
-                        (None, false, c) => Some(format!("{}{} (<< {}-~~)", base, suffix, c)),
+                        (None, true, c) => Some(format!("{base}{suffix} (>= {c}-~~)")),
+                        (None, false, c) => Some(format!("{base}{suffix} (<< {c}-~~)")),
                         (Some(ver), true, c) => {
                             if c == &ver {
                                 // A-x >= x is redundant, drop the >=
-                                Some(format!("{}-{}{}", base, ver, suffix))
+                                Some(format!("{base}-{ver}{suffix}"))
                             } else {
-                                Some(format!("{}-{}{} (>= {}-~~)", base, ver, suffix, c))
+                                Some(format!("{base}-{ver}{suffix} (>= {c}-~~)"))
                             }
                         }
                         (Some(ver), false, c) => {
@@ -168,7 +168,7 @@ impl VRange {
                                 // A-x << x is unsatisfiable, drop it
                                 None
                             } else {
-                                Some(format!("{}-{}{} (<< {}-~~)", base, ver, suffix, c))
+                                Some(format!("{base}-{ver}{suffix} (<< {c}-~~)"))
                             }
                         }
                     })

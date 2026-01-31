@@ -36,7 +36,7 @@ impl fmt::Display for ChangelogEntry {
         )?;
 
         for entry in self.items.iter() {
-            writeln!(f, "{}", entry)?;
+            writeln!(f, "{entry}")?;
         }
 
         writeln!(f, "\n -- {}  {}", self.maintainer, self.date.to_rfc2822())

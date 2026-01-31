@@ -138,8 +138,8 @@ where
 pub fn expect_success(cmd: &mut Command, err: &str) -> Result<(), anyhow::Error> {
     match cmd.status() {
         Ok(status) if status.success() => Ok(()),
-        Ok(_) => bail!("{}", err),
-        Err(e) => bail!("{}\n{}", err, e),
+        Ok(_) => bail!("{err}"),
+        Err(e) => bail!("{err}\n{e}"),
     }
 }
 

@@ -62,7 +62,7 @@ fn real_main() -> Result<()> {
         BuildOrder { args } => {
             let build_order = build_order(args)?;
             for v in &build_order {
-                println!("{}", v);
+                println!("{v}");
             }
             Ok(())
         }
@@ -82,7 +82,7 @@ fn real_main() -> Result<()> {
 fn main() {
     env_logger::init();
     if let Err(e) = real_main() {
-        eprintln!("{}", Red.bold().paint(format!("debcargo failed: {:?}", e)));
+        eprintln!("{}", Red.bold().paint(format!("debcargo failed: {e:?}")));
         std::process::exit(1);
     }
 }
