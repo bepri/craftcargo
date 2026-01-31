@@ -7,6 +7,8 @@ use std::fmt;
 use crate::config::testing_ignore_debpolv;
 use crate::debian::{self, control::base_deb_name, Package};
 use crate::errors::*;
+use crate::debian::dependency::V::*;
+use semver::Op::*;
 
 #[derive(Eq, Clone)]
 #[allow(clippy::upper_case_acronyms)]
@@ -205,8 +207,6 @@ fn coerce_unacceptable_predicate<'a>(
         }
     }
 
-    use debian::dependency::V::M;
-    use semver::Op::*;
     match (&p.op, mmp) {
         (&Greater, &M(0)) => Ok(&p.op),
         (&GreaterEq, &M(0)) => {
@@ -235,8 +235,6 @@ fn generate_version_constraints(
     op: &semver::Op,
 ) -> Result<()> {
     let mmp = V::new(p)?;
-    use debian::dependency::V::*;
-    use semver::Op::*;
     // see https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html
     // and https://docs.rs/semver/1/semver/enum.Op.html for semantics
     match (*op, &mmp) {

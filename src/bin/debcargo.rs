@@ -14,6 +14,7 @@ use debcargo::{
 
 #[cfg(feature = "update-dependencies")]
 use debcargo::update_dependencies::update_dependencies;
+use Opt::*;
 
 #[test]
 fn verify_app() {
@@ -23,7 +24,6 @@ fn verify_app() {
 
 fn real_main() -> Result<()> {
     let m = Cli::parse();
-    use Opt::*;
     match m.command {
         Update => invalidate_crates_io_cache(),
         DebSrcName {
