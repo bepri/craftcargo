@@ -385,7 +385,7 @@ impl Package {
             format!("-{}.{}", version.major, version.minor),
             format!("-{}.{}.{}", version.major, version.minor, version.patch),
         ];
-        for suffix in version_suffixes.iter() {
+        for suffix in &version_suffixes {
             // don't provide unversioned variants in semver-suffix packages
             if name_suffix.is_some() && suffix.is_empty() {
                 continue;

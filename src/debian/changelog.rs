@@ -35,7 +35,7 @@ impl fmt::Display for ChangelogEntry {
             self.source, self.version, self.distribution, self.options
         )?;
 
-        for entry in self.items.iter() {
+        for entry in &self.items {
             writeln!(f, "{entry}")?;
         }
 

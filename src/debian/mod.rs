@@ -838,7 +838,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                             dd0.extend(dd);
                         });
                     // go through other feature deps and change f_ to f
-                    for (_, (df, _)) in working_features_with_deps.iter_mut() {
+                    for (df, _) in &mut working_features_with_deps.values_mut() {
                         for feat in df.iter_mut() {
                             if *feat == f_.as_str() {
                                 *feat = f;
@@ -890,7 +890,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         log::trace!("provides: {provides:?}");
         let mut recommends = vec![];
         let mut suggests = vec![];
-        for (&feature, features) in provides.iter() {
+        for (&feature, features) in &provides {
             if feature.is_empty() {
                 continue;
             } else if feature == "default" || features.contains(&"default") {
@@ -1171,7 +1171,7 @@ fn reduce_provides(
     // If any features have duplicate dependencies, deduplicate them by
     // making all the subsequent ones depend on the first one.
     let mut features_rev_deps = HashMap::new();
-    for (&f, dep) in features_with_deps.iter() {
+    for (&f, dep) in &features_with_deps {
         if !features_rev_deps.contains_key(dep) {
             features_rev_deps.insert(dep.clone(), vec![]);
         }
@@ -1187,7 +1187,7 @@ fn reduce_provides(
     // Calculate provides by following 0- or 1-length dependency lists.
     let mut provides = BTreeMap::new();
     let mut provided = Vec::new();
-    for (&f, (ref ff, ref dd)) in features_with_deps.iter() {
+    for (&f, (ref ff, ref dd)) in &features_with_deps {
         //debcargo_info!("provides considering: {:?}", &f);
         if !dd.is_empty() {
             continue;

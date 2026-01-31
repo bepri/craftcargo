@@ -81,7 +81,7 @@ pub fn get_deb_dependencies(
     };
     let dependencies = {
         let mut dependencies = BTreeSet::<String>::new();
-        for feature in feature_set.iter() {
+        for feature in &feature_set {
             if !deps_and_features.contains_key(feature) {
                 debcargo_bail!("Unknown feature: {}", feature);
             }

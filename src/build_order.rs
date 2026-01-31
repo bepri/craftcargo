@@ -86,7 +86,7 @@ fn get_build_deps(
         SourceForDebianUnstable => Ok((hard_deps, vec![])),
         BinaryAllForDebianTesting => {
             let mut soft_deps = all_deps;
-            for h in hard_deps.iter() {
+            for h in &hard_deps {
                 soft_deps.remove(h);
             }
             Ok((hard_deps, soft_deps.into_iter().collect::<Vec<_>>()))
@@ -273,7 +273,7 @@ pub fn build_order(args: BuildOrderArgs) -> Result<Vec<PackageId>> {
     };
 
     // sanity check
-    for p in build_order.iter() {
+    for p in &build_order {
         if infos.remove(p).is_none() {
             log::error!("extra package in build-order not in infos: {p}");
         }
