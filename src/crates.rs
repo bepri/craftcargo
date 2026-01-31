@@ -24,14 +24,14 @@ use semver::Version;
 use tar::Archive;
 use tempfile;
 
+use crate::config::testing_ignore_debpolv;
+use crate::errors::Result;
+use cargo::util::Filesystem;
 use std::collections::{BTreeMap, HashSet};
 use std::fs;
 use std::io::{self, Read};
 use std::path::Path;
 use std::{self, ffi::OsStr};
-use cargo::util::Filesystem;
-use crate::config::testing_ignore_debpolv;
-use crate::errors::Result;
 
 pub struct CrateInfo {
     // only used for to_registry_toml in extract_crate. DO NOT USE ELSEWHERE
@@ -765,7 +765,7 @@ pub fn all_dependencies_and_features_filtered(
         let mut feature_deps: Vec<&'static str> = vec![];
         let mut other_deps: Vec<Dependency> = Vec::new();
         for dep in deps {
-            use self::FeatureValue::{Feature, Dep, DepFeature};
+            use self::FeatureValue::{Dep, DepFeature, Feature};
             match dep {
                 // another feature is a dependency
                 Feature(dep_feature) => {
@@ -806,16 +806,18 @@ pub fn all_dependencies_and_features_filtered(
                         }
                         if expected {
                             debcargo_warn!(
-                                    "Ignoring \"{}\" feature \"{}\" as it depends on a \
+                                "Ignoring \"{}\" feature \"{}\" as it depends on a \
                                      dev-dependency \"{}\"",
-                                    manifest.package_id(),
-                                    feature,
-                                    dep_name
-                                );
+                                manifest.package_id(),
+                                feature,
+                                dep_name
+                            );
                         } else {
                             panic!(
                                 "failed to account for dependency \"{}\" of \"{}\" feature \"{}\"",
-                                dep_name, manifest.package_id(), feature
+                                dep_name,
+                                manifest.package_id(),
+                                feature
                             );
                         }
                     }

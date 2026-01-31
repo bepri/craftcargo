@@ -90,7 +90,8 @@ pub fn get_deb_dependencies(
         }
         dependencies
     };
-    let toolchain_deps = toolchain_deps(manifest.rust_version().map(ToString::to_string).as_deref());
+    let toolchain_deps =
+        toolchain_deps(manifest.rust_version().map(ToString::to_string).as_deref());
     Ok((toolchain_deps, dependencies))
 }
 

@@ -961,16 +961,8 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 &f_deps,
                 deb_deps(config.allow_prerelease_deps, &o_deps)?,
                 &f_provides.clone(),
-                if feature.is_empty() {
-                    &recommends
-                } else {
-                    &[]
-                },
-                if feature.is_empty() {
-                    &suggests
-                } else {
-                    &[]
-                },
+                if feature.is_empty() { &recommends } else { &[] },
+                if feature.is_empty() { &suggests } else { &[] },
             )?;
             // If any overrides present for this package it will be taken care.
             package.apply_overrides(config, pk, &f_provides);
@@ -1033,11 +1025,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         deb_upstream_version,
                         &args,
                         &test_depends,
-                        if test_is_broken(f)? {
-                            &["flaky"]
-                        } else {
-                            &[]
-                        },
+                        if test_is_broken(f)? { &["flaky"] } else { &[] },
                         &test_arch,
                     )?;
                     write!(testctl, "\n{pkgtest}")?;
@@ -1278,10 +1266,7 @@ mod test {
 
     #[test]
     fn rustc_dep_includes_minver() {
-        assert_eq!(
-            "rustc:native (>= 1.65)",
-            rustc_dep(Some("1.65"), true)
-        );
+        assert_eq!("rustc:native (>= 1.65)", rustc_dep(Some("1.65"), true));
     }
 
     #[test]
@@ -1291,10 +1276,7 @@ mod test {
 
     #[test]
     fn rustc_dep_includes_minver_autopkgtest() {
-        assert_eq!(
-            "rustc (>= 1.65)",
-            rustc_dep(Some("1.65"), false)
-        );
+        assert_eq!("rustc (>= 1.65)", rustc_dep(Some("1.65"), false));
     }
 
     #[test]

@@ -240,12 +240,10 @@ impl Source {
         } else {
             "FIXME-IN-THE-SOURCE-SECTION"
         };
-        let vcs_browser = format!(
-            "https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/{pkgbase}"
-        );
-        let vcs_git = format!(
-            "https://salsa.debian.org/rust-team/debcargo-conf.git [src/{pkgbase}]"
-        );
+        let vcs_browser =
+            format!("https://salsa.debian.org/rust-team/debcargo-conf/tree/master/src/{pkgbase}");
+        let vcs_git =
+            format!("https://salsa.debian.org/rust-team/debcargo-conf.git [src/{pkgbase}]");
         Ok(Source {
             name: dsc_name(&pkgbase),
             section: section.to_string(),
@@ -295,9 +293,7 @@ impl Source {
                 .flatten()
                 .map(String::to_string),
         );
-        let bdeps_ex: &[String] = config
-            .build_depends_excludes()
-            .map_or(&[], Vec::as_slice);
+        let bdeps_ex: &[String] = config.build_depends_excludes().map_or(&[], Vec::as_slice);
         self.build_deps
             .build_depends
             .retain(|x| !bdeps_ex.contains(x));
@@ -374,7 +370,10 @@ impl Package {
         };
         let (recommends, suggests) = match feature {
             Some(_) => (vec![], vec![]),
-            None => (Package::filter_provides(f_recommends, f_provides, &pkgbase), Package::filter_provides(f_suggests, f_provides, &pkgbase)),
+            None => (
+                Package::filter_provides(f_recommends, f_provides, &pkgbase),
+                Package::filter_provides(f_suggests, f_provides, &pkgbase),
+            ),
         };
 
         // Provides for all possible versions, see:
@@ -560,8 +559,10 @@ impl Package {
         }
         self.summary
             .apply_overrides(config.summary.as_deref(), config.package_summary(key));
-        self.description
-            .apply_overrides(config.description.as_deref(), config.package_description(key));
+        self.description.apply_overrides(
+            config.description.as_deref(),
+            config.package_description(key),
+        );
 
         self.depends.extend(config::package_field_for_feature(
             |x| config.package_depends(x),
@@ -703,8 +704,9 @@ fn get_envs(keys: &[&str]) -> Result<Option<String>> {
                 return Ok(Some(val));
             }
             Err(e @ VarError::NotUnicode(_)) => {
-                return Err(Error::from(e)
-                    .context(format!("Environment variable ${key} not valid UTF-8")));
+                return Err(
+                    Error::from(e).context(format!("Environment variable ${key} not valid UTF-8"))
+                );
             }
             Err(VarError::NotPresent) => {}
         }

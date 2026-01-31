@@ -5,10 +5,10 @@ use std::cmp;
 use std::fmt;
 
 use crate::config::testing_ignore_debpolv;
+use crate::debian::dependency::V::{M, MM, MMP};
 use crate::debian::{self, control::base_deb_name, Package};
 use crate::errors::Result;
-use crate::debian::dependency::V::{M, MM, MMP};
-use semver::Op::{Greater, GreaterEq, Less, LessEq, Exact, Wildcard, Tilde, Caret};
+use semver::Op::{Caret, Exact, Greater, GreaterEq, Less, LessEq, Tilde, Wildcard};
 
 #[derive(Eq, Clone)]
 #[allow(clippy::upper_case_acronyms)]

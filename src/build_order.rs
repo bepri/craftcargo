@@ -16,8 +16,7 @@ use crate::debian::control::base_deb_name;
 use crate::errors::Result;
 use crate::package::{PackageExtractArgs, PackageProcess};
 use crate::util;
-use ResolveType::{SourceForDebianUnstable, BinaryAllForDebianTesting};
-
+use ResolveType::{BinaryAllForDebianTesting, SourceForDebianUnstable};
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 #[value(rename_all = "verbatim")]

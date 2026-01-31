@@ -360,7 +360,7 @@ impl<'a> PackageKey<'a> {
     }
 
     pub fn from_key(k: &'a str) -> Option<PackageKey<'a>> {
-        use self::PackageKey::{Bin, BareLib, FeatureLib, Extra};
+        use self::PackageKey::{BareLib, Bin, Extra, FeatureLib};
         Some(match k {
             "bin" => Bin,
             "lib" => BareLib,
@@ -377,7 +377,7 @@ impl<'a> PackageKey<'a> {
     }
 
     fn key_string(&self) -> Cow<'static, str> {
-        use self::PackageKey::{Bin, BareLib, FeatureLib, Extra};
+        use self::PackageKey::{BareLib, Bin, Extra, FeatureLib};
         match self {
             Bin => "bin".into(),
             BareLib => "lib".into(),
