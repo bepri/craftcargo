@@ -854,13 +854,12 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         debcargo_bail!(
                             "Tried to merge features {} and {} as they are not representable separately\n\
                              in Debian, but this resulted in a feature cycle. You need to manually patch the package.", f, f_);
-                    } else {
-                        debcargo_warn!(
-                            "Merged features {} and {} as they are not representable separately in Debian.\n\
-                             We checked that this does not break the package in an obvious way (feature cycle), however\n\
-                             if there is a more sophisticated breakage, you'll have to manually patch those \
-                             features instead.", f, f_);
                     }
+                    debcargo_warn!(
+                        "Merged features {} and {} as they are not representable separately in Debian.\n\
+                         We checked that this does not break the package in an obvious way (feature cycle), however\n\
+                         if there is a more sophisticated breakage, you'll have to manually patch those \
+                         features instead.", f, f_);
                 }
             }
             working_features_with_deps
