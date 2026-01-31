@@ -56,18 +56,18 @@ fn real_main() -> Result<()> {
             log::info!("preparing orig tarball");
             process.prepare_orig_tarball()?;
             log::info!("preparing debian folder");
-            process.prepare_debian_folder(finish)?;
+            process.prepare_debian_folder(&finish)?;
             process.post_package_checks()
         }
         BuildOrder { args } => {
-            let build_order = build_order(args)?;
+            let build_order = build_order(&args)?;
             for v in &build_order {
                 println!("{v}");
             }
             Ok(())
         }
         DebDependencies { args } => {
-            let (toolchain_deps, dependencies) = deb_dependencies(args)?;
+            let (toolchain_deps, dependencies) = deb_dependencies(&args)?;
             println!(
                 "{}",
                 toolchain_deps.into_iter().chain(dependencies).join(", ")

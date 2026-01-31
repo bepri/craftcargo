@@ -172,7 +172,7 @@ impl PackageProcess {
         Ok(())
     }
 
-    pub fn prepare_debian_folder(&mut self, args: PackageExecuteArgs) -> Result<()> {
+    pub fn prepare_debian_folder(&mut self, args: &PackageExecuteArgs) -> Result<()> {
         let Self {
             crate_info,
             deb_info,

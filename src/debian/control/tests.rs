@@ -127,11 +127,11 @@ fn test_package_new() {
         summary,
         description,
         feature,
-        f_deps,
+        &f_deps,
         o_deps,
-        f_provides,
-        f_recommends,
-        f_suggests,
+        &f_provides,
+        &f_recommends,
+        &f_suggests,
     );
 
     assert!(instance.is_ok());
@@ -275,9 +275,9 @@ fn test_pkg_test_new() {
         crate_name,
         feature,
         version,
-        extra_test_args,
+        &extra_test_args,
         &depends,
-        extra_restricts,
+        &extra_restricts,
         &architecture,
     );
 
@@ -396,9 +396,9 @@ fn pkgtest_fmt_has_no_extra_whitespace() {
             "crate",
             check.feature,
             "1.0",
-            check.extra_test_args,
+            &check.extra_test_args,
             &check.depends,
-            check.extra_restricts,
+            &check.extra_restricts,
             check.architecture,
         )
         .unwrap();

@@ -181,7 +181,7 @@ fn resolve_info(
     Ok(id)
 }
 
-pub fn build_order(args: BuildOrderArgs) -> Result<Vec<PackageId>> {
+pub fn build_order(args: &BuildOrderArgs) -> Result<Vec<PackageId>> {
     let crate_name = &args.crate_name;
     let version = args.version.as_deref();
     let config_dir = args.config_dir.as_deref();
@@ -252,7 +252,7 @@ pub fn build_order(args: BuildOrderArgs) -> Result<Vec<PackageId>> {
         .filter_map(|(k, v)| if v.is_empty() { Some(*k) } else { None })
         .collect::<BTreeSet<_>>();
     // swap pred/succ for call to topo_sort since we want reverse topo order
-    let build_order = match util::topo_sort(roots, pred.clone(), succ.clone()) {
+    let build_order = match util::topo_sort(roots, &pred, succ.clone()) {
         Ok(r) => r,
         Err(remain) => {
             log::error!(

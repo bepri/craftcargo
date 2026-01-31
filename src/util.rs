@@ -259,7 +259,7 @@ where
 
 pub fn topo_sort<V>(
     seed: impl IntoIterator<Item = V>,
-    succ: BTreeMap<V, BTreeSet<V>>,
+    succ: &BTreeMap<V, BTreeSet<V>>,
     mut pred: BTreeMap<V, BTreeSet<V>>,
 ) -> Result<Vec<V>, BTreeMap<V, BTreeSet<V>>>
 where

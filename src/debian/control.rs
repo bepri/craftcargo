@@ -335,6 +335,26 @@ impl Package {
         }
     }
 
+    fn deb_feature2(p: &str, f: &str) -> String {
+        format!(
+            "{} (= ${{binary:Version}})",
+            match f {
+                "" => deb_name(p),
+                _ => deb_feature_name(p, f),
+            }
+        )
+    }
+    fn deb_feature(f: &str, pkgbase: &str) -> String {
+        Package::deb_feature2(pkgbase, f)
+    }
+
+    fn filter_provides(x: &[&str], f_provides: &[&str], pkgbase: &str) -> Vec<String> {
+        x.iter()
+            .filter(|f| !f_provides.contains(f))
+            .map(|f| Package::deb_feature(f, pkgbase))
+            .collect()
+    }
+
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         basename: &str,
@@ -343,36 +363,19 @@ impl Package {
         summary: Description,
         description: Description,
         feature: Option<&str>,
-        f_deps: Vec<&str>,
+        f_deps: &[&str],
         o_deps: Vec<String>,
-        f_provides: Vec<&str>,
-        f_recommends: Vec<&str>,
-        f_suggests: Vec<&str>,
+        f_provides: &[&str],
+        f_recommends: &[&str],
+        f_suggests: &[&str],
     ) -> Result<Package> {
         let pkgbase = match name_suffix {
             None => basename.to_string(),
             Some(suf) => format!("{basename}{suf}"),
         };
-        let deb_feature2 = &|p: &str, f: &str| {
-            format!(
-                "{} (= ${{binary:Version}})",
-                match f {
-                    "" => deb_name(p),
-                    _ => deb_feature_name(p, f),
-                }
-            )
-        };
-        let deb_feature = &|f: &str| deb_feature2(&pkgbase, f);
-
-        let filter_provides = &|x: Vec<&str>| {
-            x.into_iter()
-                .filter(|f| !f_provides.contains(f))
-                .map(deb_feature)
-                .collect()
-        };
         let (recommends, suggests) = match feature {
             Some(_) => (vec![], vec![]),
-            None => (filter_provides(f_recommends), filter_provides(f_suggests)),
+            None => (Package::filter_provides(f_recommends, f_provides, &pkgbase), Package::filter_provides(f_suggests, f_provides, &pkgbase)),
         };
 
         // Provides for all possible versions, see:
@@ -392,10 +395,10 @@ impl Package {
             }
 
             let p = format!("{basename}{suffix}");
-            provides.push(deb_feature2(&p, feature.unwrap_or("")));
-            provides.extend(f_provides.iter().map(|f| deb_feature2(&p, f)));
+            provides.push(Package::deb_feature2(&p, feature.unwrap_or("")));
+            provides.extend(f_provides.iter().map(|f| Package::deb_feature2(&p, f)));
         }
-        let provides_self = deb_feature(feature.unwrap_or(""));
+        let provides_self = Package::deb_feature(feature.unwrap_or(""), &pkgbase);
         // rust dropped Vec::remove_item for annoying reasons, the below is
         // an unofficialy recommended replacement from the RFC #40062
         let i = provides.iter().position(|x| *x == *provides_self);
@@ -406,9 +409,9 @@ impl Package {
             // in dh-cargo we symlink /usr/share/doc/{$feature => $main} pkg
             // so we always need this direct dependency, even if the feature
             // only indirectly depends on the bare library via another
-            depends.push(deb_feature(""));
+            depends.push(Package::deb_feature("", &pkgbase));
         }
-        depends.extend(f_deps.into_iter().map(deb_feature));
+        depends.extend(f_deps.iter().map(|f| Package::deb_feature(f, &pkgbase)));
         depends.extend(o_deps);
         let mut breaks = vec![];
         let mut replaces = vec![];
@@ -552,7 +555,7 @@ impl Package {
         }
     }
 
-    pub fn apply_overrides(&mut self, config: &Config, key: PackageKey, f_provides: Vec<&str>) {
+    pub fn apply_overrides(&mut self, config: &Config, key: PackageKey, f_provides: &[&str]) {
         if let Some(section) = config.package_section(key) {
             self.section = Some(section.to_string());
         }
@@ -564,37 +567,37 @@ impl Package {
         self.depends.extend(config::package_field_for_feature(
             |x| config.package_depends(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.recommends.extend(config::package_field_for_feature(
             |x| config.package_recommends(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.suggests.extend(config::package_field_for_feature(
             |x| config.package_suggests(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.provides.extend(config::package_field_for_feature(
             |x| config.package_provides(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.breaks.extend(config::package_field_for_feature(
             |x| config.package_breaks(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.replaces.extend(config::package_field_for_feature(
             |x| config.package_replaces(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.conflicts.extend(config::package_field_for_feature(
             |x| config.package_conflicts(x),
             key,
-            &f_provides,
+            f_provides,
         ));
         self.extra_lines.extend(
             config
@@ -635,9 +638,9 @@ impl PkgTest {
         crate_name: &str,
         feature: &str,
         version: &str,
-        extra_test_args: Vec<&str>,
+        extra_test_args: &[&str],
         depends: &[String],
-        extra_restricts: Vec<&str>,
+        extra_restricts: &[&str],
         architecture: &[&str],
     ) -> Result<PkgTest> {
         Ok(PkgTest {

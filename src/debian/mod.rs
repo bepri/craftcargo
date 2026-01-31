@@ -725,7 +725,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
 
     let homepage = generate_homepage(
         &crate_info.manifest().name(),
-        crate_info.manifest().version().to_string(),
+        &crate_info.manifest().version().to_string(),
         meta.homepage.as_deref(),
         meta.repository.as_deref(),
         config.crate_src_path.is_none(),
@@ -796,12 +796,12 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 crate_name,
                 "@",
                 deb_upstream_version,
-                vec!["--all-features"],
+                &["--all-features"],
                 &all_features_test_depends,
                 if all_features_test_broken {
-                    vec!["flaky"]
+                    &["flaky"]
                 } else {
-                    vec![]
+                    &[]
                 },
                 all_features_test_arch.deref(),
             )?
@@ -874,7 +874,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 .collect::<Vec<_>>()
         );
         let (mut provides, reduced_features_with_deps) = if config.collapse_features {
-            collapse_features(working_features_with_deps)
+            collapse_features(&working_features_with_deps)
         } else {
             reduce_provides(working_features_with_deps)
         };
@@ -961,22 +961,22 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 } else {
                     Some(feature)
                 },
-                f_deps,
+                &f_deps,
                 deb_deps(config.allow_prerelease_deps, &o_deps)?,
-                f_provides.clone(),
+                &f_provides.clone(),
                 if feature.is_empty() {
-                    recommends.clone()
+                    &recommends
                 } else {
-                    vec![]
+                    &[]
                 },
                 if feature.is_empty() {
-                    suggests.clone()
+                    &suggests
                 } else {
-                    vec![]
+                    &[]
                 },
             )?;
             // If any overrides present for this package it will be taken care.
-            package.apply_overrides(config, pk, f_provides);
+            package.apply_overrides(config, pk, &f_provides);
 
             if package.summary_check_len().is_err() {
                 writeln!(
@@ -1034,12 +1034,12 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         crate_name,
                         f,
                         deb_upstream_version,
-                        args,
+                        &args,
                         &test_depends,
                         if test_is_broken(f)? {
-                            vec!["flaky"]
+                            &["flaky"]
                         } else {
-                            vec![]
+                            &[]
                         },
                         test_arch.deref(),
                     )?;
@@ -1080,14 +1080,14 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         );
 
         // Binary package overrides.
-        bin_pkg.apply_overrides(config, PackageKey::Bin, vec![]);
+        bin_pkg.apply_overrides(config, PackageKey::Bin, &[]);
         write!(control, "\n{bin_pkg}")?;
     }
 
     for configured in config.configured_packages() {
         if let PackageKey::Extra(package) = configured {
             let mut extra_pkg = Package::new_extra(package.to_string());
-            extra_pkg.apply_overrides(config, configured, vec![]);
+            extra_pkg.apply_overrides(config, configured, &[]);
             write!(control, "\n{extra_pkg}")?;
         }
     }
@@ -1097,7 +1097,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
 
 fn generate_homepage(
     name: &str,
-    version: String,
+    version: &str,
     homepage: Option<&str>,
     repository: Option<&str>,
     on_crates_io: bool,
@@ -1134,7 +1134,7 @@ fn generate_test_dependencies(
 }
 
 fn collapse_features(
-    orig_features_with_deps: CrateDepInfo,
+    orig_features_with_deps: &CrateDepInfo,
 ) -> (BTreeMap<&'static str, Vec<&'static str>>, CrateDepInfo) {
     let (provides, deps) = orig_features_with_deps.iter().fold(
         (Vec::new(), Vec::new()),

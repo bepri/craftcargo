@@ -1,5 +1,5 @@
 use std::collections::BTreeSet;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use cargo::core::EitherManifest;
 use cargo::core::SourceId;
@@ -39,8 +39,8 @@ pub struct DebDependenciesArgs {
 ///
 /// This is the internal implementation that can be reused by multiple commands.
 pub fn get_deb_dependencies(
-    cargo_toml: PathBuf,
-    features: Vec<String>,
+    cargo_toml: &Path,
+    features: &[String],
     all_features: bool,
     uses_default_features: bool,
     allow_prerelease_deps: bool,
@@ -95,11 +95,11 @@ pub fn get_deb_dependencies(
 }
 
 pub fn deb_dependencies(
-    args: DebDependenciesArgs,
+    args: &DebDependenciesArgs,
 ) -> Result<(Vec<String>, BTreeSet<String>), Error> {
     get_deb_dependencies(
-        args.cargo_toml,
-        args.features,
+        &args.cargo_toml,
+        &args.features,
         args.all_features,
         args.uses_default_features,
         args.allow_prerelease_deps,
