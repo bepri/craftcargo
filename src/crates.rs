@@ -784,43 +784,39 @@ pub fn all_dependencies_and_features_filtered(
                     dep_feature,
                     ..
                 } => {
-                    match deps_by_name.get(dep_name.as_str()) {
-                        // unwrap is ok, valid Cargo.toml files must have this
-                        Some(dd) => {
-                            for &dep in dd {
-                                let mut dep = dep.clone();
-                                let mut features: Vec<InternedString> =
-                                    vec![InternedString::new(dep_feature)];
-                                features.extend(dep.features());
-                                dep.set_features(features);
-                                dep.set_default_features(false);
-                                other_deps.push(dep);
-                            }
+                    if let Some(dd) = deps_by_name.get(dep_name.as_str()) {
+                        for &dep in dd {
+                            let mut dep = dep.clone();
+                            let mut features: Vec<InternedString> =
+                                vec![InternedString::new(dep_feature)];
+                            features.extend(dep.features());
+                            dep.set_features(features);
+                            dep.set_default_features(false);
+                            other_deps.push(dep);
                         }
-                        None => {
-                            let mut expected = false;
-                            for dep in manifest.dependencies() {
-                                if dep.kind() == DepKind::Development {
-                                    let s = dep.name_in_toml().as_str();
-                                    if s == dep_name.as_str() {
-                                        expected = true;
-                                    }
+                    } else {
+                        let mut expected = false;
+                        for dep in manifest.dependencies() {
+                            if dep.kind() == DepKind::Development {
+                                let s = dep.name_in_toml().as_str();
+                                if s == dep_name.as_str() {
+                                    expected = true;
                                 }
                             }
-                            if expected {
-                                debcargo_warn!(
+                        }
+                        if expected {
+                            debcargo_warn!(
                                     "Ignoring \"{}\" feature \"{}\" as it depends on a \
                                      dev-dependency \"{}\"",
                                     manifest.package_id(),
                                     feature,
                                     dep_name
                                 );
-                            } else {
-                                panic!(
-                                    "failed to account for dependency \"{}\" of \"{}\" feature \"{}\"",
-                                    dep_name, manifest.package_id(), feature
-                                );
-                            }
+                        } else {
+                            panic!(
+                                "failed to account for dependency \"{}\" of \"{}\" feature \"{}\"",
+                                dep_name, manifest.package_id(), feature
+                            );
                         }
                     }
                 }

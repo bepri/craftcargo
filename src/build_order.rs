@@ -151,29 +151,28 @@ fn resolve_info(
     if let std::collections::btree_map::Entry::Vacant(e) = infos.entry(id) {
         let id = *e.key();
         let default_config = Config::default();
-        let (config_path, config) = match config_dir {
-            None => (None, default_config),
-            Some(config_dir) => {
-                let (config_path, config) = find_config(config_dir, id)?;
-                match config_path {
-                    None => (None, default_config),
-                    Some(_) => (config_path, config),
-                }
+        let (config_path, config) = if let Some(config_dir) = config_dir {
+            let (config_path, config) = find_config(config_dir, id)?;
+            if config_path.is_none() {
+                (None, default_config)
+            } else {
+                (config_path, config)
             }
+        } else {
+            (None, default_config)
         };
-        let (info, config) = match config_path {
-            None => (info, config),
-            Some(_) => {
-                let mut process = PackageProcess::new(info, config_path, config)?;
-                let tempdir = tempfile::Builder::new()
-                    .prefix("debcargo")
-                    .tempdir_in(".")?;
-                process.extract(PackageExtractArgs {
-                    directory: Some(tempdir.path().to_path_buf()),
-                })?;
-                process.apply_overrides()?;
-                (process.crate_info, process.config)
-            }
+        let (info, config) = if config_path.is_none() {
+            (info, config)
+        } else {
+            let mut process = PackageProcess::new(info, config_path, config)?;
+            let tempdir = tempfile::Builder::new()
+                .prefix("debcargo")
+                .tempdir_in(".")?;
+            process.extract(PackageExtractArgs {
+                directory: Some(tempdir.path().to_path_buf()),
+            })?;
+            process.apply_overrides()?;
+            (process.crate_info, process.config)
         };
         let dep_info = all_dependencies_and_features(info.manifest());
         e.insert((info, dep_info, config));

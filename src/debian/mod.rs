@@ -363,32 +363,31 @@ pub fn prepare_debian_folder(
     // debian/watch
     {
         let mut watch = file("watch")?;
-        match config.crate_src_path(config_path) {
-            Some(_) => write!(watch, "FIXME add uscan directive for local crate")?,
-            None => {
-                let uscan_version_pattern = deb_info
-                    .uscan_version_pattern
-                    .as_ref()
-                    .map_or_else(|| "@ANY_VERSION@".to_string(), ToString::to_string);
-                writeln!(watch, "Version: 5\n")?;
-                writeln!(
-                    watch,
-                    "Source: https://qa.debian.org/cgi-bin/fakeupstream.cgi?upstream=crates.io/{upstream_name}",
-                )?;
-                writeln!(
-                    watch,
-                    "Matching-Pattern:  .*/crates/{upstream_name}/{uscan_version_pattern}/download"
-                )?;
-                writeln!(
-                    watch,
-                    r"Filenamemangle: s/.*\/(.*)\/download/{upstream_name}-$1\.tar\.gz/g",
-                )?;
-                writeln!(
-                    watch,
-                    r"Uversionmangle: s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/"
-                )?;
-                writeln!(watch, r"Compression: gzip")?;
-            }
+        if config.crate_src_path(config_path).is_some() {
+            write!(watch, "FIXME add uscan directive for local crate")?;
+        } else {
+            let uscan_version_pattern = deb_info
+                .uscan_version_pattern
+                .as_ref()
+                .map_or_else(|| "@ANY_VERSION@".to_string(), ToString::to_string);
+            writeln!(watch, "Version: 5\n")?;
+            writeln!(
+                watch,
+                "Source: https://qa.debian.org/cgi-bin/fakeupstream.cgi?upstream=crates.io/{upstream_name}",
+            )?;
+            writeln!(
+                watch,
+                "Matching-Pattern:  .*/crates/{upstream_name}/{uscan_version_pattern}/download"
+            )?;
+            writeln!(
+                watch,
+                r"Filenamemangle: s/.*\/(.*)\/download/{upstream_name}-$1\.tar\.gz/g",
+            )?;
+            writeln!(
+                watch,
+                r"Uversionmangle: s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/"
+            )?;
+            writeln!(watch, r"Compression: gzip")?;
         }
     }
 
