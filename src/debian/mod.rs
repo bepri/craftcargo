@@ -369,7 +369,7 @@ pub fn prepare_debian_folder(
                 let uscan_version_pattern = deb_info
                     .uscan_version_pattern
                     .as_ref()
-                    .map_or_else(|| "@ANY_VERSION@".to_string(), |ref s| s.to_string());
+                    .map_or_else(|| "@ANY_VERSION@".to_string(), ToString::to_string);
                 writeln!(watch, "Version: 5\n")?;
                 writeln!(
                     watch,

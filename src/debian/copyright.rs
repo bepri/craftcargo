@@ -292,13 +292,12 @@ fn get_licenses(license: &str) -> Result<Vec<License>> {
             .trim_end_matches("-or-later")
             .to_string();
         let text = match known_licenses.get(lname.as_str()) {
-            Some(s) => s.to_string(),
+            Some(s) => s,
             None => "FIXME (overlay): Unrecognized crate license, please find the \
                      full license text in the rest of the crate source code and \
-                     copy-paste it here"
-                .to_string(),
+                     copy-paste it here",
         };
-        licenses.insert(ls.trim().to_string(), text);
+        licenses.insert(ls.trim().to_string(), text.to_string());
     }
 
     let mut lblocks: Vec<License> = Vec::new();
