@@ -1,0 +1,34 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH debcargo-update-dependencies 1  "update-dependencies " 
+.SH NAME
+debcargo\-update\-dependencies \- Update debian/control Build\-Depends from workspace Cargo.toml files
+.SH SYNOPSIS
+\fBdebcargo update\-dependencies\fR [\fB\-\-drop\-unreferenced\fR] [\fB\-\-include\-local\-crates\fR] [\fB\-\-features\fR] [\fB\-\-all\-features\fR] [\fB\-\-no\-default\-features\fR] [\fB\-\-allow\-prerelease\-deps\fR] [\fB\-\-include\-dev\-dependencies\fR] [\fB\-h\fR|\fB\-\-help\fR] 
+.SH DESCRIPTION
+Update debian/control Build\-Depends from workspace Cargo.toml files
+.SH OPTIONS
+.TP
+\fB\-\-drop\-unreferenced\fR
+Drop Rust development package dependencies that are not referenced by any workspace crate
+.TP
+\fB\-\-include\-local\-crates\fR
+Include dependencies for crates that are present as workspace members
+.TP
+\fB\-\-features\fR \fI<FEATURES>\fR
+Features to include in dependencies (can be specified multiple times)
+.TP
+\fB\-\-all\-features\fR
+Include all features in dependencies
+.TP
+\fB\-\-no\-default\-features\fR
+Do not include default feature in dependencies
+.TP
+\fB\-\-allow\-prerelease\-deps\fR
+Allow prerelease versions of dependencies
+.TP
+\fB\-\-include\-dev\-dependencies\fR
+Include dev\-dependencies
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help

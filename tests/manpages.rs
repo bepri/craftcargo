@@ -1,3 +1,5 @@
+#![cfg(feature = "update-dependencies")]
+
 use clap::CommandFactory;
 use clap_mangen::generate_to;
 use std::{fs, path::PathBuf};
