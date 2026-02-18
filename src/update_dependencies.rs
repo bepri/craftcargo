@@ -222,8 +222,8 @@ pub fn update_dependencies(args: UpdateDependenciesArgs) -> Result<()> {
         debcargo_info!("\nAnalyzing dependencies for {}...", manifest.display());
 
         let (toolchain_deps, dependencies) = get_deb_dependencies(
-            manifest.clone(),
-            args.features.clone(),
+            &manifest.clone(),
+            &args.features.clone(),
             args.all_features,
             !args.no_default_features,
             args.allow_prerelease_deps,

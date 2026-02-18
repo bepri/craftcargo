@@ -14,6 +14,8 @@ use debcargo::{
 
 #[cfg(feature = "update-dependencies")]
 use debcargo::update_dependencies::update_dependencies;
+#[cfg(feature = "update-dependencies")]
+use Opt::UpdateDependencies;
 use Opt::{BuildOrder, DebDependencies, DebSrcName, Extract, Package, Update};
 
 #[test]
