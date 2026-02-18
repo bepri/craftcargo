@@ -731,7 +731,7 @@ dependencies = [
 
 [[package]]
 name = "debcargo"
-version = "2.8.1"
+version = "2.8.1+alpha.0"
 dependencies = [
  "anyhow",
  "cargo",
