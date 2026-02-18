@@ -102,13 +102,12 @@ fn filter_local_crate_dependencies(
 
     for dep in deps {
         // Parse the dependency string using debian_control
-        let entry: Entry = match dep.parse() {
-            Ok(e) => e,
-            Err(_) => {
-                // If parsing fails, keep the dependency
-                filtered_deps.insert(dep.clone());
-                continue;
-            }
+        let entry: Entry = if let Ok(e) = dep.parse() {
+            e
+        } else {
+            // If parsing fails, keep the dependency
+            filtered_deps.insert(dep.clone());
+            continue;
         };
 
         // Check if any relation in this entry refers to a local crate
@@ -119,10 +118,10 @@ fn filter_local_crate_dependencies(
                 .any(|crate_name| is_local_package(&pkg_name, crate_name))
         });
 
-        if !is_local {
-            filtered_deps.insert(dep.clone());
-        } else {
+        if is_local {
             debcargo_info!("  Excluding local crate: {}", dep);
+        } else {
+            filtered_deps.insert(dep.clone());
         }
     }
 
@@ -178,7 +177,7 @@ fn update_build_dependencies(
     for dep in new_deps {
         let entry: Entry = dep
             .parse()
-            .map_err(|e| anyhow::anyhow!("Failed to parse dependency '{}': {}", dep, e))?;
+            .map_err(|e| anyhow::anyhow!("Failed to parse dependency '{dep}': {e}"))?;
 
         if build_depends.ensure_relation(entry) {
             debcargo_info!("  Adding: {}", dep);
@@ -205,7 +204,7 @@ fn update_build_dependencies(
     Ok(())
 }
 
-pub fn update_dependencies(args: UpdateDependenciesArgs) -> Result<()> {
+pub fn update_dependencies(args: &UpdateDependenciesArgs) -> Result<()> {
     let control_path = "debian/control";
 
     // Discover all workspace crates

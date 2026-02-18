@@ -77,7 +77,7 @@ fn real_main() -> Result<()> {
             Ok(())
         }
         #[cfg(feature = "update-dependencies")]
-        UpdateDependencies { args } => update_dependencies(args),
+        UpdateDependencies { args } => update_dependencies(&args),
     }
 }
 
