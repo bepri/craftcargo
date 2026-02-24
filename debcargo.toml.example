@@ -6,6 +6,10 @@
 # name, with no "rust-" prefix and with underscores replaced by hyphens.
 #bin_name = "<default>"
 
+# Whether to generate a package for the library crate. If omitted, defaults to
+# true. If set to false, either a binary crate package or at least one extra
+# package must be defined.
+
 # Add the semver to the package name, to allow co-installation with other
 # versions of the same crate. This should only be true for crates older than
 # the most up-to-date version in Debian, and only if they are needed as a

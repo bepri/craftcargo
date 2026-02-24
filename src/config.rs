@@ -21,6 +21,7 @@ pub const DEFAULT_REPACK_SUFFIX: &str = "dfsg";
 pub struct Config {
     pub bin: Option<bool>,
     pub bin_name: String,
+    pub lib: Option<bool>,
     pub semver_suffix: bool,
     pub overlay: Option<PathBuf>,
     pub excludes: Option<Vec<String>>,
@@ -116,6 +117,7 @@ impl Default for Config {
         Config {
             bin: None,
             bin_name: "<default>".to_string(),
+            lib: None,
             semver_suffix: false,
             overlay: None,
             excludes: None,
@@ -182,6 +184,15 @@ impl Config {
 
     pub fn build_bin_package(&self) -> bool {
         self.bin.unwrap_or(!self.semver_suffix)
+    }
+
+    pub fn build_lib_package(&self) -> bool {
+        self.lib.unwrap_or(true)
+    }
+
+    pub fn build_extra_package(&self) -> bool {
+        self.configured_packages()
+            .any(|p| matches!(p, PackageKey::Extra(_)))
     }
 
     pub fn overlay_dir(&self, config_path: Option<&Path>) -> Option<PathBuf> {

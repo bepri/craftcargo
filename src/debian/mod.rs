@@ -631,7 +631,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     let base_pkgname = deb_info.base_package_name();
     let name_suffix = deb_info.name_suffix();
 
-    let lib = crate_info.is_lib();
+    let lib = crate_info.is_lib() && config.build_lib_package();
     let mut bins = crate_info.get_binary_targets();
     if lib && !bins.is_empty() && !config.build_bin_package() {
         bins.clear();
@@ -725,7 +725,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
             .into_iter()
             .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
             .chain(extra_override_deps);
-        if bins.is_empty() {
+        if bins.is_empty() && !config.build_extra_package() {
             assert!(lib);
             build_deps
                 .build_depends_arch
