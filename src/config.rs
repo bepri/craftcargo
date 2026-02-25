@@ -1,3 +1,4 @@
+use indexmap::IndexMap;
 use serde::de::IgnoredAny;
 use serde::Deserialize;
 use toml;
@@ -37,7 +38,7 @@ pub struct Config {
     pub requires_root: Option<String>,
 
     pub source: Option<SourceOverride>,
-    pub packages: HashMap<String, PackageOverride>,
+    pub packages: IndexMap<String, PackageOverride>,
 
     #[serde(flatten)]
     pub unknown_fields: HashMap<String, IgnoredAny>,
@@ -131,7 +132,7 @@ impl Default for Config {
             uploaders: None,
             collapse_features: false,
             source: None,
-            packages: HashMap::new(),
+            packages: IndexMap::new(),
             requires_root: None,
             unknown_fields: HashMap::new(),
         }
