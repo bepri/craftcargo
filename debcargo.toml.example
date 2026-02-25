@@ -9,6 +9,7 @@
 # Whether to generate a package for the library crate. If omitted, defaults to
 # true. If set to false, either a binary crate package or at least one extra
 # package must be defined.
+# lib = true
 
 # Add the semver to the package name, to allow co-installation with other
 # versions of the same crate. This should only be true for crates older than
