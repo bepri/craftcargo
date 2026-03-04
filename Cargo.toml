@@ -38,7 +38,7 @@ textwrap = "0.16"
 tempfile = "3"
 toml = "0.8"
 walkdir = "2"
-debian-control = { version = "0.2.14", optional = true, default-features = false, features = ["lossless"] }
+debian-control = { version = ">=0.2.14,<0.4", optional = true, default-features = false, features = ["lossless"] }
 indexmap = { version = "2", features = ["serde"] }
 
 [features]
