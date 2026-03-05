@@ -58,6 +58,10 @@
 # exceptional cases where the method gives a false-positive, add them here.
 #whitelist = ["libgit2/**"]
 
+# Set repack suffix added to upstream version in case the .crate tarball is
+# repacked. Defaults to "+dfsg" if excludes are set.
+#repack_suffix = "+dfsg"
+
 # Whether to allow prerelease deps, by rewriting these to the released version.
 # This should only be enabled for certain crates if really necessary, and first
 # you should check that they can actually build when this is enabled.
