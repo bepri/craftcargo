@@ -27,7 +27,7 @@ use crate::util::{self, copy_tree, expect_success, get_transitive_val, traverse_
 
 use self::changelog::{ChangelogEntry, ChangelogIterator};
 use self::control::{base_deb_name, deb_upstream_version};
-use self::control::{Description, Package, PkgTest, Source};
+use self::control::{Description, Package, PkgTest, PkgTestRestriction, Source};
 use self::copyright::debian_copyright;
 pub use self::dependency::{deb_dep_add_nocheck, deb_deps};
 
@@ -703,6 +703,23 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         }
     };
 
+    let test_restrictions = |f: &str| {
+        let getparents = |f: &str| features_with_deps.get(f).map(|(d, _)| d);
+        let feature_get_test_restrictions =
+            |f: &str| config.package_test_restrictions(PackageKey::feature(f));
+        match get_transitive_val(&getparents, &feature_get_test_restrictions, f) {
+            Err((k, vv)) => debcargo_bail!(
+                "{} {}: {}: {:?}",
+                "error trying to recursively determine test_restrictions for",
+                k,
+                "dependencies have inconsistent config values",
+                vv
+            ),
+            Ok(Some(v)) if v.is_empty() => Ok(None), // allow resetting via explicit empty list
+            Ok(other) => Ok(other),
+        }
+    };
+
     let build_deps = {
         let mut build_deps = BuildDeps::default();
         // these are needed for the clean target
@@ -812,6 +829,27 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
         };
         let all_features_test_arch: Vec<&str> =
             all_features_test_arch.iter().map(AsRef::as_ref).collect();
+        let mut all_features_test_restrictions = match test_restrictions("@")? {
+            Some(v) => v.to_owned(),
+            None => all_features
+                .iter()
+                .fold(HashSet::new(), |mut set, f| {
+                    if let Ok(Some(arch)) = test_restrictions(f) {
+                        set.extend(arch.to_owned());
+                    }
+                    set
+                })
+                .into_iter()
+                .collect_vec(),
+        };
+        if all_features_test_restrictions.is_empty() {
+            all_features_test_restrictions.push(PkgTestRestriction::AllowStderr);
+        }
+        if all_features_test_broken
+            && !all_features_test_restrictions.contains(&PkgTestRestriction::Flaky)
+        {
+            all_features_test_restrictions.push(PkgTestRestriction::Flaky);
+        }
         let all_features_test_depends =
             generate_test_dependencies("@", &all_features, config, &test_deps);
         let mut testctl = io::BufWriter::new(file("tests/control")?);
@@ -825,11 +863,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 &plain_upstream_version,
                 &["--all-features"],
                 &all_features_test_depends,
-                if all_features_test_broken {
-                    &["flaky"]
-                } else {
-                    &[]
-                },
+                &all_features_test_restrictions,
                 &all_features_test_arch,
             )?
         )?;
@@ -1047,6 +1081,14 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         None => Vec::new(),
                     };
                     let test_arch: Vec<&str> = test_arch.iter().map(AsRef::as_ref).collect();
+                    let mut test_restrictions = match test_restrictions(f)? {
+                        Some(v) => v.to_owned(),
+                        None => vec![PkgTestRestriction::AllowStderr],
+                    };
+                    if test_is_broken(f)? && !test_restrictions.contains(&PkgTestRestriction::Flaky)
+                    {
+                        test_restrictions.push(PkgTestRestriction::Flaky);
+                    }
                     let pkgtest = PkgTest::new(
                         package.name(),
                         crate_name,
@@ -1054,7 +1096,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                         &plain_upstream_version,
                         &args,
                         &test_depends,
-                        if test_is_broken(f)? { &["flaky"] } else { &[] },
+                        &test_restrictions,
                         &test_arch,
                     )?;
                     write!(testctl, "\n{pkgtest}")?;

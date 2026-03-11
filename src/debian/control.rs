@@ -5,6 +5,7 @@ use std::fmt::{self, Write};
 #[cfg(not(test))]
 use anyhow::{format_err, Error};
 use semver::Version;
+use serde::{Deserialize, Serialize};
 use textwrap::fill;
 
 use crate::config::{self, Config, PackageKey};
@@ -72,6 +73,31 @@ pub struct PkgTest {
     depends: Vec<String>,
     extra_restricts: Vec<String>,
     architecture: Vec<String>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
+#[serde(rename_all = "kebab-case")]
+pub enum PkgTestRestriction {
+    AllowStderr,
+    BreaksTestBed,
+    BuildNeeded,
+    Flaky,
+    IsolationContainer,
+    IsolationMachine,
+    NeedsInternet,
+    NeedsReboot,
+    NeedsRoot,
+    NeedsSudo,
+    RwBuildTree,
+    Skippable,
+    SkipNotInstallable,
+    Superficial,
+}
+
+impl fmt::Display for PkgTestRestriction {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::serde::Serialize::serialize(self, f)
+    }
 }
 
 impl fmt::Display for Source {
@@ -204,7 +230,7 @@ impl fmt::Display for PkgTest {
         };
         writeln!(
             f,
-            "Restrictions: allow-stderr, skip-not-installable{restricts}",
+            "Restrictions: skip-not-installable{restricts}",
         )?;
         if !self.architecture.is_empty() {
             writeln!(f, "Architecture: {}", self.architecture.join(" "))?;
@@ -646,7 +672,7 @@ impl PkgTest {
         version: &str,
         extra_test_args: &[&str],
         depends: &[String],
-        extra_restricts: &[&str],
+        extra_restricts: &[PkgTestRestriction],
         architecture: &[&str],
     ) -> Result<PkgTest> {
         Ok(PkgTest {

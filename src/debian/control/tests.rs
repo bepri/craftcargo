@@ -1,6 +1,6 @@
 use super::{
     base_deb_name, deb_feature_name, deb_name, deb_upstream_version, dsc_name, Description,
-    Package, PkgTest, Source,
+    Package, PkgTest, PkgTestRestriction, Source,
 };
 use crate::{
     config::{Config, SourceOverride},
@@ -270,7 +270,7 @@ fn test_pkg_test_new() {
     let version = "0.9.7";
     let extra_test_args: Vec<&str> = vec![];
     let depends: Vec<String> = vec![];
-    let extra_restricts: Vec<&str> = vec![];
+    let extra_restricts: Vec<_> = vec![];
     let architecture: Vec<&str> = vec![];
     let instance = PkgTest::new(
         name,
@@ -375,30 +375,37 @@ struct PkgTestFmtData<'a> {
     feature: &'a str,
     extra_test_args: Vec<&'a str>,
     depends: Vec<String>,
-    extra_restricts: Vec<&'a str>,
+    extra_restricts: Vec<PkgTestRestriction>,
     architecture: &'a [&'a str],
 }
 
 #[test]
-fn pkgtest_fmt_has_no_extra_whitespace() {
+fn pkgtest_fmt_has_expected_output() {
     let checks = vec![
-        PkgTestFmtData {
-            feature: "",
-            extra_test_args: Vec::new(),
-            depends: Vec::new(),
-            extra_restricts: Vec::new(),
-            architecture: &[],
-        },
-        PkgTestFmtData {
-            feature: "X",
-            extra_test_args: vec!["--no-default-features", "--features X"],
-            depends: vec!["libfoo-dev".into(), "bar".into()],
-            extra_restricts: vec!["flaky"],
-            architecture: &["!riscv64"],
-        },
+        (
+            PkgTestFmtData {
+                feature: "",
+                extra_test_args: Vec::new(),
+                depends: Vec::new(),
+                extra_restricts: vec![PkgTestRestriction::AllowStderr],
+                architecture: &[],
+            },
+            "Test-Command: /usr/share/cargo/bin/cargo-auto-test crate 1.0 --all-targets\nFeatures: test-name=librust-crate-dev:\nDepends: dh-cargo (>= 33~), @\nRestrictions: skip-not-installable, allow-stderr\n"
+,
+        ),
+        (
+            PkgTestFmtData {
+                feature: "X",
+                extra_test_args: vec!["--no-default-features", "--features X"],
+                depends: vec!["libfoo-dev".into(), "bar".into()],
+                extra_restricts: vec![PkgTestRestriction::AllowStderr, PkgTestRestriction::Flaky],
+                architecture: &["!riscv64"],
+            },
+            "Test-Command: /usr/share/cargo/bin/cargo-auto-test crate 1.0 --all-targets --no-default-features --features X\nFeatures: test-name=librust-crate-dev:X\nDepends: dh-cargo (>= 33~), libfoo-dev, bar, @\nRestrictions: skip-not-installable, allow-stderr, flaky\nArchitecture: !riscv64\n",
+        ),
     ];
 
-    for check in checks {
+    for (check, expected) in checks {
         let pkgtest = PkgTest::new(
             "librust-crate-dev",
             "crate",
@@ -411,7 +418,10 @@ fn pkgtest_fmt_has_no_extra_whitespace() {
         )
         .unwrap();
 
-        for ln in pkgtest.to_string().lines() {
+        let output = pkgtest.to_string();
+        assert_eq!(output, expected);
+
+        for ln in output.lines() {
             let trimmed = ln.trim_end();
             assert_eq!(trimmed, ln);
         }

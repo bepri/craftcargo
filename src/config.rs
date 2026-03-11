@@ -3,6 +3,7 @@ use serde::de::IgnoredAny;
 use serde::Deserialize;
 use toml;
 
+use crate::debian::control::PkgTestRestriction;
 use crate::errors::Result;
 
 use std::borrow::Cow;
@@ -108,6 +109,7 @@ pub struct PackageOverride {
     test_is_broken: Option<bool>,
     test_architecture: Option<Vec<String>>,
     test_depends: Option<Vec<String>>,
+    test_restrictions: Option<Vec<PkgTestRestriction>>,
 
     #[serde(flatten)]
     pub unknown_fields: HashMap<String, IgnoredAny>,
@@ -340,6 +342,10 @@ impl Config {
 
     pub fn package_test_is_broken(&self, key: PackageKey) -> Option<bool> {
         self.with_package(key, |pkg| pkg.test_is_broken)
+    }
+
+    pub fn package_test_restrictions(&self, key: PackageKey) -> Option<&Vec<PkgTestRestriction>> {
+        self.with_package(key, |pkg| pkg.test_restrictions.as_ref())
     }
 
     pub fn package_test_architecture(&self, key: PackageKey) -> Option<&Vec<String>> {

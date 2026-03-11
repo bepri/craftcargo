@@ -255,6 +255,12 @@ uploaders = [ "foo bar <foo@debian.org>" ]
 #
 #test_is_broken = false
 
+# Some test might require extra restrictions. `flaky` is controlled by
+# `test_is_broken` above. Use an explicit empty list ([]) to reset an inherited
+# restriction. The "@" (all features) test will default to a combination of all
+# individual restrictions.
+#test_restrictions = []
+
 # Some tests depend on extra system tools or libraries, which need to be given
 # to autopkgtest. Like test_is_broken, the effect is transitive to its rdeps.
 #test_depends = []
