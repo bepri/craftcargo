@@ -390,6 +390,7 @@ impl Package {
         f_provides: &[&str],
         f_recommends: &[&str],
         f_suggests: &[&str],
+        min_rust_ver: Option<&str>,
     ) -> Result<Package> {
         let pkgbase = match name_suffix {
             None => basename.to_string(),
@@ -448,6 +449,9 @@ impl Package {
             next_version.patch += 1;
             breaks.push(format!("{} (<< {}~)", deb_name(basename), next_version));
             replaces.push(format!("{} (<< {}~)", deb_name(basename), next_version));
+        }
+        if let Some(min_rust_ver) = min_rust_ver {
+            breaks.push(format!("rustc (<< {}~)", min_rust_ver));
         }
         let conflicts = vec![];
 

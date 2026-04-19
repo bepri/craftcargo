@@ -134,6 +134,7 @@ fn test_package_new() {
         &f_provides,
         &f_recommends,
         &f_suggests,
+        None,
     );
 
     assert!(instance.is_ok());
