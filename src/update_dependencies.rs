@@ -11,7 +11,6 @@ use debian_control::lossless::control::Control;
 use debian_control::lossless::relations::Entry;
 
 use crate::deb_dependencies::get_deb_dependencies;
-use crate::debcargo_info;
 use crate::debian::control::{base_deb_name, Package, DEV_SUFFIX};
 
 #[derive(Debug, Clone, Parser)]
