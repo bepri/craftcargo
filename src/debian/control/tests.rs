@@ -390,7 +390,7 @@ fn pkgtest_fmt_has_expected_output() {
                 extra_restricts: vec![PkgTestRestriction::AllowStderr],
                 architecture: &[],
             },
-            "Test-Command: /usr/share/cargo/bin/cargo-auto-test crate 1.0 --all-targets\nFeatures: test-name=librust-crate-dev:\nDepends: dh-cargo (>= 33~), @\nRestrictions: skip-not-installable, allow-stderr\n"
+            "Test-Command: /usr/share/cargo/bin/cargo-auto-test crate 1.0 --all-targets\nFeatures: test-name=librust-crate-dev:\nDepends: dh-cargo (>= 33~), @\nRestrictions: allow-stderr\n"
 ,
         ),
         (
@@ -401,7 +401,7 @@ fn pkgtest_fmt_has_expected_output() {
                 extra_restricts: vec![PkgTestRestriction::AllowStderr, PkgTestRestriction::Flaky],
                 architecture: &["!riscv64"],
             },
-            "Test-Command: /usr/share/cargo/bin/cargo-auto-test crate 1.0 --all-targets --no-default-features --features X\nFeatures: test-name=librust-crate-dev:X\nDepends: dh-cargo (>= 33~), libfoo-dev, bar, @\nRestrictions: skip-not-installable, allow-stderr, flaky\nArchitecture: !riscv64\n",
+            "Test-Command: /usr/share/cargo/bin/cargo-auto-test crate 1.0 --all-targets --no-default-features --features X\nFeatures: test-name=librust-crate-dev:X\nDepends: dh-cargo (>= 33~), libfoo-dev, bar, @\nRestrictions: allow-stderr, flaky\nArchitecture: !riscv64\n",
         ),
     ];
 

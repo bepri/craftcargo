@@ -223,15 +223,10 @@ impl fmt::Display for PkgTest {
         };
         writeln!(f, "Depends: dh-cargo (>= 33~){depends}, {default_deps}")?;
 
-        let restricts = if self.extra_restricts.is_empty() {
-            String::new()
-        } else {
-            format!(", {}", self.extra_restricts.join(", "))
-        };
-        writeln!(
-            f,
-            "Restrictions: skip-not-installable{restricts}",
-        )?;
+        if !self.extra_restricts.is_empty() {
+            let restricts = self.extra_restricts.join(", ");
+            writeln!(f, "Restrictions: {restricts}",)?;
+        }
         if !self.architecture.is_empty() {
             writeln!(f, "Architecture: {}", self.architecture.join(" "))?;
         }
