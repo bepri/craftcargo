@@ -277,7 +277,7 @@ it's a maintenance burden. Use debcargo.toml instead."
             debcargo_bail!("applying patches failed! see above for details..");
         }
         debcargo_info!("reloading Cargo.toml..");
-        crate_info.replace_manifest(&output_dir.join("Cargo.toml"))?;
+        let reload_result = crate_info.replace_manifest(&output_dir.join("Cargo.toml"));
 
         // this should never fail!
         debcargo_info!("unapplying patches again..");
@@ -290,6 +290,7 @@ it's a maintenance burden. Use debcargo.toml instead."
             "failed to unapply patches",
         )?;
         fs::remove_dir_all(output_dir.join(".pc"))?;
+        reload_result?;
     }
     Ok(tempdir)
 }
