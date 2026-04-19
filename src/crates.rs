@@ -548,13 +548,6 @@ impl CrateInfo {
             _ => false,
         };
 
-        let debian_dir_pattern = Pattern::new(&format!("{top_level}/debian/*")).unwrap();
-        if debian_dir_pattern.matches_path(path) {
-            return Err(format!(
-                "Suspicious file or directory, should probably be excluded in debcargo.toml: {path:?}"
-            ));
-        }
-
         if suspicious {
             if self.includes.iter().any(matches) {
                 debcargo_info!("Suspicious file, on whitelist so ignored: {:?}", path);
@@ -632,6 +625,9 @@ impl CrateInfo {
                 path.display()
             )));
         }
+
+        // Ensure an upstream debian/ dir is stripped, just like dpkg-source does
+        let _ = fs::remove_dir_all(path.join("debian"));
 
         // Ensure that Cargo.toml is in standard form, e.g. does not contain
         // path dependencies, so can be built standalone (see #4030).
