@@ -1,0 +1,1621 @@
+---
+
+d: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+d: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+d: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+d: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+d: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+d: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+d: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+cache-efficiency-debug
+f: 
+d: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/cache-efficiency-debug
+ff: 
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/cache-efficiency-debug
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+crosstermion
+f: 
+d: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+ff: 
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+default
+f: max
+ff: max
+ff: hashes
+ff: max-control
+ff: fast
+ff: gitoxide-core-tools-query
+ff: gitoxide-core-tools-corpus
+ff: gitoxide-core-blocking-client
+ff: http-client-curl-openssl
+ff: sha1
+ff: 
+ff: tracing
+ff: fast
+ff: pretty-cli
+ff: gitoxide-core-tools
+ff: prodash-render-line
+ff: prodash-render-tui
+ff: 
+ff: 
+ff: 
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+ff: futures-lite
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-autoconfigure
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/revparse-regex
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui-crossterm
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/query
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/corpus
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/blocking-client
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-openssl
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+document-features
+f: 
+d: document-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(0), pre: Prerelease("") }] })
+ff: 
+dd: document-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+fast
+f: 
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+fast-safe
+f: fast
+ff: fast
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+futures-lite
+f: 
+d: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+ff: 
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-async-client
+f: futures-lite
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/async-client
+ff: futures-lite
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/async-client
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-blocking-client
+f: 
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/blocking-client
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/blocking-client
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-tools
+f: gitoxide-core-tools-archive
+f: gitoxide-core-tools-clean
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-tools-archive
+f: 
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-tools-clean
+f: 
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-tools-corpus
+f: 
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/corpus
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/corpus
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+gitoxide-core-tools-query
+f: 
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/query
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/query
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+hashes
+f: sha1
+ff: sha1
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+http-client-curl
+f: 
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+http-client-curl-openssl
+f: 
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-openssl
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-openssl
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+http-client-curl-rustls
+f: 
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-rustls
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-rustls
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+http-client-reqwest
+f: 
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-reqwest-rust-tls
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-reqwest-rust-tls
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+is-terminal
+f: 
+d: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+ff: 
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+lean
+f: hashes
+f: fast
+f: tracing
+f: pretty-cli
+f: http-client-curl-openssl
+f: gitoxide-core-tools-query
+f: gitoxide-core-tools-corpus
+f: gitoxide-core-tools
+f: gitoxide-core-blocking-client
+f: prodash-render-line
+ff: hashes
+ff: fast
+ff: tracing
+ff: pretty-cli
+ff: http-client-curl-openssl
+ff: gitoxide-core-tools-query
+ff: gitoxide-core-tools-corpus
+ff: gitoxide-core-tools
+ff: gitoxide-core-blocking-client
+ff: prodash-render-line
+ff: sha1
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-openssl
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/query
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/corpus
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/blocking-client
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+lean-async
+f: hashes
+f: fast
+f: tracing
+f: pretty-cli
+f: gitoxide-core-tools
+f: gitoxide-core-tools-query
+f: gitoxide-core-tools-corpus
+f: gitoxide-core-async-client
+f: prodash-render-line
+ff: hashes
+ff: fast
+ff: tracing
+ff: pretty-cli
+ff: gitoxide-core-tools
+ff: gitoxide-core-tools-query
+ff: gitoxide-core-tools-corpus
+ff: gitoxide-core-async-client
+ff: prodash-render-line
+ff: sha1
+ff: 
+ff: 
+ff: 
+ff: 
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+ff: 
+ff: 
+ff: futures-lite
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/query
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/corpus
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/async-client
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+max
+f: hashes
+f: max-control
+f: fast
+f: gitoxide-core-tools-query
+f: gitoxide-core-tools-corpus
+f: gitoxide-core-blocking-client
+f: http-client-curl-openssl
+ff: hashes
+ff: max-control
+ff: fast
+ff: gitoxide-core-tools-query
+ff: gitoxide-core-tools-corpus
+ff: gitoxide-core-blocking-client
+ff: http-client-curl-openssl
+ff: sha1
+ff: 
+ff: tracing
+ff: fast
+ff: pretty-cli
+ff: gitoxide-core-tools
+ff: prodash-render-line
+ff: prodash-render-tui
+ff: 
+ff: 
+ff: 
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+ff: futures-lite
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-autoconfigure
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/revparse-regex
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui-crossterm
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/query
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/corpus
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/blocking-client
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-curl-openssl
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+max-control
+f: tracing
+f: fast
+f: pretty-cli
+f: gitoxide-core-tools
+f: prodash-render-line
+f: prodash-render-tui
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-autoconfigure
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/revparse-regex
+ff: tracing
+ff: fast
+ff: pretty-cli
+ff: gitoxide-core-tools
+ff: prodash-render-line
+ff: prodash-render-tui
+ff: 
+ff: 
+ff: 
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+ff: futures-lite
+ff: 
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-autoconfigure
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/revparse-regex
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui-crossterm
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+max-pure
+f: hashes
+f: max-control
+f: http-client-reqwest
+f: gitoxide-core-blocking-client
+ff: hashes
+ff: max-control
+ff: http-client-reqwest
+ff: gitoxide-core-blocking-client
+ff: sha1
+ff: 
+ff: tracing
+ff: fast
+ff: pretty-cli
+ff: gitoxide-core-tools
+ff: prodash-render-line
+ff: prodash-render-tui
+ff: 
+ff: 
+ff: 
+ff: gitoxide-core-tools-archive
+ff: gitoxide-core-tools-clean
+ff: 
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+ff: futures-lite
+ff: 
+ff: 
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-autoconfigure
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/revparse-regex
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/max-performance
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/comfort
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/organize
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/estimate-hours
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/archive
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/clean
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui-crossterm
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/blocking-http-transport-reqwest-rust-tls
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/blocking-client
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+pretty-cli
+f: 
+d: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+d: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+d: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+d: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+ff: 
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+prodash
+f: 
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })
+ff: 
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+prodash-render-line
+f: prodash-render-line-crossterm
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+prodash-render-line-crossterm
+f: is-terminal
+f: crosstermion
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+prodash-render-tui
+f: futures-lite
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui
+d: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui-crossterm
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+ff: futures-lite
+ff: 
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-tui-crossterm
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: futures-lite/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: Some(1), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+sha1
+f: 
+d: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+small
+f: hashes
+f: pretty-cli
+f: prodash-render-line
+f: is-terminal
+ff: hashes
+ff: pretty-cli
+ff: prodash-render-line
+ff: is-terminal
+ff: sha1
+ff: 
+ff: 
+ff: prodash-render-line-crossterm
+ff: is-terminal
+ff: crosstermion
+ff: 
+ff: 
+ff: 
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/sha1
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })/serde
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/progress-tree-log
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/local-time
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/humantime
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/color
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })/auto-color
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })/progress-tree
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/render-line-crossterm
+dd: prodash/Req(VersionReq { comparators: [Comparator { op: Caret, major: 31, minor: Some(0), patch: Some(0), pre: Prerelease("") }] })/signal-hook
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: crosstermion/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+dd: is-terminal/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(0), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })
+---
+tracing
+f: 
+d: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+d: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+d: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+d: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+d: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+ff: 
+dd: tracing-forest/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(5), pre: Prerelease("") }] })/serde
+dd: tracing-subscriber/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: Some(17), pre: Prerelease("") }] })
+dd: tracing/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(1), patch: Some(37), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })/tracing-detail
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: Some(98), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(42), pre: Prerelease("") }] })/derive|cargo
+dd: clap_complete/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: Some(55), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: Some(8), pre: Prerelease("") }] })
+dd: gitoxide-core/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(55), patch: Some(0), pre: Prerelease("") }] })
+dd: gix/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(81), patch: Some(0), pre: Prerelease("") }] })
+dd: gix-features/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(46), patch: Some(2), pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 1, minor: Some(0), patch: Some(185), pre: Prerelease("") }] })
+dd: terminal_size/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(2), pre: Prerelease("") }] })

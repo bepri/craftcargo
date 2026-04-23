@@ -1,0 +1,1777 @@
+---
+
+d: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk
+f: Win32_Foundation
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Devices
+f: Wdk
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Devices_Bluetooth
+f: Wdk_Devices
+ff: Wdk_Devices
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Devices_HumanInterfaceDevice
+f: Wdk_Devices
+ff: Wdk_Devices
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Foundation
+f: Wdk
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Graphics
+f: Wdk
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Graphics_Direct3D
+f: Wdk_Graphics
+ff: Wdk_Graphics
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_NetworkManagement
+f: Wdk
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_NetworkManagement_Ndis
+f: Wdk_NetworkManagement
+ff: Wdk_NetworkManagement
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_NetworkManagement_WindowsFilteringPlatform
+f: Wdk_NetworkManagement
+ff: Wdk_NetworkManagement
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Storage
+f: Wdk
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Storage_FileSystem
+f: Wdk_Storage
+ff: Wdk_Storage
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_Storage_FileSystem_Minifilters
+f: Wdk_Storage_FileSystem
+ff: Wdk_Storage_FileSystem
+ff: Wdk_Storage
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System
+f: Wdk
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_IO
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_Memory
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_OfflineRegistry
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_Registry
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_SystemInformation
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_SystemServices
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Wdk_System_Threading
+f: Wdk_System
+ff: Wdk_System
+ff: Wdk
+ff: Win32_Foundation
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32
+f: 
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Data
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Data_HtmlHelp
+f: Win32_Data
+ff: Win32_Data
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Data_RightsManagement
+f: Win32_Data
+ff: Win32_Data
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_AllJoyn
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Beep
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_BiometricFramework
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Bluetooth
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Cdrom
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Communication
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_DeviceAndDriverInstallation
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_DeviceQuery
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Display
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Dvd
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Enumeration
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Enumeration_Pnp
+f: Win32_Devices_Enumeration
+ff: Win32_Devices_Enumeration
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Fax
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_HumanInterfaceDevice
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Nfc
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Nfp
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_PortableDevices
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Properties
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Pwm
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Sensors
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_SerialCommunication
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Tapi
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_Usb
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Devices_WebServicesOnDevices
+f: Win32_Devices
+ff: Win32_Devices
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Foundation
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Gaming
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Globalization
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_Dwm
+f: Win32_Graphics
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_Gdi
+f: Win32_Graphics
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_GdiPlus
+f: Win32_Graphics
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_Hlsl
+f: Win32_Graphics
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_OpenGL
+f: Win32_Graphics
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_Printing
+f: Win32_Graphics
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Graphics_Printing_PrintTicket
+f: Win32_Graphics_Printing
+ff: Win32_Graphics_Printing
+ff: Win32_Graphics
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Management
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Management_MobileDeviceManagementRegistration
+f: Win32_Management
+ff: Win32_Management
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media_Audio
+f: Win32_Media
+ff: Win32_Media
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media_DxMediaObjects
+f: Win32_Media
+ff: Win32_Media
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media_KernelStreaming
+f: Win32_Media
+ff: Win32_Media
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media_Multimedia
+f: Win32_Media
+ff: Win32_Media
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media_Streaming
+f: Win32_Media
+ff: Win32_Media
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Media_WindowsMediaFormat
+f: Win32_Media
+ff: Win32_Media
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_Dhcp
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_Dns
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_InternetConnectionWizard
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_IpHelper
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_Multicast
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_Ndis
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_NetBios
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_NetManagement
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_NetShell
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_NetworkDiagnosticsFramework
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_P2P
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_QoS
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_Rras
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_Snmp
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WNet
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WebDav
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WiFi
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WindowsConnectionManager
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WindowsFilteringPlatform
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WindowsFirewall
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_NetworkManagement_WindowsNetworkVirtualization
+f: Win32_NetworkManagement
+ff: Win32_NetworkManagement
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_ActiveDirectory
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_Clustering
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_HttpServer
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_Ldap
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_WebSocket
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_WinHttp
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_WinInet
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_WinSock
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Networking_WindowsWebServices
+f: Win32_Networking
+ff: Win32_Networking
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_AppLocker
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Authentication
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Authentication_Identity
+f: Win32_Security_Authentication
+ff: Win32_Security_Authentication
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Authorization
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Credentials
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Cryptography
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Cryptography_Catalog
+f: Win32_Security_Cryptography
+ff: Win32_Security_Cryptography
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Cryptography_Certificates
+f: Win32_Security_Cryptography
+ff: Win32_Security_Cryptography
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Cryptography_Sip
+f: Win32_Security_Cryptography
+ff: Win32_Security_Cryptography
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Cryptography_UI
+f: Win32_Security_Cryptography
+ff: Win32_Security_Cryptography
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_DiagnosticDataQuery
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_DirectoryServices
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_EnterpriseData
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_ExtensibleAuthenticationProtocol
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_Isolation
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_LicenseProtection
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_NetworkAccessProtection
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_WinTrust
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Security_WinWlx
+f: Win32_Security
+ff: Win32_Security
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Cabinets
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_CloudFilters
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Compression
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_DistributedFileSystem
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_FileHistory
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_FileSystem
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Imapi
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_IndexServer
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_InstallableFileSystems
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_IscsiDisc
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Jet
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Nvme
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_OfflineFiles
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_OperationRecorder
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Packaging
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Packaging_Appx
+f: Win32_Storage_Packaging
+ff: Win32_Storage_Packaging
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_ProjectedFileSystem
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_StructuredStorage
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Vhd
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Storage_Xps
+f: Win32_Storage
+ff: Win32_Storage
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_AddressBook
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Antimalware
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_ApplicationInstallationAndServicing
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_ApplicationVerifier
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_ClrHosting
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Com
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Com_Marshal
+f: Win32_System_Com
+ff: Win32_System_Com
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Com_StructuredStorage
+f: Win32_System_Com
+ff: Win32_System_Com
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Com_Urlmon
+f: Win32_System_Com
+ff: Win32_System_Com
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_ComponentServices
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Console
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_CorrelationVector
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_DataExchange
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_DeploymentServices
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_DeveloperLicensing
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_Ceip
+f: Win32_System_Diagnostics
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_Debug
+f: Win32_System_Diagnostics
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_Debug_Extensions
+f: Win32_System_Diagnostics_Debug
+ff: Win32_System_Diagnostics_Debug
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_Etw
+f: Win32_System_Diagnostics
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_ProcessSnapshotting
+f: Win32_System_Diagnostics
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_ToolHelp
+f: Win32_System_Diagnostics
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Diagnostics_TraceLogging
+f: Win32_System_Diagnostics
+ff: Win32_System_Diagnostics
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_DistributedTransactionCoordinator
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Environment
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_ErrorReporting
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_EventCollector
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_EventLog
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_EventNotificationService
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_GroupPolicy
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_HostCompute
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_HostComputeNetwork
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_HostComputeSystem
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Hypervisor
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_IO
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Iis
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Ioctl
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_JobObjects
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Js
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Kernel
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_LibraryLoader
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Mailslots
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Mapi
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Memory
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Memory_NonVolatile
+f: Win32_System_Memory
+ff: Win32_System_Memory
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_MessageQueuing
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_MixedReality
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Ole
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_PasswordManagement
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Performance
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Performance_HardwareCounterProfiling
+f: Win32_System_Performance
+ff: Win32_System_Performance
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Pipes
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Power
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_ProcessStatus
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Recovery
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Registry
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_RemoteDesktop
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_RemoteManagement
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_RestartManager
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Restore
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Rpc
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Search
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Search_Common
+f: Win32_System_Search
+ff: Win32_System_Search
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_SecurityCenter
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Services
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_SetupAndMigration
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Shutdown
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_StationsAndDesktops
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_SubsystemForLinux
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_SystemInformation
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_SystemServices
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Threading
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Time
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_TpmBaseServices
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_UserAccessLogging
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Variant
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_VirtualDosMachines
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_WindowsProgramming
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_System_Wmi
+f: Win32_System
+ff: Win32_System
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Accessibility
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_ColorSystem
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Controls
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Controls_Dialogs
+f: Win32_UI_Controls
+ff: Win32_UI_Controls
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_HiDpi
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Input
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Input_Ime
+f: Win32_UI_Input
+ff: Win32_UI_Input
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Input_KeyboardAndMouse
+f: Win32_UI_Input
+ff: Win32_UI_Input
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Input_Pointer
+f: Win32_UI_Input
+ff: Win32_UI_Input
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Input_Touch
+f: Win32_UI_Input
+ff: Win32_UI_Input
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Input_XboxController
+f: Win32_UI_Input
+ff: Win32_UI_Input
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_InteractionContext
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Magnification
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Shell
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Shell_Common
+f: Win32_UI_Shell
+ff: Win32_UI_Shell
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_Shell_PropertiesSystem
+f: Win32_UI_Shell
+ff: Win32_UI_Shell
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_TabletPC
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_TextServices
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_UI_WindowsAndMessaging
+f: Win32_UI
+ff: Win32_UI
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Web
+f: Win32
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+Win32_Web_InternetExplorer
+f: Win32_Web
+ff: Win32_Web
+ff: Win32
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+default
+f: 
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+docs
+f: 
+ff: 
+dd: windows-link/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })

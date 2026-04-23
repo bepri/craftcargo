@@ -1,0 +1,146 @@
+---
+
+d: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+d: cargo/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(91), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(95), patch: None, pre: Prerelease("") }] })
+d: cargo-util/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }] })
+d: cargo-util-schemas/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(10), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(12), patch: None, pre: Prerelease("") }] })
+d: chrono/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(31), pre: Prerelease("") }] })
+d: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: None, pre: Prerelease("") }] })/cargo|derive|wrap_help
+d: clap_mangen/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(29), pre: Prerelease("") }] })
+d: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: None, pre: Prerelease("") }] })
+d: filetime/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: None, pre: Prerelease("") }] })
+d: flate2/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+d: git2/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(19), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(21), patch: None, pre: Prerelease("") }] })
+d: glob/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: None, pre: Prerelease("") }] })
+d: indexmap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })/serde
+d: itertools/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(13), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(15), patch: None, pre: Prerelease("") }] })
+d: log/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+d: nu-ansi-term/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(50), patch: None, pre: Prerelease("") }] })
+d: regex/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+d: semver/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+d: serde/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+d: serde_derive/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+d: tar/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+d: tempfile/Req(VersionReq { comparators: [Comparator { op: Caret, major: 3, minor: None, patch: None, pre: Prerelease("") }] })
+d: textwrap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: None, pre: Prerelease("") }] })
+d: toml/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(9), patch: None, pre: Prerelease("") }] })
+d: walkdir/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: cargo/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(91), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(95), patch: None, pre: Prerelease("") }] })
+dd: cargo-util/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }] })
+dd: cargo-util-schemas/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(10), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(12), patch: None, pre: Prerelease("") }] })
+dd: chrono/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(31), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: None, pre: Prerelease("") }] })/cargo|derive|wrap_help
+dd: clap_mangen/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(29), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: None, pre: Prerelease("") }] })
+dd: filetime/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: None, pre: Prerelease("") }] })
+dd: flate2/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: git2/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(19), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(21), patch: None, pre: Prerelease("") }] })
+dd: glob/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: None, pre: Prerelease("") }] })
+dd: indexmap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })/serde
+dd: itertools/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(13), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(15), patch: None, pre: Prerelease("") }] })
+dd: log/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: nu-ansi-term/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(50), patch: None, pre: Prerelease("") }] })
+dd: regex/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: semver/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: tar/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: tempfile/Req(VersionReq { comparators: [Comparator { op: Caret, major: 3, minor: None, patch: None, pre: Prerelease("") }] })
+dd: textwrap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: None, pre: Prerelease("") }] })
+dd: toml/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(9), patch: None, pre: Prerelease("") }] })
+dd: walkdir/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })
+---
+debian-control
+f: 
+d: debian-control/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })/lossless
+ff: 
+dd: debian-control/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })/lossless
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: cargo/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(91), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(95), patch: None, pre: Prerelease("") }] })
+dd: cargo-util/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }] })
+dd: cargo-util-schemas/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(10), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(12), patch: None, pre: Prerelease("") }] })
+dd: chrono/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(31), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: None, pre: Prerelease("") }] })/cargo|derive|wrap_help
+dd: clap_mangen/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(29), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: None, pre: Prerelease("") }] })
+dd: filetime/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: None, pre: Prerelease("") }] })
+dd: flate2/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: git2/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(19), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(21), patch: None, pre: Prerelease("") }] })
+dd: glob/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: None, pre: Prerelease("") }] })
+dd: indexmap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })/serde
+dd: itertools/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(13), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(15), patch: None, pre: Prerelease("") }] })
+dd: log/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: nu-ansi-term/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(50), patch: None, pre: Prerelease("") }] })
+dd: regex/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: semver/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: tar/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: tempfile/Req(VersionReq { comparators: [Comparator { op: Caret, major: 3, minor: None, patch: None, pre: Prerelease("") }] })
+dd: textwrap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: None, pre: Prerelease("") }] })
+dd: toml/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(9), patch: None, pre: Prerelease("") }] })
+dd: walkdir/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })
+---
+default
+f: update-dependencies
+ff: update-dependencies
+ff: debian-control
+ff: 
+dd: debian-control/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })/lossless
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: cargo/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(91), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(95), patch: None, pre: Prerelease("") }] })
+dd: cargo-util/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }] })
+dd: cargo-util-schemas/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(10), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(12), patch: None, pre: Prerelease("") }] })
+dd: chrono/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(31), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: None, pre: Prerelease("") }] })/cargo|derive|wrap_help
+dd: clap_mangen/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(29), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: None, pre: Prerelease("") }] })
+dd: filetime/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: None, pre: Prerelease("") }] })
+dd: flate2/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: git2/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(19), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(21), patch: None, pre: Prerelease("") }] })
+dd: glob/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: None, pre: Prerelease("") }] })
+dd: indexmap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })/serde
+dd: itertools/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(13), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(15), patch: None, pre: Prerelease("") }] })
+dd: log/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: nu-ansi-term/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(50), patch: None, pre: Prerelease("") }] })
+dd: regex/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: semver/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: tar/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: tempfile/Req(VersionReq { comparators: [Comparator { op: Caret, major: 3, minor: None, patch: None, pre: Prerelease("") }] })
+dd: textwrap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: None, pre: Prerelease("") }] })
+dd: toml/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(9), patch: None, pre: Prerelease("") }] })
+dd: walkdir/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })
+---
+update-dependencies
+f: debian-control
+ff: debian-control
+ff: 
+dd: debian-control/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })/lossless
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: cargo/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(91), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(95), patch: None, pre: Prerelease("") }] })
+dd: cargo-util/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(14), pre: Prerelease("") }] })
+dd: cargo-util-schemas/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(10), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(12), patch: None, pre: Prerelease("") }] })
+dd: chrono/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: Some(31), pre: Prerelease("") }] })
+dd: clap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 4, minor: Some(5), patch: None, pre: Prerelease("") }] })/cargo|derive|wrap_help
+dd: clap_mangen/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(29), pre: Prerelease("") }] })
+dd: env_logger/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(11), patch: None, pre: Prerelease("") }] })
+dd: filetime/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: None, pre: Prerelease("") }] })
+dd: flate2/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: git2/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(19), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(21), patch: None, pre: Prerelease("") }] })
+dd: glob/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(3), patch: None, pre: Prerelease("") }] })
+dd: indexmap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })/serde
+dd: itertools/Req(VersionReq { comparators: [Comparator { op: GreaterEq, major: 0, minor: Some(13), patch: None, pre: Prerelease("") }, Comparator { op: Less, major: 0, minor: Some(15), patch: None, pre: Prerelease("") }] })
+dd: log/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: nu-ansi-term/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(50), patch: None, pre: Prerelease("") }] })
+dd: regex/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: Some(0), patch: None, pre: Prerelease("") }] })
+dd: semver/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: serde_derive/Req(VersionReq { comparators: [Comparator { op: Caret, major: 1, minor: None, patch: None, pre: Prerelease("") }] })
+dd: tar/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(4), patch: None, pre: Prerelease("") }] })
+dd: tempfile/Req(VersionReq { comparators: [Comparator { op: Caret, major: 3, minor: None, patch: None, pre: Prerelease("") }] })
+dd: textwrap/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(16), patch: None, pre: Prerelease("") }] })
+dd: toml/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(9), patch: None, pre: Prerelease("") }] })
+dd: walkdir/Req(VersionReq { comparators: [Comparator { op: Caret, major: 2, minor: None, patch: None, pre: Prerelease("") }] })
