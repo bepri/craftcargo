@@ -63,6 +63,8 @@ fn test_crate(name: &str, overwrite: bool) {
         }
         let (ffs, dds) = debcargo::crates::transitive_deps(&all_deps, feature).unwrap();
         for ff in ffs {
+            // Cycle!
+            assert_ne!(&ff, feature);
             actual.push_str(&format!("ff: {ff}\n"));
         }
 
