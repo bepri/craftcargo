@@ -451,7 +451,7 @@ impl Package {
             replaces.push(format!("{} (<< {}~)", deb_name(basename), next_version));
         }
         if let Some(min_rust_ver) = min_rust_ver {
-            breaks.push(format!("rustc (<< {}~)", min_rust_ver));
+            breaks.push(format!("rustc (<< {min_rust_ver}~)"));
         }
         let conflicts = vec![];
 
