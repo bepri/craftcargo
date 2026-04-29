@@ -1027,6 +1027,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
                 &f_provides.clone(),
                 if feature.is_empty() { &recommends } else { &[] },
                 if feature.is_empty() { &suggests } else { &[] },
+                crate_info.rust_version().as_deref(),
             )?;
             // If any overrides present for this package it will be taken care.
             package.apply_overrides(config, pk, &f_provides);
