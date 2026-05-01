@@ -95,3 +95,8 @@ fn gitoxide_deps() {
 fn windows_sys_deps() {
     test_crate("windows-sys", false);
 }
+
+#[test]
+fn cycle_deps() {
+    test_crate("cycle", false);
+}

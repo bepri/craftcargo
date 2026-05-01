@@ -1,0 +1,58 @@
+---
+
+d: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+bar
+f: 
+ff: 
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+cycle
+f: 
+ff: 
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+default
+f: 
+ff: 
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+foo
+f: middle
+ff: middle
+ff: bar
+ff: 
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+libc
+f: 
+d: libc/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+ff: 
+dd: libc/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+middle
+f: bar
+ff: bar
+ff: 
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+optional
+f: libc
+ff: libc
+ff: 
+dd: libc/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+---
+second
+f: optional
+f: cycle
+ff: optional
+ff: cycle
+ff: libc
+ff: 
+ff: 
+dd: libc/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
+dd: anyhow/Req(VersionReq { comparators: [Comparator { op: Caret, major: 0, minor: Some(2), patch: Some(1), pre: Prerelease("") }] })
