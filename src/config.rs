@@ -37,6 +37,10 @@ pub struct Config {
     pub uploaders: Option<Vec<String>>,
     pub collapse_features: bool,
     pub requires_root: Option<String>,
+    /// Packager-supplied contact address, distinct from maintainer when needed.
+    pub contact: Option<String>,
+    /// Base image for debcraft (e.g. `"ubuntu@24.04"`); omitted when not set.
+    pub base: Option<String>,
 
     pub source: Option<SourceOverride>,
     pub packages: IndexMap<String, PackageOverride>,
@@ -136,6 +140,8 @@ impl Default for Config {
             source: None,
             packages: IndexMap::new(),
             requires_root: None,
+            contact: None,
+            base: None,
             unknown_fields: HashMap::new(),
         }
     }

@@ -6,7 +6,8 @@ use std::path::Path;
 
 use crate::config::Config;
 use crate::crates::CrateInfo;
-use crate::debian::DebInfo;
+use crate::debian::control::{deb_upstream_version, dsc_name};
+use crate::debian::{generate_homepage, DebInfo};
 use crate::errors::Result;
 
 use schema::{DebcraftPackage, DebcraftPart, DebcraftYaml};
@@ -50,11 +51,147 @@ pub fn prepare_debcraft_yaml(
 }
 
 fn build_debcraft_top_level(
-    _crate_info: &CrateInfo,
-    _deb_info: &DebInfo,
-    _config: &Config,
+    crate_info: &CrateInfo,
+    deb_info: &DebInfo,
+    config: &Config,
 ) -> Result<DebcraftYaml> {
-    todo!("step 5: top-level field mapping")
+    let meta = crate_info.metadata();
+
+    // 5a: source package name
+    let name = dsc_name(deb_info.base_package_name());
+
+    // 5b: initial Debian version
+    let version = format!("{}-1", deb_info.deb_upstream_version());
+
+    // 5c: summary / description (top-level gets the " - Rust source code" suffix)
+    let (crate_summary, crate_description) = crate_info.get_summary_description();
+    let summary = crate_summary.map(|s| format!("{s} - Rust source code"));
+    let description = crate_description;
+
+    // 5d / 5e: maintainer and uploaders
+    let maintainer = config.maintainer().to_string();
+    let uploaders = config
+        .uploaders()
+        .map(|v| v.iter().map(String::as_str).map(str::to_string).collect())
+        .unwrap_or_default();
+
+    // 5f: section
+    let lib = crate_info.is_lib() && config.build_lib_package();
+    let section = Some(if lib { "rust" } else { "FIXME" }.to_string());
+
+    // 5g: contact — packager override, else the maintainer address
+    let contact = config
+        .contact
+        .clone()
+        .or_else(|| Some(config.maintainer().to_string()));
+
+    // 5h: source-code URL
+    let source_code = Some(generate_homepage(
+        crate_info.crate_name(),
+        &crate_info.version().to_string(),
+        meta.homepage.as_deref(),
+        meta.repository.as_deref(),
+        config.crate_src_path.is_none(),
+    ))
+    .filter(|s| !s.is_empty());
+
+    // 5i: vcs-git — config override first, then repository if it looks like a git URL
+    let vcs_git = config
+        .vcs_git()
+        .map(str::to_string)
+        .or_else(|| meta.repository.as_deref().and_then(derive_vcs_git));
+
+    // 5j: license — normalize SPDX "/" separator to " OR "
+    let license = meta.license.as_deref().map(normalize_spdx_license);
+
+    // 5k: issues URL derived from repository
+    let issues = meta.repository.as_deref().and_then(derive_issues_url);
+
+    // 5l: custom source fields
+    let plain_version = deb_upstream_version(crate_info.version(), None);
+    let mut custom_source_fields = BTreeMap::new();
+    custom_source_fields.insert(
+        "X-Cargo-Crate".to_string(),
+        crate_info.crate_name().to_string(),
+    );
+    custom_source_fields.insert("X-Cargo-Crate-Version".to_string(), plain_version);
+
+    // 5m: rules-requires-root
+    let rules_requires_root = config.requires_root.clone();
+
+    // 5n: base image
+    let base = config.base.clone();
+
+    Ok(DebcraftYaml {
+        name,
+        version,
+        summary,
+        description,
+        maintainer,
+        uploaders,
+        section,
+        priority: None,
+        contact,
+        source_code,
+        vcs_git,
+        license,
+        issues,
+        base,
+        custom_source_fields,
+        rules_requires_root,
+        parts: BTreeMap::new(),
+        packages: BTreeMap::new(),
+    })
+}
+
+/// Apply `[source]` config overrides on top of the computed top-level fields.
+fn apply_source_overrides(yaml: &mut DebcraftYaml, config: &Config) {
+    if let Some(section) = config.section() {
+        yaml.section = Some(section.to_string());
+    }
+    // vcs_git override
+    if let Some(vcs_git) = config.vcs_git() {
+        yaml.vcs_git = Some(vcs_git.to_string());
+    }
+    // source-code can be overridden by vcs_browser or homepage in [source]
+    if let Some(browser) = config.vcs_browser().or_else(|| config.homepage()) {
+        yaml.source_code = Some(browser.to_string());
+    }
+}
+
+/// Normalize an SPDX license expression from Cargo.toml.
+///
+/// Cargo uses "/" as an OR separator (pre-SPDX legacy); replace with " OR ".
+fn normalize_spdx_license(license: &str) -> String {
+    license.replace('/', " OR ")
+}
+
+/// If `repository` looks like a GitHub or GitLab URL, return its issues URL.
+fn derive_issues_url(repository: &str) -> Option<String> {
+    let url = repository.trim_end_matches('/').trim_end_matches(".git");
+    if url.starts_with("https://github.com/") || url.starts_with("http://github.com/") {
+        return Some(format!("{url}/issues"));
+    }
+    // GitLab: any https://gitlab.* host
+    if let Some(rest) = url.strip_prefix("https://") {
+        if rest.starts_with("gitlab.") {
+            return Some(format!("{url}/issues"));
+        }
+    }
+    None
+}
+
+/// If `repository` looks like a git URL, return it as a vcs-git value.
+fn derive_vcs_git(repository: &str) -> Option<String> {
+    let url = repository.trim_end_matches('/');
+    if url.contains("github.com")
+        || url.contains("gitlab.")
+        || url.contains("salsa.debian.org")
+        || url.ends_with(".git")
+    {
+        return Some(url.to_string());
+    }
+    None
 }
 
 fn build_debcraft_packages(
@@ -74,10 +211,6 @@ fn build_debcraft_parts(
     todo!("step 7: parts generation")
 }
 
-fn apply_source_overrides(_yaml: &mut DebcraftYaml, _config: &Config) {
-    todo!("step 5: source overrides")
-}
-
 fn write_companion_files(
     _crate_info: &CrateInfo,
     _deb_info: &DebInfo,
@@ -87,4 +220,73 @@ fn write_companion_files(
     _out_dir: &Path,
 ) -> Result<()> {
     todo!("step 8: companion files")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn spdx_slash_normalized_to_or() {
+        assert_eq!(
+            normalize_spdx_license("MIT/Apache-2.0"),
+            "MIT OR Apache-2.0"
+        );
+        assert_eq!(
+            normalize_spdx_license("MIT/Apache-2.0/ISC"),
+            "MIT OR Apache-2.0 OR ISC"
+        );
+    }
+
+    #[test]
+    fn spdx_already_valid_unchanged() {
+        assert_eq!(
+            normalize_spdx_license("MIT OR Apache-2.0"),
+            "MIT OR Apache-2.0"
+        );
+    }
+
+    #[test]
+    fn issues_url_derived_from_github() {
+        assert_eq!(
+            derive_issues_url("https://github.com/foo/bar"),
+            Some("https://github.com/foo/bar/issues".to_string())
+        );
+        // trailing slash and .git stripped before appending
+        assert_eq!(
+            derive_issues_url("https://github.com/foo/bar.git"),
+            Some("https://github.com/foo/bar/issues".to_string())
+        );
+    }
+
+    #[test]
+    fn issues_url_derived_from_gitlab() {
+        assert_eq!(
+            derive_issues_url("https://gitlab.com/foo/bar"),
+            Some("https://gitlab.com/foo/bar/issues".to_string())
+        );
+        assert_eq!(
+            derive_issues_url("https://gitlab.example.org/foo/bar"),
+            Some("https://gitlab.example.org/foo/bar/issues".to_string())
+        );
+    }
+
+    #[test]
+    fn issues_url_none_for_unknown_host() {
+        assert_eq!(derive_issues_url("https://sr.ht/~user/repo"), None);
+        assert_eq!(derive_issues_url("https://example.com/repo"), None);
+    }
+
+    #[test]
+    fn vcs_git_derived_for_known_hosts() {
+        assert!(derive_vcs_git("https://github.com/foo/bar").is_some());
+        assert!(derive_vcs_git("https://gitlab.com/foo/bar").is_some());
+        assert!(derive_vcs_git("https://salsa.debian.org/rust-team/foo").is_some());
+        assert!(derive_vcs_git("https://example.com/repo.git").is_some());
+    }
+
+    #[test]
+    fn vcs_git_none_for_unknown_plain_url() {
+        assert_eq!(derive_vcs_git("https://example.com/repo"), None);
+    }
 }

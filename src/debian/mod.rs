@@ -1153,7 +1153,7 @@ fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Er
     Ok((source, has_dev_deps, test_is_broken("default")?))
 }
 
-fn generate_homepage(
+pub fn generate_homepage(
     name: &str,
     version: &str,
     homepage: Option<&str>,
