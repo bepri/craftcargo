@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+
+###############################################################################
+# craftcargo end-to-end demo
+#
+# Demonstrates: crate → debcraft.yaml generation using craftcargo
+# Requires: pv (for simulated typing), cargo, craftcargo built
+#
+# Usage:
+#   ./run-demo.sh        # Interactive (press ENTER to advance)
+#   ./run-demo.sh -n     # Non-interactive (auto-advance)
+###############################################################################
+
+DEMO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$DEMO_DIR/.." && pwd)"
+
+# Source demo-magic
+source "$DEMO_DIR/demo-magic.sh"
+
+# Configure
+TYPE_SPEED=40
+DEMO_PROMPT="${GREEN}craftcargo-demo ${CYAN}\$ ${COLOR_RESET}"
+
+# Ensure we have a built binary
+if [ ! -f "$REPO_ROOT/target/release/debcargo" ] && [ ! -f "$REPO_ROOT/target/debug/debcargo" ]; then
+  echo "Building craftcargo first..."
+  (cd "$REPO_ROOT" && cargo build --release --quiet)
+fi
+
+DEBCARGO="$REPO_ROOT/target/release/debcargo"
+if [ ! -f "$DEBCARGO" ]; then
+  DEBCARGO="$REPO_ROOT/target/debug/debcargo"
+fi
+
+# Working directory for demo output
+DEMO_WORKDIR=$(mktemp -d /tmp/craftcargo-demo.XXXXXX)
+trap "rm -rf $DEMO_WORKDIR" EXIT
+
+clear
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TITLE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+echo ""
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${COLOR_RESET}"
+echo -e "${BOLD}${WHITE}        craftcargo: Rust → Ubuntu Packaging Made Easy${COLOR_RESET}"
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${COLOR_RESET}"
+echo ""
+echo -e "${GREY}This demo shows how craftcargo generates a complete debcraft.yaml"
+echo -e "from a Rust crate, ready for Ubuntu package building.${COLOR_RESET}"
+echo ""
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 1: Show the tool
+# ═══════════════════════════════════════════════════════════════════════════════
+
+p "# Step 1: Let's see what craftcargo can do"
+pe "$DEBCARGO --help"
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 2: Pick a crate
+# ═══════════════════════════════════════════════════════════════════════════════
+
+p "# Step 2: Let's package 'tokio-util' — it has features, multiple deps, and licence complexity"
+echo ""
+
+p "# First, what would the Debian source package be called?"
+pe "$DEBCARGO deb-src-name tokio-util"
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 3: Generate debcraft.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+
+p "# Step 3: Generate the debcraft.yaml"
+pe "$DEBCARGO package-debcraft tokio-util --directory $DEMO_WORKDIR/tokio-util"
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 4: Inspect the output
+# ═══════════════════════════════════════════════════════════════════════════════
+
+p "# Step 4: Let's look at what was generated"
+pe "ls -la $DEMO_WORKDIR/tokio-util/"
+
+wait
+
+p "# Here's the debcraft.yaml:"
+pe "cat $DEMO_WORKDIR/tokio-util/debcraft.yaml"
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 5: Show the structure
+# ═══════════════════════════════════════════════════════════════════════════════
+
+p "# Step 5: Let's look at key sections"
+echo ""
+
+p "# The metadata section maps crate info → Debian packaging fields"
+pe "head -20 $DEMO_WORKDIR/tokio-util/debcraft.yaml"
+
+wait
+
+p "# The parts section defines build steps"
+pe "grep -A 10 'parts:' $DEMO_WORKDIR/tokio-util/debcraft.yaml"
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 6: Compare with manual approach
+# ═══════════════════════════════════════════════════════════════════════════════
+
+p "# Step 6: Compare — the traditional debcargo approach generates ~15 files"
+pe "$DEBCARGO package tokio-util --directory $DEMO_WORKDIR/tokio-util-traditional 2>&1 | tail -5"
+
+wait
+
+pe "find $DEMO_WORKDIR/tokio-util-traditional -type f | wc -l"
+p "# vs our single debcraft.yaml — much simpler to review and maintain!"
+
+wait
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# WRAP UP
+# ═══════════════════════════════════════════════════════════════════════════════
+
+echo ""
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${COLOR_RESET}"
+echo -e "${BOLD}${WHITE}        Demo Complete!${COLOR_RESET}"
+echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${COLOR_RESET}"
+echo ""
+echo -e "${WHITE}craftcargo turns complex Rust crates into clean debcraft.yaml files"
+echo -e "that are easy to review, version-control, and maintain.${COLOR_RESET}"
+echo ""
+echo -e "${GREY}Generated output is in: $DEMO_WORKDIR/tokio-util/${COLOR_RESET}"
+echo ""
