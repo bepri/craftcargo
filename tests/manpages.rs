@@ -25,9 +25,7 @@ fn check_manpages() {
         .filter(|manpage| {
             let new_manpage = manpage.as_ref().unwrap().path();
             let old_manpage = manpages_dir.join(new_manpage.file_name().unwrap());
-            if !old_manpage.exists() {
-                true
-            } else {
+            if old_manpage.exists() {
                 let old_manpage_content = fs::read_to_string(&old_manpage).unwrap_or_else(|e| {
                     panic!("Could not read {}: {e}", old_manpage.to_string_lossy())
                 });
@@ -35,6 +33,8 @@ fn check_manpages() {
                     panic!("Could not read {}: {e}", new_manpage.to_string_lossy())
                 });
                 old_manpage_content != new_manpage_content
+            } else {
+                true
             }
         })
         .map(|manpage| manpage.unwrap().file_name().to_string_lossy().to_string())

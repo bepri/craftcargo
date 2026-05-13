@@ -39,7 +39,7 @@ fn local_package_test(tmpdir: &Path, crate_name: &str, version: &str) -> Option<
 #[test]
 fn generate_package_with_crate_src() {
     let out_dir = Path::new(env!("CARGO_TARGET_TMPDIR"));
-    if let Some(actual) = local_package_test(&out_dir, "foobar", "0.1.0") {
+    if let Some(actual) = local_package_test(out_dir, "foobar", "0.1.0") {
         std::fs::write(out_dir.join("foobar.actual"), &actual)
             .expect("Should be able to write out generate control contents");
         let expected = include_str!("foobar.expected");
@@ -50,7 +50,7 @@ fn generate_package_with_crate_src() {
 #[test]
 fn generate_package_with_semver_crate_src() {
     let out_dir = Path::new(env!("CARGO_TARGET_TMPDIR"));
-    if let Some(actual) = local_package_test(&out_dir, "foobar-semver", "0.1.0") {
+    if let Some(actual) = local_package_test(out_dir, "foobar-semver", "0.1.0") {
         std::fs::write(out_dir.join("foobar-semver.actual"), &actual)
             .expect("Should be able to write out generate control contents");
         let expected = include_str!("foobar-semver.expected");

@@ -1415,7 +1415,7 @@ mod test {
             "https://example.com",
             generate_homepage(
                 "crate",
-                "1.0".into(),
+                "1.0",
                 Some("https://example.com"),
                 Some("https://example.com/repo"),
                 true
@@ -1424,20 +1424,14 @@ mod test {
 
         assert_eq!(
             "https://example.com",
-            generate_homepage(
-                "crate",
-                "1.0".into(),
-                Some("https://example.com"),
-                None,
-                true
-            )
+            generate_homepage("crate", "1.0", Some("https://example.com"), None, true)
         );
 
         assert_eq!(
             "https://example.com",
             generate_homepage(
                 "crate",
-                "1.0".into(),
+                "1.0",
                 Some("https://example.com"),
                 Some("https://example.com/repo"),
                 false
@@ -1446,13 +1440,7 @@ mod test {
 
         assert_eq!(
             "https://example.com",
-            generate_homepage(
-                "crate",
-                "1.0".into(),
-                Some("https://example.com"),
-                None,
-                false
-            )
+            generate_homepage("crate", "1.0", Some("https://example.com"), None, false)
         );
     }
 
@@ -1460,31 +1448,19 @@ mod test {
     fn homepage_is_repository() {
         assert_eq!(
             "https://example.com/repo",
-            generate_homepage(
-                "crate",
-                "1.0".into(),
-                None,
-                Some("https://example.com/repo"),
-                true
-            )
+            generate_homepage("crate", "1.0", None, Some("https://example.com/repo"), true)
+        );
+
+        assert_eq!(
+            "https://example.com/repo",
+            generate_homepage("crate", "1.0", None, Some("https://example.com/repo"), true)
         );
 
         assert_eq!(
             "https://example.com/repo",
             generate_homepage(
                 "crate",
-                "1.0".into(),
-                None,
-                Some("https://example.com/repo"),
-                true
-            )
-        );
-
-        assert_eq!(
-            "https://example.com/repo",
-            generate_homepage(
-                "crate",
-                "1.0".into(),
+                "1.0",
                 None,
                 Some("https://example.com/repo"),
                 false
@@ -1495,7 +1471,7 @@ mod test {
             "https://example.com/repo",
             generate_homepage(
                 "crate",
-                "1.0".into(),
+                "1.0",
                 None,
                 Some("https://example.com/repo"),
                 false
@@ -1507,13 +1483,10 @@ mod test {
     fn homepage_is_fallback() {
         assert_eq!(
             "https://crates.io/crates/crate/1.0",
-            generate_homepage("crate", "1.0".into(), None, None, true)
+            generate_homepage("crate", "1.0", None, None, true)
         );
 
-        assert_eq!(
-            "",
-            generate_homepage("crate", "1.0".into(), None, None, false)
-        );
+        assert_eq!("", generate_homepage("crate", "1.0", None, None, false));
     }
 
     #[test]

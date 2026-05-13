@@ -21,7 +21,7 @@ use Opt::{BuildOrder, DebDependencies, DebSrcName, Extract, Package, PackageDebc
 #[test]
 fn verify_app() {
     use clap::CommandFactory;
-    Cli::command().debug_assert()
+    Cli::command().debug_assert();
 }
 
 fn real_main() -> Result<()> {

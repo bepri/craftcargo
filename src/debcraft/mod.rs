@@ -113,7 +113,7 @@ fn build_debcraft_top_level(
 
     // 5d / 5e: maintainer and uploaders
     let maintainer = config.maintainer().to_string();
-    let uploaders = config.uploaders().map(|v| v.clone()).unwrap_or_default();
+    let uploaders = config.uploaders().cloned().unwrap_or_default();
 
     // 5f: section
     let lib = crate_info.is_lib() && config.build_lib_package();
@@ -337,7 +337,7 @@ fn build_debcraft_packages(
             } else {
                 match f_provides.len() {
                     0 => format!(" - feature \"{feature}\""),
-                    n => format!(" - feature \"{}\" and {} more", feature, n),
+                    n => format!(" - feature \"{feature}\" and {n} more"),
                 }
             };
             let description_suffix = if feature.is_empty() {
@@ -927,7 +927,6 @@ fn copy_overlay(src: &Path, dst: &Path) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::io::Write;
     use tempfile::TempDir;
 
     // ── N7: version bump detection ─────────────────────────────────────────

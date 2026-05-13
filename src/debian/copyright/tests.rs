@@ -51,7 +51,7 @@ fn check_debian_copyright_authors() {
         ),
     ];
 
-    for (input, expected_output) in checks.into_iter() {
+    for (input, expected_output) in checks {
         let package = build_package_with_authors(input);
         let srcdir = tempfile::tempdir().unwrap();
         let copyright = debian_copyright(
@@ -77,7 +77,10 @@ fn check_debian_copyright_authors() {
 }
 
 fn build_package_with_authors(authors: Vec<&str>) -> Package {
-    let authors: Vec<String> = authors.into_iter().map(|s| s.to_string()).collect();
+    let authors: Vec<String> = authors
+        .into_iter()
+        .map(std::string::ToString::to_string)
+        .collect();
     let toml = toml! {
         [package]
         name = "mypackage"

@@ -6,7 +6,7 @@ use crate::{
     config::{Config, SourceOverride},
     debian::BuildDeps,
 };
-use semver::{Prerelease, Version};
+use semver::{BuildMetadata, Prerelease, Version};
 
 #[test]
 fn source_to_string() {
@@ -31,14 +31,14 @@ fn source_to_string() {
 
 fn empty_source_overrides() -> SourceOverride {
     SourceOverride::new(
-        Some("".to_owned()),
-        Some("".to_owned()),
-        Some("".to_owned()),
-        Some("".to_owned()),
-        Some("".to_owned()),
+        Some(String::new()),
+        Some(String::new()),
+        Some(String::new()),
+        Some(String::new()),
+        Some(String::new()),
         Some(vec!["rust-digest".to_owned()]),
-        Some(vec!["".to_owned()]),
-        Some(vec!["".to_owned()]),
+        Some(vec![String::new()]),
+        Some(vec![String::new()]),
         Some(vec!["rust-const-oid".to_owned()]),
         Some(false),
     )
@@ -48,7 +48,7 @@ fn empty_source_overrides() -> SourceOverride {
 fn test_description_display() {
     let instance = Description::new("prefix".to_owned(), "suffix".to_owned());
 
-    assert_eq!("prefixsuffix", instance.to_string())
+    assert_eq!("prefixsuffix", instance.to_string());
 }
 
 #[test]
@@ -88,8 +88,10 @@ fn test_apply_overrides() {
         instance.vcs_browser
     );
 
-    let mut config = Config::default();
-    config.source = Some(empty_source_overrides());
+    let config = Config {
+        source: Some(empty_source_overrides()),
+        ..Config::default()
+    };
     instance.apply_overrides(&config);
 
     assert_eq!("", instance.section);
@@ -110,8 +112,8 @@ fn test_package_new() {
         major: 0,
         minor: 9,
         patch: 7,
-        pre: Default::default(),
-        build: Default::default(),
+        pre: Prerelease::default(),
+        build: BuildMetadata::default(),
     };
     let summary: Description = Description::new("summary_pre".to_owned(), "summary_suf".to_owned());
     let description: Description =
@@ -198,10 +200,10 @@ fn test_package_display() {
     let basename: &str = "rsa";
     let name_suffix: Option<&str> = None;
     let section = Some("rust");
-    let summary: Description = Description::new("".to_owned(), "".to_owned());
+    let summary: Description = Description::new(String::new(), String::new());
     let description: Description = Description::new(
         "description_start\n\nempty lines\n\ndescription_stop".to_owned(),
-        "".to_owned(),
+        String::new(),
     );
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
@@ -215,10 +217,10 @@ fn test_package_display_arch() {
     let basename: &str = "tiny-dfr";
     let name_suffix: Option<&str> = None;
     let section = Some("utils");
-    let summary: Description = Description::new("".to_owned(), "".to_owned());
+    let summary: Description = Description::new(String::new(), String::new());
     let description: Description = Description::new(
         "description_start\n\nempty lines\n\ndescription_stop".to_owned(),
-        "".to_owned(),
+        String::new(),
     );
     let mut instance = Package::new_bin(basename, name_suffix, section, summary, description);
     instance.arch = "arm64 amd64".to_string();
@@ -233,10 +235,10 @@ fn test_package_summary_check_len() {
     let basename: &str = "rsa";
     let name_suffix: Option<&str> = None;
     let section = Some("rust");
-    let summary: Description = Description::new("".to_owned(), "".to_owned());
+    let summary: Description = Description::new(String::new(), String::new());
     let description: Description = Description::new(
         "description_start\n\nempty lines\n\ndescription_stop".to_owned(),
-        "".to_owned(),
+        String::new(),
     );
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
@@ -252,11 +254,11 @@ fn test_package_summary_check_len_err() {
     let summary: Description = Description::new(
         "123456789012345678901234567890123456789012345678901234567890123456789012345678901"
             .to_owned(),
-        "".to_owned(),
+        String::new(),
     );
     let description: Description = Description::new(
         "description_start\n\nempty lines\n\ndescription_stop".to_owned(),
-        "".to_owned(),
+        String::new(),
     );
     let instance = Package::new_bin(basename, name_suffix, section, summary, description);
 
@@ -302,8 +304,8 @@ fn test_deb_upstream_version_without_pre() {
         major: 0,
         minor: 9,
         patch: 7,
-        pre: Default::default(),
-        build: Default::default(),
+        pre: Prerelease::default(),
+        build: BuildMetadata::default(),
     };
 
     let result = deb_upstream_version(&version, None);
@@ -326,7 +328,7 @@ fn test_deb_upstream_version_with_pre() {
         minor: 9,
         patch: 7,
         pre: Prerelease::new("alpha").unwrap(),
-        build: Default::default(),
+        build: BuildMetadata::default(),
     };
 
     let result = deb_upstream_version(&version, Some("dfsg9"));
@@ -355,7 +357,7 @@ fn test_deb_upstream_version_pre_without_repack() {
         minor: 0,
         patch: 0,
         pre: Prerelease::new("beta.1").unwrap(),
-        build: Default::default(),
+        build: BuildMetadata::default(),
     };
     assert_eq!("2.0.0~beta.1", deb_upstream_version(&version, None));
 }
@@ -367,7 +369,7 @@ fn test_deb_upstream_version_pre_rc() {
         minor: 0,
         patch: 0,
         pre: Prerelease::new("rc.1").unwrap(),
-        build: Default::default(),
+        build: BuildMetadata::default(),
     };
     assert_eq!("1.0.0~rc.1", deb_upstream_version(&version, None));
 }

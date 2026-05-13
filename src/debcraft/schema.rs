@@ -1,6 +1,6 @@
 //! Serde-serialisable structs mirroring the debcraft.yaml schema.
 //!
-//! All fields use Rust snake_case and are renamed to kebab-case in YAML output.
+//! All fields use Rust `snake_case` and are renamed to kebab-case in YAML output.
 
 use std::collections::BTreeMap;
 

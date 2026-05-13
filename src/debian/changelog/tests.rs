@@ -98,7 +98,7 @@ fn test_from_string() {
     assert_eq!(
         FixedOffset::west_opt(5 * 3600)
             .unwrap()
-            .with_ymd_and_hms(2024, 12, 05, 11, 08, 36)
+            .with_ymd_and_hms(2024, 12, 5, 11, 8, 36)
             .unwrap(),
         instance.date
     );
@@ -129,7 +129,7 @@ fn test_changelog_entry_display() {
         "Daniel Kahn Gillmor <dkg@fifthhorseman.net>".to_owned(),
         FixedOffset::west_opt(5 * 3600)
             .unwrap()
-            .with_ymd_and_hms(2024, 12, 05, 11, 08, 36)
+            .with_ymd_and_hms(2024, 12, 5, 11, 8, 36)
             .unwrap(),
         vec![
             "  * Team upload.".to_owned(),
@@ -160,7 +160,7 @@ fn test_changelog_entry_maintainer_name() {
         "Daniel Kahn Gillmor <dkg@fifthhorseman.net>".to_owned(),
         FixedOffset::west_opt(5 * 3600)
             .unwrap()
-            .with_ymd_and_hms(2024, 12, 05, 11, 08, 36)
+            .with_ymd_and_hms(2024, 12, 5, 11, 8, 36)
             .unwrap(),
         vec![
             "  * Team upload.".to_owned(),
@@ -182,7 +182,7 @@ fn test_changelog_entry_version_parts() {
         "Daniel Kahn Gillmor <dkg@fifthhorseman.net>".to_owned(),
         FixedOffset::west_opt(5 * 3600)
             .unwrap()
-            .with_ymd_and_hms(2024, 12, 05, 11, 08, 36)
+            .with_ymd_and_hms(2024, 12, 5, 11, 8, 36)
             .unwrap(),
         vec![
             "  * Team upload.".to_owned(),
@@ -207,7 +207,7 @@ fn test_changelog_entry_deb_version_suffix() {
         "Daniel Kahn Gillmor <dkg@fifthhorseman.net>".to_owned(),
         FixedOffset::west_opt(5 * 3600)
             .unwrap()
-            .with_ymd_and_hms(2024, 12, 05, 11, 08, 36)
+            .with_ymd_and_hms(2024, 12, 5, 11, 8, 36)
             .unwrap(),
         vec![
             "  * Team upload.".to_owned(),
@@ -229,7 +229,7 @@ fn test_changelog_entry_deb_version_suffix_bump() {
         "Daniel Kahn Gillmor <dkg@fifthhorseman.net>".to_owned(),
         FixedOffset::west_opt(5 * 3600)
             .unwrap()
-            .with_ymd_and_hms(2024, 12, 05, 11, 08, 36)
+            .with_ymd_and_hms(2024, 12, 5, 11, 8, 36)
             .unwrap(),
         vec![
             "  * Team upload.".to_owned(),
