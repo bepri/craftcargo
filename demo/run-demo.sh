@@ -77,9 +77,8 @@ demo_pause 2
 # ═══════════════════════════════════════════════════════════════════════════════
 
 p "# Step 1: Let's see what craftcargo can do"
-pe "$DEBCARGO --help"
-
 demo_pause 2
+pe "$DEBCARGO --help"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 2: Pick a crate
@@ -87,34 +86,31 @@ demo_pause 2
 
 p "# Step 2: Let's package 'tokio-util' — it has features, multiple deps, and licence complexity"
 echo ""
-
 p "# First, what would the Debian source package be called?"
-pe "$DEBCARGO deb-src-name tokio-util"
-
 demo_pause 1
+pe "$DEBCARGO deb-src-name tokio-util"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 3: Generate debcraft.yaml
 # ═══════════════════════════════════════════════════════════════════════════════
 
 p "# Step 3: Generate the debcraft.yaml"
-pe "$DEBCARGO package-debcraft tokio-util --directory $DEMO_WORKDIR/tokio-util"
-
 demo_pause 1
+pe "$DEBCARGO package-debcraft tokio-util --directory $DEMO_WORKDIR/tokio-util"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 4: Inspect the output
 # ═══════════════════════════════════════════════════════════════════════════════
 
 p "# Step 4: Let's look at what was generated"
+demo_pause 1
 pe "ls -la $DEMO_WORKDIR/tokio-util/"
 
 demo_pause 2
 
 p "# Here's the debcraft.yaml:"
+demo_pause 1
 pe "cat $DEMO_WORKDIR/tokio-util/debcraft.yaml"
-
-demo_pause 4
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 5: Show the structure
@@ -122,16 +118,13 @@ demo_pause 4
 
 p "# Step 5: Let's look at key sections"
 echo ""
-
 p "# The metadata section maps crate info → Debian packaging fields"
+demo_pause 2
 pe "head -20 $DEMO_WORKDIR/tokio-util/debcraft.yaml"
 
-demo_pause 2
-
 p "# The parts section defines build steps"
-pe "grep -A 10 'parts:' $DEMO_WORKDIR/tokio-util/debcraft.yaml"
-
 demo_pause 2
+pe "grep -A 10 'parts:' $DEMO_WORKDIR/tokio-util/debcraft.yaml"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 6: Show the debcraft integration
@@ -140,13 +133,11 @@ demo_pause 2
 p "# Step 6: The generated debcraft.yaml is designed for 'debcraft pack'"
 p "# debcraft reads the YAML and builds the .deb — one command!"
 echo ""
-pe "cd $DEMO_WORKDIR/tokio-util && debcraft pack 2>&1 || true"
-
 demo_pause 2
+pe "cd $DEMO_WORKDIR/tokio-util && debcraft pack 2>&1 || true"
 
 p "# (The cargo plugin is still being implemented upstream in debcraft)"
 p "# Once landed, it's: craftcargo generate → debcraft pack → .deb"
-
 demo_pause 2
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -154,13 +145,11 @@ demo_pause 2
 # ═══════════════════════════════════════════════════════════════════════════════
 
 p "# Step 7: Compare — the traditional debcargo approach generates 100+ files"
+demo_pause 2
 pe "DEBFULLNAME='Demo User' DEBEMAIL='demo@example.com' $DEBCARGO package tokio-util --directory $DEMO_WORKDIR/tokio-util-traditional 2>&1 | tail -5"
-
-demo_pause 1
 
 pe "find $DEMO_WORKDIR/tokio-util-traditional -type f | wc -l"
 p "# vs our single debcraft.yaml — much simpler to review and maintain!"
-
 demo_pause 3
 
 # ═══════════════════════════════════════════════════════════════════════════════
