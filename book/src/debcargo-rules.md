@@ -1,0 +1,641 @@
+debcargo: Rules for Generating Debian Source Package from Cargo.toml
+
+This document describes the exact rules debcargo uses to extract information from
+Cargo.toml and generate the debian/ directory. It is intended as a reference
+for LLM-based code generation.
+
+
+1. PACKAGE NAMING
+=================
+
+Crate name to Debian source package name:
+  - Underscores (_) in the crate name are replaced with hyphens (-).
+  - The result is lowercased.
+  - The prefix "rust-" is prepended.
+  - Example: crate "foo_bar" -> source package "rust-foo-bar"
+
+Crate name to Debian binary (library) package name:
+  - Same as above but with prefix "librust-" and suffix "-dev".
+  - Example: crate "foo_bar" -> "librust-foo-bar-dev"
+
+Feature packages:
+  - Format: librust-{base_name}+{feature_name}-dev
+  - Feature name also has underscores replaced by hyphens and is lowercased.
+  - Example: crate "foo", feature "async-std" -> "librust-foo+async-std-dev"
+
+Binary (executable) packages:
+  - Name defaults to the base crate name (no "librust-" prefix, no "-dev" suffix).
+  - Overridable via bin_name in debcargo.toml.
+
+Semver suffix mode (semver_suffix = true):
+  - Appends "-{MAJOR}" (for major >= 1) or "-0.{MINOR}" (for 0.x crates) to the
+    package name.
+  - Used when packaging older versions alongside the latest.
+  - Example: crate "foo" version 0.3.x -> source "rust-foo-0.3",
+    library "librust-foo-0.3-dev"
+
+
+2. VERSION NUMBERS
+==================
+
+Upstream version to Debian upstream version:
+  - Format: {MAJOR}.{MINOR}.{PATCH}
+  - Pre-release appended with "~" (tilde) separator, e.g. 1.0.0~alpha.1
+    This makes the pre-release sort before the release in Debian versioning.
+  - Build metadata is dropped entirely.
+  - Repack suffix (if set) is appended with "+", e.g. 1.0.0+dfsg
+
+Full Debian package version:
+  - Format: {deb_upstream_version}-{debian_revision}
+  - Revision starts at 1, auto-incremented on re-packaging.
+
+
+3. debian/control - SOURCE STANZA
+==================================
+
+Generated from Cargo.toml metadata:
+
+  Source:                rust-{crate_name} (with semver suffix if applicable)
+  Section:               "rust" (library crates) or
+                         "FIXME-IN-THE-SOURCE-SECTION" (binary-only crates)
+  Maintainer:            Defaults to:
+                         "Debian Rust Maintainers
+                         <pkg-rust-maintainers@alioth-lists.debian.net>"
+  Uploaders:             From uploaders in debcargo.toml
+  Standards-Version:     Current Debian policy version (hardcoded in debcargo,
+                         e.g. 4.7.3)
+  Vcs-Git:               https://salsa.debian.org/rust-team/debcargo-conf.git
+                         [src/{pkg_base}]
+  Vcs-Browser:           https://salsa.debian.org/rust-team/debcargo-conf/
+                         tree/master/src/{pkg_base}
+  Homepage:              Priority: Cargo.toml [package.homepage] ->
+                         [package.repository] -> crates.io URL
+  X-Cargo-Crate:         Exact crate name (always set, to disambiguate crate
+                         names with numeric suffixes)
+  X-Cargo-Crate-Version: Plain upstream version (no repack suffix)
+  Rules-Requires-Root:   Only set if requires_root is specified in debcargo.toml
+
+Build-Depends:
+  - Always includes: debhelper-compat (= 13), dh-sequence-cargo
+  - cargo:native (for building)
+  - rustc:native (>= MIN_VER) where MIN_VER comes from [package.rust-version]
+    in Cargo.toml (if set), otherwise plain rustc:native
+  - libstd-rust-dev (for cross-compilation support)
+  - All Debian package dependencies of the default feature (translated from
+    [dependencies]).
+  - By default, all deps for library-only packages get the <!nocheck> profile
+    annotation, unless skip_nocheck = true.
+  - Build-Depends are split into three fields:
+      Build-Depends:       always-needed (debhelper, dh-sequence-cargo)
+      Build-Depends-Arch:  architecture-specific (toolchain + crate library deps)
+      Build-Depends-Indep: when needed for arch-independent parts
+
+
+4. debian/control - BINARY PACKAGE STANZAS
+===========================================
+
+Library package (one per feature, including bare library):
+
+  For the bare library (no-feature package):
+
+    Package: librust-{name}-dev
+    Architecture: any
+    Multi-Arch: same
+    Depends: ${misc:Depends}, [feature deps]
+    Recommends: [default feature and its super-features]
+    Suggests: [other features]
+    Provides: [all versioned aliases]
+
+  For feature packages (librust-{name}+{feature}-dev):
+
+    Package: librust-{name}+{feature}-dev
+    Architecture: any
+    Multi-Arch: same
+    Depends: ${misc:Depends}, librust-{name}-dev (= ${binary:Version}),
+             [feature deps]
+    Provides: [versioned aliases]
+
+Provides versioning:
+  Each library/feature package Provides multiple versioned virtual packages:
+  - librust-{name}-dev (= ${binary:Version})              unversioned
+  - librust-{name}-{MAJOR}-dev (= ${binary:Version})      major version
+  - librust-{name}-{MAJOR}.{MINOR}-dev (= ...)            major.minor
+  - librust-{name}-{MAJOR}.{MINOR}.{PATCH}-dev (= ...)    full version
+  For semver-suffix packages, the unversioned virtual package is omitted.
+
+Breaks/Replaces (semver suffix packages only):
+  When semver_suffix = true, the bare library package sets:
+  - Breaks: librust-{base_name}-dev (<< {MAJOR}.{MINOR}.{PATCH+1}~)
+  - Replaces: librust-{base_name}-dev (<< {MAJOR}.{MINOR}.{PATCH+1}~)
+
+Binary executable package:
+
+    Package: {bin_name}
+    Architecture: any
+    Depends: ${misc:Depends}, ${shlibs:Depends}, ${cargo:Depends}
+    Recommends: ${cargo:Recommends}
+    Suggests: ${cargo:Suggests}
+    Provides: ${cargo:Provides}
+              [, {base_name} (= ${binary:Version}) if semver_suffix]
+    Built-Using: ${cargo:Built-Using}
+    Static-Built-Using: ${cargo:Static-Built-Using}
+
+Descriptions:
+  The summary (short description) and long description for library packages come
+  from [package.description] in Cargo.toml, processed as follows:
+
+  1. "\n\n" -> paragraph break (converted to "\n"), single "\n" -> space
+     (unwrapping manual line wraps).
+  2. Common prefixes are stripped via regex:
+     - The crate name itself (case-insensitive)
+     - "This <word>?" followed by "," / "is" / "provides"
+     - Leading articles: "a", "an", "the"
+     - Common phrases: "rust implementation/library/tool/crate of/to/for"
+  3. First letter is capitalised.
+  4. The first sentence or first line (whichever comes first) becomes the
+     summary (truncated at ". " or "\n").
+  5. The remainder becomes the long description.
+  6. If no description in Cargo.toml, summary defaults to
+     Rust crate "{crate_name}".
+
+  Each package gets an auto-generated suffix appended:
+  - Bare library:                          " - Rust source code"
+  - Feature package with N>0 absorbed:     " - feature \"{feat}\" and {N} more"
+  - Feature package with 0 absorbed:       " - feature \"{feat}\""
+  - Binary package:                        (no suffix)
+
+  The long description for feature packages explains what feature is being
+  enabled and lists any additionally-provided features.
+
+
+5. DEPENDENCY TRANSLATION (Cargo to Debian)
+============================================
+
+Cargo dependency names have "_" replaced with "-" and are lowercased.
+
+Dependency type mapping:
+
+  [dependencies] (non-optional)  -> Depends: of bare library + Build-Depends-Arch:
+  [dependencies] optional        -> Pulled in by feature packages that enable them
+  [build-dependencies]           -> Treated same as [dependencies] for Debian
+  [dev-dependencies]             -> Test-only; added to autopkgtest Depends:
+
+Version range translation:
+
+  Cargo uses the caret (^) operator by default. In the examples below,
+  {dep} stands for the dependency name (underscores replaced with hyphens,
+  lowercased). The version number is appended to the dep name, before the
+  feature suffix. Translation rules:
+
+  ^1.2.3 (major >= 1)   librust-{dep}-dev (>= 1.2.3),
+                         librust-{dep}-1-dev (>= 1.2.3)
+  ^0.2.3                librust-{dep}-dev (>= 0.2.3),
+                         librust-{dep}-0.2-dev (>= 0.2.3)
+  ^0.0.3                librust-{dep}-dev (>= 0.0.3),
+                         librust-{dep}-dev (<< 0.0.4)
+  ~1.2.3                librust-{dep}-dev (>= 1.2.3),
+                         librust-{dep}-dev (<< 1.3.0)
+  =1.2.3 / 1.2.3        librust-{dep}-dev (>= 1.2.3),
+                         librust-{dep}-dev (<< 1.2.4)
+  >=1.2.3               librust-{dep}-dev (>= 1.2.3)
+  <1.2.3                librust-{dep}-dev (<< 1.2.3)
+  no constraint         librust-{dep}-dev (unversioned)
+
+  The unversioned package name resolves to the non-semver-suffix package.
+  Versioned forms like librust-{dep}-1-dev resolve to semver-suffixed variants.
+
+Default features and feature requirements:
+
+  Dependency uses default features (the default):
+    librust-{dep}+default-dev
+
+  Specific features required:
+    librust-{dep}+{feature}-dev  (one entry per required feature)
+
+  No default features:
+    librust-{dep}-dev
+
+Pre-release dependency handling:
+  Pre-release suffixes are stripped (with a warning or error depending on
+  allow_prerelease_deps). ">=0.0.0" is coerced to ">0.0.0".
+
+
+6. FEATURE PACKAGE REDUCTION
+=============================
+
+debcargo reduces the number of generated binary packages through two algorithms:
+
+reduce_provides (default):
+  The algorithm runs in three passes:
+
+  Pass 1 — deduplication: If two or more features have identical dependency
+    sets (same feature deps and same external deps), all but the first are
+    rewritten to have exactly one feature dep (on the first) and no external
+    deps. This sets them up for absorption in pass 2.
+
+  Pass 2 — single-dep absorption: Any feature that now has exactly one
+    feature dependency and no external deps is absorbed. The parent feature
+    gains a Provides: entry for the absorbed feature, and no separate package
+    is generated for the absorbed feature.
+
+  Pass 3 — transitive collection: Provides entries are collected
+    transitively via traverse_depth(). If feature A provides B and B provides
+    C, then A's final Provides: list includes both B and C — not just the
+    direct provides. This means a chain of single-dep features collapses
+    fully into the root feature's Provides: list.
+
+  Result: fewer generated packages; absorbed features appear only as virtual
+    package names in the surviving package's Provides: field.
+
+collapse_features (opt-in, collapse_features = true):
+  - All features (except the bare library) are collapsed into a single bare
+    library package.
+  - The bare library Provides: all features.
+  - Use only when there are too many features and the metadata overhead is
+    considered too large.
+
+Feature name normalisation:
+  - Feature names with "-" vs "_" that differ only by this are merged, since
+    Debian package names cannot contain "_".
+  - A cycle check is performed after merging; if a cycle results, debcargo aborts.
+
+
+7. debian/copyright (DEP-5 FORMAT)
+====================================
+
+Generated from:
+
+  Upstream-Name:       [package.name] from Cargo.toml
+  Upstream-Contact:    [package.authors] from Cargo.toml
+                       (falls back to "FIXME UNKNOWN-AUTHORS")
+  Source:              [package.repository] from Cargo.toml
+  Files: * copyright  Authors from Cargo.toml; year range from git history
+                       (if --copyright-guess-harder) or "FIXME UNKNOWN-YEARS"
+  Files: debian/*      Maintainer/Uploaders with year range from debian/changelog
+  License: (all)       From [package.license] in Cargo.toml
+
+License handling:
+  - [package.license] SPDX string (e.g. "MIT OR Apache-2.0") is used directly.
+    "/" and " OR " become "or"; " AND " becomes "and" in the copyright field.
+    Known SPDX identifiers have their full text included (built into debcargo):
+      AGPL-3.0, Apache-2.0, BSD-2-Clause, BSD-3-Clause, CC0-1.0, GPL-2.0,
+      GPL-3.0, ISC, LGPL-2.0, LGPL-2.1, LGPL-3.0, MIT, MITNFA, MPL-1.1,
+      MPL-2.0, Unlicense, Zlib
+    Unknown licenses -> "FIXME (overlay)" placeholder with a comment.
+  - [package.license-file] -> full text read from the file, with
+    "UNKNOWN-LICENSE; FIXME (overlay)" as the license header.
+  - If neither license nor license-file is present -> debcargo aborts.
+  - Files-Excluded: populated from excludes in debcargo.toml.
+
+File-level copyright extraction:
+  - When --copyright-guess-harder is given, debcargo clones the upstream git
+    repository and extracts the year range from git history.
+  - debcargo scans all source files for lines matching the pattern:
+      (?:[Cc]opyright|©)(?:\s|[©:,()Cc<])*\b(\d{4}\b.*)$
+    Each file with a found copyright notice gets its own Files: stanza with
+    "License: UNKNOWN-LICENSE; FIXME (overlay)".
+
+
+8. debian/changelog
+====================
+
+Generated or updated based on the existing overlay changelog:
+
+  - Source package name, Debian version ({upstream}-{revision}), distribution
+    (UNRELEASED-FIXME-AUTOGENERATED-DEBCARGO), urgency (medium).
+  - Revision starts at 1, incremented if upstream version matches the last entry.
+  - Autogenerated item:
+      "* Package {crate_name} {crate_version} from crates.io using debcargo
+       {debcargo_version}"
+  - If $DEBFULLNAME/$NAME is not in uploaders, inserts "  * Team upload."
+    automatically.
+  - Author name from $DEBFULLNAME or $NAME; email from $DEBEMAIL or $EMAIL.
+  - If an overlay changelog exists and its top entry has distribution
+    UNRELEASED-FIXME-AUTOGENERATED-DEBCARGO:
+      - That entry is updated in-place (autogenerated item replaced or added).
+      - If the entry was authored by a different person, their items are preserved
+        under a "[ Name ]" header.
+  - Otherwise: a new entry is prepended on top.
+  - The changelog is always written back to the overlay directory.
+
+
+9. debian/rules
+================
+
+Without dev-dependencies (normal case):
+
+    #!/usr/bin/make -f
+    %:
+    	dh $@ --buildsystem cargo
+
+    override_dh_auto_test:
+    	dh_auto_test -- test --all
+
+  If the default feature test is marked broken, "|| true" is appended to the
+  dh_auto_test line.
+
+With dev-dependencies:
+
+    #!/usr/bin/make -f
+    %:
+    	dh $@ --buildsystem cargo
+
+  Tests are skipped entirely to avoid extra build-dependency cycles.
+
+
+10. debian/watch
+=================
+
+    Version: 5
+
+    Source: https://qa.debian.org/cgi-bin/fakeupstream.cgi?upstream=crates.io/{upstream_name}
+    Matching-Pattern:  .*/crates/{upstream_name}/{VERSION_PATTERN}/download
+    Filenamemangle: s/.*\/(.*)\/download/{upstream_name}-$1\.tar\.gz/g
+    Uversionmangle: s/(\d)[_\.\-\+]?((RC|rc|pre|dev|beta|alpha)\.?\d*)$/$1~$2/
+    Dversionmangle: s/@DEB_EXT@//g
+    Compression: gzip
+
+  {VERSION_PATTERN} is @ANY_VERSION@ unless semver_suffix = true, in which case
+  it is a regex matching only the relevant semver prefix, e.g.:
+    [-_]?(0\.3\.\d[\-+\.\:\~\da-zA-Z]*)
+
+  If repack_suffix is set, these lines are appended:
+    Repack: yes
+    Repacksuffix: +{repack_suffix}
+
+  If crate_src_path is set (local crate):
+    FIXME add uscan directive for local crate
+
+
+11. debian/source/format
+=========================
+
+Always contains:
+
+    3.0 (quilt)
+
+
+12. debian/tests/control (AUTOPKGTEST)
+========================================
+
+One test stanza per feature (including the bare no-feature case) plus one for
+--all-features:
+
+    Test-Command: /usr/share/cargo/bin/cargo-auto-test {crate_name} {version}
+                  --all-targets [EXTRA_ARGS]
+    Features: test-name={pkg_name}:{feature}
+    Depends: dh-cargo (>= 33~)[, EXTRA_DEPS], @
+    Restrictions: allow-stderr, skip-not-installable[, flaky]
+    [Architecture: ARCH_LIST]
+
+  - The --all-features test uses "@" as both feature name and test name.
+  - --no-default-features is added when the feature does not transitively depend
+    on "default".
+  - --features {feature} is added for non-default named features.
+  - "Restrictions: flaky" added when test_is_broken = true for that feature
+    (the setting is transitive through feature dependencies).
+  - Architecture: field set when test_architecture is specified.
+  - rustc (without :native) added to test dependencies, with minimum version
+    if [package.rust-version] is set in Cargo.toml.
+  - Dev-dependencies translated to Debian deps and added to test Depends:.
+
+
+13. debian/cargo-checksum.json
+================================
+
+    {"package":"{SHA256_CHECKSUM}","files":{}}
+
+  Checksum comes from the crates.io registry metadata.
+
+
+14. LINTIAN OVERRIDES
+======================
+
+For each feature package, a file {pkg_name}.lintian-overrides is created:
+
+    {pkg_name} binary: empty-rust-library-declares-provides *
+
+  This suppresses a spurious lintian warning about empty packages that only
+  declare Provides: virtual packages.
+
+
+15. ORIG TARBALL HANDLING
+==========================
+
+  - The orig tarball is named rust-{name}_{version}.orig.tar.gz.
+  - If excludes are configured, the tarball is repacked with excluded files
+    removed. Default repack suffix: "+dfsg" (appended to upstream version).
+  - If the upstream Cargo.toml is not in normalised form (i.e. does not contain
+    "AUTOMATICALLY GENERATED BY CARGO"):
+      - debcargo canonicalises it using cargo package.
+      - Saves the original as Cargo.toml.orig, canonical version as Cargo.toml.
+      - The tarball is then repacked with the normalised manifest.
+  - Files with extensions .c, .a, .S, .o, .so trigger a fatal error unless
+    whitelisted or excluded.
+  - Files under a debian/ directory inside the crate trigger a fatal error.
+
+
+16. PATCHES
+============
+
+  - If debian/patches/series exists in the overlay, debcargo applies patches
+    using quilt before re-reading Cargo.toml.
+  - Patches are unapplied after reading; they are stored in the overlay and
+    applied by dpkg-source during the actual package build.
+  - If patch application fails, debcargo attempts cleanup and aborts.
+
+
+17. debcargo.toml OVERRIDES SUMMARY
+=====================================
+
+All auto-generated values can be overridden via debcargo.toml. Key overridable
+values:
+
+Top-level:
+  bin                  whether to generate a binary package (default: true
+                       unless semver_suffix is true)
+  lib                  whether to generate a library package (default: true)
+  bin_name             name for the binary package
+  semver_suffix        include semver in package name
+  summary              global description prefix (short)
+  description          global description prefix (long)
+  maintainer           package maintainer
+  uploaders            list of uploaders
+  collapse_features    collapse all features into one package
+  requires_root        value for Rules-Requires-Root field
+  allow_prerelease_deps  allow pre-release version dependencies
+  excludes             glob patterns of files to exclude from orig tarball
+  whitelist            glob patterns of suspicious files to allow
+  repack_suffix        suffix appended to upstream version when repacking
+  overlay              overlay directory path
+  crate_src_path       local crate directory (instead of crates.io)
+
+[source]:
+  section              source section override
+  policy               Standards-Version override
+  homepage             homepage URL override
+  vcs_git              Vcs-Git override
+  vcs_browser          Vcs-Browser override
+  build_depends        extra Build-Depends entries
+  build_depends_arch   extra Build-Depends-Arch entries
+  build_depends_indep  extra Build-Depends-Indep entries
+  build_depends_excludes  Build-Depends entries to remove (for cycle breaking)
+  skip_nocheck         if true, omit <!nocheck> from build deps
+
+[packages.KEY] where KEY is "lib", "bin", "lib+{feature}", "extra+{name}":
+  section              package section override
+  summary              short description override
+  description          long description override
+  architecture         Architecture field value (list)
+  multi_arch           Multi-Arch field value
+  depends              extra Depends entries
+  recommends           extra Recommends entries
+  suggests             extra Suggests entries
+  provides             extra Provides entries
+  breaks               extra Breaks entries
+  replaces             extra Replaces entries
+  conflicts            extra Conflicts entries
+  extra_lines          freeform extra lines to append to the stanza
+  test_is_broken       mark the autopkgtest as flaky (true/false, transitive)
+  test_depends         extra autopkgtest Depends entries (transitive)
+  test_architecture    Architecture restriction for autopkgtest (transitive)
+
+Extra packages (extra+{name}): fully manually defined binary packages; useful
+for cdylib targets or other non-standard build outputs.
+
+
+18. MISSING OR INCOMPLETE FEATURES
+=====================================
+
+The following Cargo.toml concepts are not (or only partially) translated by
+debcargo into Debian package metadata. Where relevant, workarounds using
+debcargo.toml overrides are noted.
+
+18.1 Ignored Cargo.toml [package] fields
+------------------------------------------
+
+[package.keywords]
+  Not used. Cargo keywords are not mapped to any Debian control field or tag.
+  Workaround: none (Debian tags can be added manually via extra_lines).
+
+[package.categories]
+  Not used. Cargo categories are not mapped to Section or any other field.
+  Workaround: set source.section in debcargo.toml.
+
+[package.documentation]
+  Not used. The docs.rs or other documentation URL is not placed into Homepage
+  or any other Debian field. Homepage is sourced only from [package.homepage]
+  then [package.repository].
+  Workaround: set source.homepage in debcargo.toml.
+
+[package.readme]
+  Not used for Debian metadata. The readme path is only consulted during
+  Cargo.toml normalisation (to patch stale relative paths in old crates) and
+  is otherwise ignored.
+
+[package.edition]
+  Not used. The Rust edition (2015, 2018, 2021, 2024) has no effect on the
+  generated Debian package.
+
+[package.links]
+  Not used. The links field identifies that a crate links a native C library
+  (sys crates). debcargo does not automatically derive any build dependency on
+  the corresponding -dev system package. The packager must add these manually
+  via [packages.lib].depends in debcargo.toml.
+
+[package.default-run]
+  Not used. All [[bin]] targets are collected into a single binary package;
+  default-run has no effect on which binary is considered primary.
+
+[package.include] / [package.exclude]
+  Cargo's own include/exclude lists are not translated into debcargo's orig
+  tarball excludes. debcargo uses only its own "excludes" and "whitelist" keys
+  from debcargo.toml. (Cargo does honour include/exclude when creating the .crate
+  file on crates.io, so the files may already be absent from the orig tarball
+  for published crates.)
+
+18.2 Platform-specific (target-conditional) dependencies
+----------------------------------------------------------
+
+[target.'cfg(...)'.dependencies] and [target.'cfg(...)'.build-dependencies]
+  debcargo flattens all dependencies unconditionally: it calls
+  manifest.dependencies() without filtering by target/platform and includes
+  every dependency regardless of whether it applies to the current architecture.
+  This means:
+  - Platform-specific deps (e.g. Windows-only or wasm-only crates) appear in
+    Build-Depends-Arch for all architectures.
+  - There is no mechanism to generate architecture-restricted dependency clauses
+    (e.g. "librust-winapi-dev [amd64]") from Cargo.toml automatically.
+  Workaround: use build_depends_excludes in [source] to drop unwanted
+  platform-specific deps, or use test_architecture on individual features.
+
+18.3 Unpackaged target types
+------------------------------
+
+proc-macro crates (TargetKind::ProcMacro):
+  Proc-macro targets are not detected separately. is_lib() only checks for
+  TargetKind::Lib(_) and does not match ProcMacro. Consequently:
+  - A crate with only a proc-macro target returns false from is_lib(), so no
+    librust-*-dev package is generated.
+  - If the crate also has no [[bin]] targets, debcargo generates no binary
+    packages either, producing an effectively empty source package.
+  - Workaround: set lib = true in the [packages.{name}] section of
+    debcargo.toml to force debcargo to treat the crate as a library. This
+    causes the librust-*-dev package to be generated and the crate source to
+    be installed to /usr/share/cargo/registry/ as normal.
+
+cdylib / staticlib targets:
+  These are not detected or packaged automatically. There is no generated
+  .install file or binary package for shared/static library outputs.
+  Workaround: define an extra+{name} package in debcargo.toml and supply an
+  overlay debian/ directory with manual .install and other files.
+
+[[example]] targets:
+  Example binaries are completely ignored. No package or install rule is
+  generated for them.
+
+[[bench]] targets:
+  Benchmark targets are completely ignored.
+
+18.4 Weak feature dependencies (the "?" syntax)
+-------------------------------------------------
+
+Cargo supports weak optional dependencies in features using the syntax
+"dep?/feature" (activate "feature" of "dep" only if "dep" is already being
+activated elsewhere). debcargo's feature parser matches DepFeature { dep_name,
+dep_feature, .. } and silently drops the "weak" flag. The resulting Debian
+feature package will include the dependency unconditionally, which may generate
+a slightly over-eager Depends: entry for crates that use this pattern.
+
+18.5 Workspace-level Cargo.toml
+---------------------------------
+
+debcargo packages individual crates only. Workspace-level Cargo.toml files
+(with [workspace] tables, workspace.dependencies, workspace.metadata, etc.)
+are not processed. Each crate in a workspace must be packaged individually,
+pointing debcargo at the crate's own Cargo.toml.
+
+18.6 [patch] and [replace] sections
+--------------------------------------
+
+Cargo [patch] and [replace] sections are not translated into any Debian
+packaging concept. debcargo does call registry.lock_patches() internally but
+only as part of Cargo's own dependency resolution. These sections have no effect
+on the generated debian/ files.
+
+18.7 [profile] sections
+-------------------------
+
+Build profile settings (opt-level, debug, lto, codegen-units, etc.) are
+completely ignored. Debian packages are built with dh-cargo using its default
+profile settings.
+
+18.8 Multiple [[bin]] targets
+------------------------------
+
+When a crate defines multiple [[bin]] targets they are all listed in the
+description of the single generated binary package. There is no support for
+generating one Debian package per binary target. All binaries are installed by
+the single binary package using dh-cargo's default behaviour.
+Workaround: use bin_name in debcargo.toml to set the package name; separate
+packaging of individual binaries is not supported automatically.

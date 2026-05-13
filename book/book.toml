@@ -1,0 +1,14 @@
+[book]
+title = "craftcargo Documentation"
+authors = ["craftcargo contributors"]
+language = "en"
+src = "src"
+
+[build]
+build-dir = "build"
+
+[output.html]
+default-theme = "navy"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/bepri/craftcargo"
+edit-url-template = "https://github.com/bepri/craftcargo/edit/experimental/hack/book/{path}"

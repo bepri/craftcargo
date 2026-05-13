@@ -1,0 +1,896 @@
+debcargo → debcraft.yaml: Implementation Plan
+==============================================
+
+Goal: extend debcargo with a new code path that generates a debcraft.yaml
+file (plus minimal companion files) instead of the debian/ directory tree.
+The existing debian/ generation is preserved unchanged; the new output mode
+is activated via a new CLI subcommand (see item 7).
+
+This plan assumes debcraft has implemented all features listed as "MISS" in
+cargo-debcraft-mapping.txt sections F and H. Specifically:
+  - custom-source-fields map in debcraft.yaml (for X-Cargo-Crate etc.)
+  - <!nocheck> build profile support in parts.build-packages entries
+  - A build-packages-arch / build-packages-indep split in parts
+  - tests: section in debcraft.yaml (autopkgtest — not converted now, handled separately)
+  - provides version injection handled automatically by debcraft (no ${binary:Version} substitution)
+  - Built-Using / Static-Built-Using handled by the debcraft cargo helper
+  - A debcraft cargo helper that handles library crate packaging
+    (source installation to /usr/share/cargo/registry/, per-feature tests,
+    cargo-checksum.json, binary install, Built-Using tracking)
+  - vcs-git field in debcraft.yaml top-level
+  - rules-requires-root field in debcraft.yaml top-level
+
+IMPORTANT — debcraft is independent from Debian packaging tools:
+  debcraft operates independently from debhelper, dh-cargo, and the standard
+  Debian packaging toolchain. The generated debcraft.yaml must NOT reference
+  any debhelper tools, dh-cargo packages, or dh-sequence-* entries. The
+  debcraft cargo helper is a native debcraft component that implements the
+  Rust library packaging workflow (source registry installation, test
+  execution, cargo-checksum.json) without invoking debhelper at all.
+  Wherever this plan refers to the plugin field "cargo" in a DebcraftPart,
+  it means the part activates the debcraft cargo helper for that part.
+  No separate craft-parts plugin needs to be authored; the helper is a
+  debcraft built-in capability.
+
+All other debcargo logic (dependency translation, feature reduction, naming,
+description processing, copyright, crate fetching) is reused unchanged.
+
+
+1. ADD serde_yaml DEPENDENCY
+==============================
+
+File: Cargo.toml
+
+Add to [dependencies]:
+  serde_yaml = "0.9"
+
+serde is already a dependency (used by config.rs for TOML deserialisation).
+serde_yaml uses the same Serialize/Deserialize derive macros so no new
+derive dependency is needed.
+
+Note: serde_yaml 0.9 serialises structs with rename_all = "kebab-case"
+correctly, preserving kebab-case keys in the output YAML. Verify the version
+is compatible with the existing serde constraint in Cargo.toml.
+
+
+2. CREATE src/debcraft/ MODULE
+================================
+
+Create the following new files (parallel to src/debian/):
+
+  src/debcraft/mod.rs      Main generation function
+  src/debcraft/schema.rs   Rust structs for debcraft.yaml schema
+
+Register the module in src/lib.rs by adding:
+  pub mod debcraft;
+
+
+3. DEFINE SCHEMA STRUCTS (src/debcraft/schema.rs)
+===================================================
+
+Define serde-serialisable Rust structs that directly mirror the debcraft.yaml
+schema. All struct fields use snake_case (Rust convention) and are renamed to
+kebab-case for YAML output via #[serde(rename_all = "kebab-case")].
+
+3a. Top-level struct: DebcraftYaml
+
+  #[derive(Serialize)]
+  #[serde(rename_all = "kebab-case")]
+  pub struct DebcraftYaml {
+      pub name: String,
+      pub version: String,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub summary: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub description: Option<String>,
+      pub maintainer: String,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub uploaders: Vec<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub section: Option<String>,
+      // "optional" is debcraft's default; only serialise if different
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub priority: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub contact: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub source_code: Option<String>,   // -> "source-code"
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub vcs_git: Option<String>,       // -> "vcs-git" (assumed in debcraft)
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub license: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub issues: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub base: Option<String>,
+      // Assumed new debcraft.yaml field for custom source stanza entries.
+      // Emits X-Cargo-Crate and X-Cargo-Crate-Version.
+      #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+      pub custom_source_fields: BTreeMap<String, String>,  // -> "custom-source-fields"
+      // Assumed new field for Rules-Requires-Root equivalent.
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub rules_requires_root: Option<String>,  // -> "rules-requires-root"
+      pub parts: BTreeMap<String, DebcraftPart>,
+      #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+      pub packages: BTreeMap<String, DebcraftPackage>,
+      // tests: field is NOT generated in this implementation;
+      // autopkgtest conversion is handled separately by debcraft.
+  }
+
+3b. Part struct: DebcraftPart
+
+  #[derive(Serialize)]
+  #[serde(rename_all = "kebab-case")]
+  pub struct DebcraftPart {
+      pub plugin: String,
+      pub source: String,
+      // "none" = use system toolchain (rust plugin option)
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub rust_channel: Option<String>,     // -> "rust-channel"
+      // For binary packages: features to build
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub rust_features: Vec<String>,       // -> "rust-features"
+      // Standard build packages (always present for the part)
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub build_packages: Vec<String>,      // -> "build-packages"
+      // Architecture-specific build packages with optional nocheck profile.
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub build_packages_arch: Vec<BuildPackageEntry>, // -> "build-packages-arch"
+      // Parts this part depends on (after: equivalent)
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub after: Vec<String>,               // -> "after"
+  }
+
+  Note: library crates produce TWO parts (see 7a): a "crate" part using the
+  dump plugin and a "check" part carrying the nocheck-gated dependencies.
+  Binary crates produce a single part using the "rust" plugin.
+
+3c. Build package entry: BuildPackageEntry
+
+  Build packages for library crates need <!nocheck> profile annotations to
+  break bootstrapping cycles (debcargo-rules.txt section 3). Represent this
+  as an enum that serialises to either a plain string or an object:
+
+  #[derive(Serialize)]
+  #[serde(untagged)]
+  pub enum BuildPackageEntry {
+      // Emits a plain string: "librust-foo-dev (>= 1.2)"
+      Simple(String),
+      // Emits: {package: "librust-foo-dev (>= 1.2)", profiles: ["nocheck"]}
+      // (assumes debcraft supports the profiles key as the <!nocheck> equivalent)
+      WithProfile {
+          package: String,
+          #[serde(skip_serializing_if = "Vec::is_empty")]
+          profiles: Vec<String>,
+      },
+  }
+
+  The mapping from debcargo's deb_dep_add_nocheck() output (which wraps the
+  dep string with " [!nocheck]" in Debian control syntax) to this struct is:
+  any dep that currently gets deb_dep_add_nocheck() applied should be emitted
+  as BuildPackageEntry::WithProfile { profiles: vec!["nocheck".to_string()] }.
+  Deps that do not get nocheck (binary packages, skip_nocheck=true) use
+  BuildPackageEntry::Simple.
+
+  Note: The exact YAML representation that debcraft expects for build profiles
+  may differ. Adjust the WithProfile variant fields to match debcraft's schema
+  once it is documented. The important semantic is: this entry should only be
+  installed when the "nocheck" profile is NOT active.
+
+3d. Package struct: DebcraftPackage
+
+  #[derive(Serialize, Default)]
+  #[serde(rename_all = "kebab-case")]
+  pub struct DebcraftPackage {
+      // "any" for all Rust packages (library, feature, and binary)
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub architectures: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub summary: Option<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub description: Option<String>,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub depends: Vec<String>,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub recommends: Vec<String>,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub suggests: Vec<String>,
+      // debcraft injects the package version into provides automatically;
+      // emit bare package names only (no version clause needed)
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub provides: Vec<String>,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub breaks: Vec<String>,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub replaces: Vec<String>,
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub conflicts: Vec<String>,
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub section: Option<String>,
+      // Omit when "no" (debcraft default). Always "same" for lib packages.
+      #[serde(skip_serializing_if = "Option::is_none")]
+      pub multi_arch: Option<String>,
+  }
+
+3e. Test stanza
+  NOT IMPLEMENTED in this plan. Autopkgtest conversion is handled separately
+  by debcraft; no DebcraftTest struct or tests: field is generated here.
+  The PkgTest logic in src/debian/mod.rs (lines 1024-1061) and
+  generate_test_dependencies() are therefore not needed in src/debcraft/.
+
+
+4. MAIN GENERATION FUNCTION (src/debcraft/mod.rs)
+===================================================
+
+Create pub fn prepare_debcraft_yaml() as a replacement for prepare_debian_folder()
+in src/debian/mod.rs. The function signature is nearly identical:
+
+  pub fn prepare_debcraft_yaml(
+      crate_info: &mut CrateInfo,
+      deb_info: &DebInfo,
+      config_path: Option<&Path>,
+      config: &Config,
+      output_dir: &Path,
+      copyright_guess_harder: bool,
+  ) -> Result<()>
+
+  Differences from prepare_debian_folder():
+  - No tempdir parameter: we build a DebcraftYaml struct in memory, then
+    serialise it. Companion files (copyright, lintian-overrides,
+    cargo-checksum.json) are written directly to output_dir/debcraft/.
+  - No changelog_ready parameter: debcraft.yaml carries the version directly;
+    there is no changelog to maintain.
+  - No overlay_write_back parameter: the overlay mechanism (debcargo.toml
+    overlay = "...") still applies for companion files in debcraft/ but
+    there is no changelog writeback.
+
+  The function body:
+
+    // 1. Build the top-level struct (see item 5)
+    let mut yaml = build_debcraft_top_level(crate_info, deb_info, config)?;
+
+    // 2. Build packages + tests (see item 6)
+    let (packages, tests) =
+        build_debcraft_packages(deb_info, crate_info, config)?;
+    yaml.packages = packages;
+    yaml.tests = tests;
+
+    // 3. Build parts (see item 7)
+    yaml.parts = build_debcraft_parts(crate_info, deb_info, config, &yaml.packages)?;
+
+    // 4. Apply top-level source overrides from config
+    apply_source_overrides(&mut yaml, config);
+
+    // 5. Serialise to YAML and write debcraft.yaml
+    let out_dir = output_dir;  // or output_dir.join("debcraft") if using subdir
+    fs::create_dir_all(out_dir)?;
+    let yaml_str = serde_yaml::to_string(&yaml)?;
+    fs::write(out_dir.join("debcraft.yaml"), yaml_str)?;
+
+    // 6. Write companion files (see item 8)
+    write_companion_files(crate_info, deb_info, config_path, config,
+                          copyright_guess_harder, out_dir)?;
+
+    Ok(())
+
+
+5. TOP-LEVEL FIELD MAPPING (build_debcraft_top_level)
+======================================================
+
+This function fills the non-packages/parts/tests fields of DebcraftYaml.
+All logic is borrowed directly from prepare_debian_folder() /
+prepare_debian_control() in src/debian/mod.rs.
+
+5a. name
+  Use: the public helper dsc_name() from src/debian/control.rs, which
+  constructs the source package name as:
+    format!("{}-{}", Source::pkg_prefix(), base_deb_name(name))
+  where Source::pkg_prefix() returns "rust" and base_deb_name() lowercases
+  and replaces underscores with hyphens. Source::new() at line 253 calls
+  this as: name: dsc_name(&pkgbase).
+  Reuse: call dsc_name(deb_info.base_package_name()) directly, or replicate
+  the same call currently made in prepare_debian_control() at line 760.
+
+  Note: dsc_name() already incorporates the semver suffix when pkgbase
+  includes it (deb_info.base_package_name() returns the base with any
+  name_suffix already appended). Do NOT manually prepend "rust-"; use
+  dsc_name() which combines Source::pkg_prefix() + base_deb_name().
+
+5b. version
+  Use: format!("{}-1", deb_info.deb_upstream_version()) for the initial
+  version. If a version bump is needed (detected from an existing
+  debcraft.yaml), increment the Debian revision. This is simpler than the
+  changelog handling in prepare_debian_folder(): for debcraft.yaml the full
+  "upstream-revision" string is set directly.
+  Reuse: deb_info.deb_upstream_version() (already computed in DebInfo::new).
+
+5c. summary / description
+  Use: crate_info.get_summary_description() — same as in
+  prepare_debian_control() line 780. Returns (Option<String>, Option<String>).
+  The bare library package summary suffix " - Rust source code" is appended
+  to the top-level summary; per-package suffixes are on each DebcraftPackage.
+
+5d. maintainer
+  Use: config.maintainer(). Currently defaults to RUST_MAINT ("Debian Rust
+  Maintainers ..."). For Ubuntu packaging, change the default constant in
+  src/config.rs (or add a separate Ubuntu default constant and select it at
+  compile time or via a new config field base_distro: String).
+
+5e. uploaders
+  Use: config.uploaders() — same as in prepare_debian_control() line 317.
+
+5f. section
+  Use: "rust" for library crates (matches current Source::new() default).
+  For binary-only crates: "FIXME" (debcargo.toml source.section override
+  must be set by the packager). Source: src/debian/control.rs Source::new()
+  sets section based on lib flag.
+
+5g. contact
+  No current debcargo source. Populate from config.maintainer() as a
+  reasonable default, or leave None. Add optional contact field to Config
+  struct if packager-supplied contact differs from maintainer.
+
+5h. source-code
+  Use: generate_homepage() from src/debian/mod.rs line 1112.
+  This function already selects homepage > repository > crates.io fallback.
+  The result maps directly to source-code (which is Vcs-Browser in Debian).
+
+5i. vcs-git
+  Use: config.source.as_ref().and_then(|s| s.vcs_git.as_deref()).
+  Or generate from [package.repository] if it looks like a git URL.
+  Current Source::new() sets vcs_git based on SourceOverride; the same
+  logic applies here.
+  Source: src/debian/control.rs Source::new() lines that set vcs_git.
+
+5j. license
+  Extract the top-level license SPDX string from Cargo.toml metadata:
+    crate_info.manifest().license().map(str::to_string)
+  Normalise "/" to " OR " and handle other SPDX syntax if needed.
+  This is not currently extracted as a separate value in debcargo (it goes
+  into debian/copyright via debian_copyright()); add extraction here.
+
+5k. issues
+  No current debcargo source. Optionally derive from [package.repository]:
+  if repository URL matches https://github.com/{org}/{repo} or
+  https://gitlab.{...}/{org}/{repo}, append "/issues".
+  Or add an optional issues field to SourceOverride in Config.
+
+5l. custom-source-fields (X-Cargo-Crate / X-Cargo-Crate-Version)
+  Always populate with:
+    "X-Cargo-Crate"         -> exact crate name (crate_info.crate_name())
+    "X-Cargo-Crate-Version" -> plain upstream version, no repack suffix
+                               (control::deb_upstream_version(version, None))
+  Source: src/debian/mod.rs lines 757-758 and control.rs Source::new()
+  lines that set crate_name and plain version.
+
+5m. rules-requires-root
+  Use: config.requires_root.as_deref() if Some.
+  Source: src/config.rs Config.requires_root field.
+  Only emit if not None (debcraft default is "no").
+
+5n. base
+  No current debcargo source. Add an optional base field to Config
+  (or SourceOverride):
+    base: Option<String>
+  If not set, do not emit (debcraft uses its own default).
+  Packagers set this in debcargo.toml: base = "ubuntu@24.04"
+
+
+6. BINARY PACKAGE GENERATION (build_debcraft_packages)
+=======================================================
+
+This function reimplements the logic of prepare_debian_control() from
+src/debian/mod.rs:624, adapted to return BTreeMap<String, DebcraftPackage>
+instead of writing to debian/control and debian/tests/control files.
+
+Note: prepare_debian_control() is a private function (no pub qualifier);
+it cannot be called directly from src/debcraft/. Its logic must be
+extracted and reimplemented in build_debcraft_packages(). The function
+signature is captured here for reference only.
+
+Note: autopkgtest generation (debian/tests/control) is NOT part of this
+implementation. The tests: section in debcraft.yaml is handled separately
+by debcraft. Do not port the PkgTest / generate_test_dependencies() logic.
+
+All the following logic is REUSED UNCHANGED:
+
+  - all_dependencies_and_features() — feature/dep graph construction
+  - reduce_provides() / collapse_features() — feature reduction
+  - Feature name normalisation (_ vs - merging and cycle detection)
+  - transitive_deps() — dep expansion
+  - deb_deps() — Cargo deps → Debian package name strings
+  - The build_deps (toolchain + default feature deps) calculation
+
+  NOT ported (autopkgtest handled separately by debcraft):
+  - test_is_broken() / test_architecture()
+  - generate_test_dependencies()
+  - PkgTest construction
+
+Changes in this function vs. prepare_debian_control():
+
+6a. Library packages (for each feature in reduced_features_with_deps):
+
+  Construct a DebcraftPackage:
+    name key = package.name() (use existing Package::name() logic or
+               inline the deb_feature_name() call)
+    architectures = Some("any".to_string())
+    summary = Some(format!("{summary_prefix}{summary_suffix}"))
+    description = Some(format!("{description_prefix}{description_suffix}"))
+    depends = (f_deps and o_deps translated to strings, same as now.
+               No substvar strings — see N2 for per-substvar handling.)
+    recommends = (feature packages only: existing recommends logic, unchanged)
+    suggests = (feature packages only: existing suggests logic, unchanged)
+    provides = (existing provides list, WITHOUT any version clause — debcraft
+                does not use ${binary:Version} substitutions; instead it
+                automatically injects the correct version into provides entries
+                at packaging time. Emit bare package names only.)
+    breaks = (existing breaks list, unchanged)
+    replaces = (existing replaces list, unchanged)
+    multi_arch = Some("same".to_string())
+
+  Key difference for provides: current code in control.rs:388-403 generates
+  "librust-foo-dev (= ${binary:Version})" strings. debcraft does not use
+  variable substitutions of this form; the version is injected automatically.
+  Emit the package names as bare strings WITHOUT any version clause:
+    "librust-foo-dev"
+    "librust-foo-1-dev"
+    "librust-foo-1.2-dev"
+    "librust-foo-1.2.3-dev"
+  plus one entry per absorbed feature per version suffix as currently.
+
+  Key difference for depends: the current debcargo output contains substvar
+  strings (${misc:Depends}, ${shlibs:Depends}, ${cargo:Depends} etc.).
+  debcraft does not use substvar syntax. Apply the per-substvar policy from
+  N2: inline any known concrete values directly; omit known-empty ones.
+  For library packages all of these are empty or auto-handled — emit only
+  the explicit librust-*-dev dependency strings. Keep the explicit direct
+  dep on the bare library package from feature packages:
+    DebcraftPackage::depends includes Package::deb_feature("", &pkgbase)
+    for feature packages where !f_deps.contains(&"").
+
+6b. Binary executable package:
+
+  Construct a DebcraftPackage:
+    name key = bin_name (using existing bin_name logic)
+    architectures = Some("any".to_string())
+    summary = Some(...)
+    description = Some(...)
+    depends = [] (see N2/N4 — all substvars for binary packages are either
+                  empty or handled natively by debcraft; no values to inline)
+    provides = [] for non-semver-suffix; ["bin_name (= ...)"] for semver-
+               suffix (same as current Package::new_bin logic)
+    multi_arch = None (debcraft default "no")
+    section = Some("FIXME-...") if lib exists; None otherwise
+  Note: Built-Using / Static-Built-Using are handled by the debcraft
+  cargo helper and do not appear in debcraft.yaml packages section.
+
+6c. Extra packages ([packages."extra+{name}"] in debcargo.toml):
+
+  Construct a minimal DebcraftPackage with all fields from apply_overrides().
+  Logic mirrors Package::new_extra() + apply_overrides(config, extra, &[]).
+
+6d. Autopkgtest stanzas
+  NOT IMPLEMENTED. Autopkgtest/test conversion is handled separately by
+  debcraft. Do not generate a tests: section in debcraft.yaml.
+
+
+7. PARTS GENERATION (build_debcraft_parts)
+==========================================
+
+This function creates the parts: map. Unlike debian/rules (a debhelper
+one-liner used by debcargo today), parts express the full build description
+natively within debcraft — no debhelper tools are involved.
+
+7a. For library crates (lib = true):
+
+  Generate TWO parts: "crate" and "check".
+
+  Part 1 — "crate": copies the source tree using the dump plugin.
+
+    DebcraftPart {
+        plugin: "dump".to_string(),
+        source: ".".to_string(),
+        rust_channel: None,
+        rust_features: vec![],
+        build_packages: vec![],
+        build_packages_arch: vec![],  // no build deps on the dump part
+        after: vec![],
+    }
+
+  Part 2 — "check": runs the crate tests. Carries the toolchain and
+  crate dependency packages, gated with <!nocheck> where applicable
+  to break bootstrapping cycles (see 7c).
+
+    DebcraftPart {
+        plugin: "cargo".to_string(),   // activates debcraft cargo helper
+        source: ".".to_string(),
+        rust_channel: None,            // cargo helper uses system toolchain
+        rust_features: vec![],         // features handled via packages
+        build_packages: vec![],        // toolchain managed by cargo helper
+        build_packages_arch: <crate deps with nocheck — see 7c>,
+        after: vec!["crate".to_string()],
+    }
+
+  The two-part split mirrors the separation between source installation
+  (dump, unconditional) and test execution (cargo helper, skippable via
+  nocheck). The "crate" part name is fixed; the "check" part name may be
+  adjusted to match debcraft conventions.
+
+7b. For binary-only crates (lib = false, bins non-empty):
+
+  Plugin: "rust" (existing craft-parts plugin, works for binaries).
+  DebcraftPart {
+      plugin: "rust".to_string(),
+      source: ".".to_string(),
+      rust_channel: Some("none".to_string()),  // use system toolchain
+      rust_features: <features from config if any>,
+      build_packages: toolchain_deps(rust_version) as simple strings
+                      plus translated crate deps (no nocheck needed),
+      build_packages_arch: vec![],  // rust plugin is arch-independent build
+  }
+
+7c. Build packages for the "check" part (nocheck handling):
+
+  Current logic in prepare_debian_control() (lines 706-742):
+    - toolchain_deps: cargo:native, rustc:native (>= min_ver), libstd-rust-dev
+    - default feature dep translation via deb_deps()
+    - if !has_bins && !skip_nocheck: wrap each dep with deb_dep_add_nocheck()
+
+  For the "check" part's build_packages_arch:
+    - Each toolchain dep → BuildPackageEntry::Simple (always needed)
+    - Each crate dep:
+        if skip_nocheck() → BuildPackageEntry::Simple
+        else              → BuildPackageEntry::WithProfile {
+                                package: dep_string,
+                                profiles: vec!["nocheck".to_string()]
+                           }
+
+  The "crate" part has no build_packages_arch entries — it uses the dump
+  plugin which requires no build dependencies.
+
+  The source override fields build_depends, build_depends_arch,
+  build_depends_indep, build_depends_excludes from SourceOverride are applied
+  the same way as in Source::apply_overrides() in control.rs.
+
+  build_depends_excludes: iterate build_packages_arch and remove any entry
+  whose package string matches any entry in build_depends_excludes.
+
+
+8. COMPANION FILES (write_companion_files)
+==========================================
+
+These files go into the output directory (or a debcraft/ subdirectory if
+debcraft uses a separate directory for per-package files).
+
+8a. debcraft/copyright (or debian/copyright)
+  KEEP: call debian_copyright() from src/debian/copyright.rs unchanged.
+  This generates DEP-5 copyright data that debcraft reads from
+  debian/copyright or debcraft/copyright.
+  Write to: output_dir/copyright (debcraft will find it in debcraft/)
+  No changes needed to copyright.rs.
+
+8b. debcraft/cargo-checksum.json
+  KEEP: generate the same {"package":"<sha256>","files":{}} content.
+  Source: prepare_debian_folder() lines 343-353.
+  Write to: output_dir/cargo-checksum.json
+  The debcraft cargo helper reads this file during its configure phase
+  (see cargo-debcraft-mapping.txt G.7).
+  Note: if the cargo helper generates cargo-checksum.json itself from
+  crates.io metadata, this file can be omitted; verify cargo helper behaviour.
+
+8c. debcraft/{pkg}.lintian-overrides (per feature package)
+  KEEP: same content as current debian/{pkg}.lintian-overrides.
+  Source: prepare_debian_control() lines 1014-1022.
+  Write to: output_dir/{package_name}.lintian-overrides
+  One file per non-empty feature package.
+
+8d. No longer generated (debian/ generation removed or skipped):
+  - debian/rules             (replaced by parts: in debcraft.yaml)
+  - debian/control           (replaced by debcraft.yaml packages/source)
+  - debian/tests/control     (autopkgtest — not converted, handled by debcraft separately)
+  - debian/changelog         (version in debcraft.yaml, no changelog needed)
+  - debian/watch             (no debcraft.yaml equivalent; omit)
+  - debian/source/format     (debcraft handles this internally)
+
+8e. Overlay directory
+  The existing overlay mechanism (config.overlay_dir()) applies for
+  companion files: if a file already exists in the overlay directory
+  (debcraft/), it is copied to output_dir/debcraft/ instead of being
+  auto-generated. This reuses the same "hint file" / write-back logic
+  from prepare_debian_folder().
+  Change: the overlay directory for debcraft mode is debcraft/ (not debian/)
+  relative to the config file. Add a new config field overlay_debcraft:
+  Option<PathBuf> (analogous to the existing overlay field) so packagers
+  can set it in debcargo.toml. If not set, default to "debcraft/" relative
+  to the config file path.
+
+
+9. CONFIG CHANGES (src/config.rs)
+===================================
+
+Most Config fields remain valid for debcraft mode. The following changes
+are needed:
+
+9a. New fields in Config (top-level):
+  base: Option<String>        // debcraft.yaml base field (e.g. "ubuntu@24.04")
+  build_base: Option<String>  // debcraft.yaml build-base field, if debcraft
+                              // supports a separate base image for the build
+                              // environment; omit from DebcraftYaml if None
+  contact: Option<String>     // debcraft.yaml contact field (default: maintainer)
+  issues: Option<String>      // debcraft.yaml issues field (optional override)
+  license: Option<String>     // override for SPDX license string
+                              // (default: from Cargo.toml [package.license])
+  overlay_debcraft: Option<PathBuf>  // overlay dir for debcraft/ companion files
+                              // (default: "debcraft/" relative to config file)
+
+  These are added as #[serde(default)] fields with Option<T> type so that
+  existing debcargo.toml files that do not set them remain valid.
+
+9b. Fields in SourceOverride that need debcraft equivalents:
+  vcs_git and vcs_browser are already in SourceOverride and map to:
+    vcs_git     -> DebcraftYaml.vcs_git
+    vcs_browser -> DebcraftYaml.source_code (same as Homepage in Source)
+  No change needed; existing SourceOverride fields are reused.
+
+9c. Fields only relevant to debian/ generation (no debcraft equivalent):
+  - build_depends / build_depends_arch / build_depends_indep in SourceOverride:
+    these still apply but are mapped to parts.build-packages entries instead
+    of Build-Depends lines.
+  - requires_root: maps to rules-requires-root in DebcraftYaml.
+  - policy (Standards-Version override): no equivalent, drop/ignore.
+
+9d. Default maintainer:
+  RUST_MAINT in src/config.rs currently defaults to the Debian team address.
+  For Ubuntu packaging, either:
+  - Add a compile-time feature flag "ubuntu" that changes the default, or
+  - Add a new mandatory config field maintainer_default (no default value,
+    so the packager must set it), or
+  - Keep existing behaviour and let packagers override via debcargo.toml.
+  Recommended: keep the current default; the Debian address is still
+  acceptable for Ubuntu packaging as-is.
+
+9e. Fields no longer used in debcraft mode (safe to ignore, no removal needed):
+  - repack_suffix (no debian/watch generated; still used in version string)
+  - changelog_ready (no changelog; ignored)
+
+
+10. CLI CHANGES (src/cli.rs)
+=============================
+
+Add a new subcommand "package-debcraft" (or "debcraft") to the Opt enum:
+
+  /// Package a Rust crate for debcraft (generates debcraft.yaml).
+  PackageDebcraft {
+      #[command(flatten)]
+      init: PackageInitArgs,
+      #[command(flatten)]
+      extract: PackageExtractArgs,
+      #[command(flatten)]
+      finish: PackageDebcraftArgs,
+  }
+
+Add a new args struct in src/package.rs (or src/cli.rs):
+
+  #[derive(Debug, Clone, Parser)]
+  pub struct PackageDebcraftArgs {
+      /// Guess extra values for debcraft/copyright. Might be slow.
+      #[arg(long)]
+      pub copyright_guess_harder: bool,
+      /// Don't write back hint files to the overlay directory.
+      #[arg(long)]
+      pub no_overlay_write_back: bool,
+  }
+
+Add a handler in src/lib.rs or main.rs for the new subcommand that:
+  1. Calls PackageProcess::init() (same as the existing Package handler)
+  2. Calls PackageProcess::extract() (same as the existing Package handler)
+  3. Calls debcraft::prepare_debcraft_yaml() instead of debian::prepare_debian_folder()
+
+The existing Package subcommand and all its logic remain unchanged.
+
+
+11. PACKAGE PROCESS INTEGRATION (src/package.rs)
+==================================================
+
+The PackageProcess struct is the main orchestrator. Add a new method:
+
+  impl PackageProcess {
+      pub fn execute_debcraft(
+          &mut self,
+          args: &PackageDebcraftArgs,
+      ) -> Result<()> {
+          let output_dir = self.output_dir.as_ref()
+              .ok_or_else(|| anyhow!("output_dir not set"))?;
+          let tempdir = tempfile::TempDir::new()?;
+          debcraft::prepare_debcraft_yaml(
+              &mut self.crate_info,
+              &self.deb_info,
+              self.config_path.as_deref(),
+              &self.config,
+              output_dir,
+              args.copyright_guess_harder,
+          )?;
+          Ok(())
+      }
+  }
+
+The existing execute() method (which calls prepare_debian_folder) is
+unchanged.
+
+
+12. IMPORTS AND MODULE WIRING
+==============================
+
+In src/debcraft/mod.rs, import from existing modules:
+
+  use crate::config::{Config, PackageKey, SourceOverride};
+  use crate::crates::CrateInfo;
+  use crate::debian::{
+      DebInfo,
+      mod::{
+          all_dependencies_and_features,
+          reduce_provides, collapse_features,
+          toolchain_deps, generate_homepage,
+          transitive_deps, deb_dep_add_nocheck,
+          // etc. — make these pub(crate) if currently private
+      },
+      control::{
+          deb_name, deb_feature_name, deb_upstream_version,
+          Package, Description,
+          // PkgTest not needed — autopkgtest not generated here
+          // etc.
+      },
+      copyright::debian_copyright,
+      dependency::deb_deps,
+  };
+
+  Note: several functions in src/debian/mod.rs are currently private (fn,
+  not pub fn). These need to be changed to pub(crate) or pub:
+  - generate_homepage()
+  - toolchain_deps() — already pub(crate) since it's used by build_order
+  - reduce_provides() — currently private
+  - collapse_features() — currently private
+  - all_dependencies_and_features() — already pub in src/crates.rs (no change needed)
+  generate_test_dependencies() is NOT needed (autopkgtest not generated here).
+  Check each and add pub(crate) visibility modifiers as needed.
+
+
+13. OUTPUT FILE LAYOUT
+========================
+
+When the user runs `debcargo package-debcraft <crate> <version>`, the output
+directory structure is:
+
+  {output_dir}/
+      debcraft.yaml                  ← main output
+      debcraft/
+          copyright                  ← DEP-5 copyright (same content as before)
+          cargo-checksum.json        ← {"package":"<sha256>","files":{}}
+          {pkg}.lintian-overrides    ← one per feature package (if any)
+
+Compared to the current debian/ output:
+
+  {output_dir}/debian/
+      control
+      rules
+      changelog
+      copyright
+      watch
+      tests/control
+      source/format
+      cargo-checksum.json
+      {pkg}.lintian-overrides
+
+Removed: control, rules, changelog, watch, tests/control, source/format.
+Moved:   debcraft.yaml contains what control+changelog+rules used to hold.
+         copyright and cargo-checksum.json move to debcraft/ directory.
+
+
+14. TESTING
+============
+
+Existing integration tests in tests/ use golden-file comparison against
+expected debian/ content. Add parallel golden-file tests for the new
+debcraft mode:
+
+  - tests/debcraft/ directory with expected debcraft.yaml files per test crate
+  - A new test fixture runner (analogous to the existing one in tests/) that
+    invokes PackageProcess::execute_debcraft() and compares output
+  - The existing tests/debian/ golden files are NOT changed
+
+To avoid duplicating all test crates, consider a shared test helper that
+runs both modes and compares both outputs in a single test invocation.
+
+
+15. NOTES AND CAVEATS
+======================
+
+N1. Provides version clause
+  Current control.rs generates provides like:
+    librust-foo-dev (= ${binary:Version})
+  debcraft does not use ${binary:Version} or any similar variable
+  substitution syntax. Instead, debcraft automatically injects the correct
+  package version into provides entries at packaging time.
+  Emit bare package names with no version clause:
+    librust-foo-dev
+  This applies to all provides entries: versioned aliases (librust-foo-1-dev
+  etc.) are also emitted as bare names; debcraft handles version binding.
+
+N2. Substvar handling policy
+  debcraft.yaml does not use ${...} variable substitution syntax in package
+  relationship fields. For each substvar that appears in the current debcargo
+  output, apply the following rule:
+
+    - If the substvar expands to a KNOWN CONCRETE VALUE in the Rust packaging
+      context, place that value directly in the corresponding debcraft.yaml
+      field (depends, provides, recommends, suggests, etc.).
+
+    - If the substvar is KNOWN TO ALWAYS BE EMPTY for Rust packages, omit it
+      entirely (do not emit an empty string).
+
+    - If the substvar's value is INJECTED AUTOMATICALLY by debcraft (e.g.
+      shared library deps for binary packages), omit it from the YAML —
+      debcraft will handle it without needing an explicit entry.
+
+  Per-substvar resolution for Rust packages:
+
+    ${misc:Depends}      — empty for all Rust packages; omit.
+    ${shlibs:Depends}    — empty for library packages (source-only, no .so);
+                           for binary packages, debcraft injects this
+                           automatically; omit from YAML in both cases.
+    ${cargo:Depends}     — always empty (never populated); omit.
+    ${cargo:Provides}    — always empty (never populated); omit.
+    ${cargo:Recommends}  — always empty (never populated); omit.
+    ${cargo:Suggests}    — always empty (never populated); omit.
+    ${binary:Version}    — handled by debcraft's automatic version injection
+                           into provides; emit bare package names (see N1).
+
+  If a future substvar is encountered that has a known non-empty expansion,
+  inline its value rather than leaving it as a substvar string.
+
+N3. Feature package doc symlink
+  dh-cargo (the Debian tool) installs a doc symlink for feature packages:
+    ln -s {libpkg} debian/{featurepkg}/usr/share/doc/{featurepkg}
+  The debcraft cargo helper must replicate this behaviour natively.
+  No change needed in debcargo.
+
+N4. Binary package substvar resolution
+  In current control.rs, binary packages use:
+    Depends: ${misc:Depends}, ${shlibs:Depends}, ${cargo:Depends}
+    Provides: ${cargo:Provides}
+    Recommends: ${cargo:Recommends}
+    Suggests: ${cargo:Suggests}
+  Applying the policy from N2: all of these are either always empty or
+  auto-handled by debcraft, so none produce values to inline. The resulting
+  debcraft.yaml binary package has empty depends/recommends/suggests/provides
+  (unless explicit deps are added via debcargo.toml overrides).
+
+N5. extra_lines removal
+  Package::extra_lines currently carries arbitrary control field text
+  (e.g. "Built-Using: ...", "Static-Built-Using: ..."). In debcraft.yaml
+  there is no equivalent for extra_lines. The built-using lines are assumed
+  handled by the debcraft cargo helper. The PackageOverride.extra_lines config
+  field has no debcraft.yaml mapping; emit a warning if it is set.
+
+N6. Cargo.toml normalisation and orig tarball
+  The orig tarball creation (prepare_orig_tarball) and apply_overlay_and_patches
+  functions in src/debian/mod.rs are UNCHANGED. These run before
+  prepare_debcraft_yaml() is called, in the extract phase of PackageProcess.
+  cargo-checksum.json is still needed for the debcraft cargo helper.
+
+N7. Version bump detection
+  When regenerating debcraft.yaml for a crate that already has one, the
+  version should be preserved or incremented. Since there is no changelog,
+  implement this by reading the existing debcraft.yaml (if present) and
+  comparing its version to the current upstream version:
+  - If upstream version unchanged: keep the existing Debian revision
+  - If upstream version changed: reset to -1
+  This is simpler than the changelog "version bump" logic in
+  prepare_debian_folder() (lines 522-601).
+
+N8. Overlay / hint file mechanism
+  The current overlay system in prepare_debian_folder() writes "hint" files
+  (name.hint) when an auto-generated file conflicts with an overlay file.
+  In debcraft mode, only copyright and cargo-checksum.json have overlay
+  equivalents. The hint mechanism can be simplified: if copyright exists in
+  the overlay debcraft/ directory, skip generating it.
