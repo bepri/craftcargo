@@ -1387,7 +1387,7 @@ fn changelog_first_last(tempdir: &Path) -> Result<(i32, i32)> {
 
 #[cfg(test)]
 mod test {
-    use super::{generate_homepage, rustc_dep};
+    use super::{generate_homepage, rustc_dep, toolchain_deps};
 
     #[test]
     fn rustc_dep_includes_minver() {
@@ -1514,5 +1514,88 @@ mod test {
             "",
             generate_homepage("crate", "1.0".into(), None, None, false)
         );
+    }
+
+    #[test]
+    fn homepage_prefers_homepage_over_repository() {
+        // homepage takes priority even when repository is present
+        assert_eq!(
+            "https://serde.rs",
+            generate_homepage(
+                "serde",
+                "1.0.197",
+                Some("https://serde.rs"),
+                Some("https://github.com/serde-rs/serde"),
+                true
+            )
+        );
+    }
+
+    #[test]
+    fn homepage_fallback_includes_version() {
+        assert_eq!(
+            "https://crates.io/crates/tokio/1.36.0",
+            generate_homepage("tokio", "1.36.0", None, None, true)
+        );
+    }
+
+    #[test]
+    fn homepage_repository_used_when_no_homepage() {
+        assert_eq!(
+            "https://github.com/dtolnay/syn",
+            generate_homepage(
+                "syn",
+                "2.0.48",
+                None,
+                Some("https://github.com/dtolnay/syn"),
+                true
+            )
+        );
+    }
+
+    #[test]
+    fn homepage_empty_when_not_on_crates_io_and_no_urls() {
+        assert_eq!(
+            "",
+            generate_homepage("private-crate", "0.1.0", None, None, false)
+        );
+    }
+
+    #[test]
+    fn rustc_dep_native_with_version() {
+        assert_eq!("rustc:native (>= 1.70)", rustc_dep(Some("1.70"), true));
+    }
+
+    #[test]
+    fn rustc_dep_native_without_version() {
+        assert_eq!("rustc:native", rustc_dep(None, true));
+    }
+
+    #[test]
+    fn rustc_dep_non_native_with_version() {
+        assert_eq!("rustc (>= 1.56)", rustc_dep(Some("1.56"), false));
+    }
+
+    #[test]
+    fn rustc_dep_non_native_without_version() {
+        assert_eq!("rustc", rustc_dep(None, false));
+    }
+
+    #[test]
+    fn toolchain_deps_with_min_version() {
+        let deps = toolchain_deps(Some("1.70"));
+        assert_eq!(deps.len(), 3);
+        assert_eq!(deps[0], "cargo:native");
+        assert_eq!(deps[1], "rustc:native (>= 1.70)");
+        assert_eq!(deps[2], "libstd-rust-dev");
+    }
+
+    #[test]
+    fn toolchain_deps_without_min_version() {
+        let deps = toolchain_deps(None);
+        assert_eq!(deps.len(), 3);
+        assert_eq!(deps[0], "cargo:native");
+        assert_eq!(deps[1], "rustc:native");
+        assert_eq!(deps[2], "libstd-rust-dev");
     }
 }

@@ -10,7 +10,7 @@ use crate::debian::{self, control::base_deb_name, Package};
 use crate::errors::Result;
 use semver::Op::{Caret, Exact, Greater, GreaterEq, Less, LessEq, Tilde, Wildcard};
 
-#[derive(Eq, Clone)]
+#[derive(Eq, Clone, Debug)]
 #[allow(clippy::upper_case_acronyms)]
 enum V {
     M(u64),

@@ -174,6 +174,23 @@ mod tests {
         );
     }
 
+    #[test]
+    fn build_package_entry_with_multiple_profiles() {
+        let entry = BuildPackageEntry::WithProfile {
+            package: "librust-foo-dev".to_string(),
+            profiles: vec!["nocheck".to_string(), "cross".to_string()],
+        };
+        let v = to_yaml(&entry);
+        assert_eq!(
+            v["profiles"][0],
+            serde_yaml_ng::Value::String("nocheck".to_string())
+        );
+        assert_eq!(
+            v["profiles"][1],
+            serde_yaml_ng::Value::String("cross".to_string())
+        );
+    }
+
     // Kebab-case renaming: spot-check the fields most likely to be misnamed.
 
     #[test]
@@ -203,6 +220,59 @@ mod tests {
         assert!(
             v.get("rustChannel").is_none(),
             "camelCase key must not appear"
+        );
+    }
+
+    #[test]
+    fn debcraft_part_omits_empty_vecs() {
+        let part = DebcraftPart {
+            plugin: "rust".to_string(),
+            source: "https://example.com".to_string(),
+            rust_channel: None,
+            rust_features: vec![],
+            build_packages: vec![],
+            build_packages_arch: vec![],
+            after: vec![],
+        };
+        let v = to_yaml(&part);
+        assert!(
+            v.get("rust-channel").is_none(),
+            "None rust_channel should be omitted"
+        );
+        assert!(
+            v.get("rust-features").is_none(),
+            "empty rust_features should be omitted"
+        );
+        assert!(
+            v.get("build-packages").is_none(),
+            "empty build_packages should be omitted"
+        );
+        assert!(
+            v.get("build-packages-arch").is_none(),
+            "empty build_packages_arch should be omitted"
+        );
+        assert!(
+            v.get("after").is_none(),
+            "empty after should be omitted"
+        );
+    }
+
+    #[test]
+    fn debcraft_part_includes_non_empty_after() {
+        let part = DebcraftPart {
+            plugin: "rust".to_string(),
+            source: ".".to_string(),
+            rust_channel: None,
+            rust_features: vec![],
+            build_packages: vec![],
+            build_packages_arch: vec![],
+            after: vec!["crate".to_string()],
+        };
+        let v = to_yaml(&part);
+        assert!(v.get("after").is_some(), "non-empty after should be present");
+        assert_eq!(
+            v["after"][0],
+            serde_yaml_ng::Value::String("crate".to_string())
         );
     }
 
@@ -245,6 +315,141 @@ mod tests {
         );
     }
 
+    #[test]
+    fn debcraft_yaml_required_fields_always_present() {
+        let yaml = DebcraftYaml {
+            name: "rust-bar".to_string(),
+            version: "2.0.0-1".to_string(),
+            summary: None,
+            description: None,
+            maintainer: "Maintainer <m@example.com>".to_string(),
+            uploaders: vec![],
+            section: None,
+            priority: None,
+            contact: None,
+            source_code: None,
+            vcs_git: None,
+            license: None,
+            issues: None,
+            base: None,
+            custom_source_fields: BTreeMap::new(),
+            rules_requires_root: None,
+            parts: BTreeMap::new(),
+            packages: BTreeMap::new(),
+        };
+        let v = to_yaml(&yaml);
+        assert_eq!(
+            v["name"],
+            serde_yaml_ng::Value::String("rust-bar".to_string())
+        );
+        assert_eq!(
+            v["version"],
+            serde_yaml_ng::Value::String("2.0.0-1".to_string())
+        );
+        assert_eq!(
+            v["maintainer"],
+            serde_yaml_ng::Value::String("Maintainer <m@example.com>".to_string())
+        );
+    }
+
+    #[test]
+    fn debcraft_yaml_summary_and_description_when_present() {
+        let yaml = DebcraftYaml {
+            name: "rust-baz".to_string(),
+            version: "0.1.0-1".to_string(),
+            summary: Some("A short summary".to_string()),
+            description: Some("A longer description\nwith multiple lines.".to_string()),
+            maintainer: "Test <t@t.com>".to_string(),
+            uploaders: vec![],
+            section: Some("rust".to_string()),
+            priority: None,
+            contact: None,
+            source_code: None,
+            vcs_git: None,
+            license: Some("MIT".to_string()),
+            issues: None,
+            base: Some("ubuntu@24.04".to_string()),
+            custom_source_fields: BTreeMap::new(),
+            rules_requires_root: None,
+            parts: BTreeMap::new(),
+            packages: BTreeMap::new(),
+        };
+        let v = to_yaml(&yaml);
+        assert_eq!(
+            v["summary"],
+            serde_yaml_ng::Value::String("A short summary".to_string())
+        );
+        assert!(v.get("description").is_some());
+        assert_eq!(
+            v["section"],
+            serde_yaml_ng::Value::String("rust".to_string())
+        );
+        assert_eq!(
+            v["license"],
+            serde_yaml_ng::Value::String("MIT".to_string())
+        );
+        assert_eq!(
+            v["base"],
+            serde_yaml_ng::Value::String("ubuntu@24.04".to_string())
+        );
+    }
+
+    #[test]
+    fn debcraft_yaml_uploaders_omitted_when_empty() {
+        let yaml = DebcraftYaml {
+            name: "rust-x".to_string(),
+            version: "1.0.0-1".to_string(),
+            summary: None,
+            description: None,
+            maintainer: "M <m@m.com>".to_string(),
+            uploaders: vec![],
+            section: None,
+            priority: None,
+            contact: None,
+            source_code: None,
+            vcs_git: None,
+            license: None,
+            issues: None,
+            base: None,
+            custom_source_fields: BTreeMap::new(),
+            rules_requires_root: None,
+            parts: BTreeMap::new(),
+            packages: BTreeMap::new(),
+        };
+        let v = to_yaml(&yaml);
+        assert!(v.get("uploaders").is_none(), "empty uploaders should be omitted");
+    }
+
+    #[test]
+    fn debcraft_yaml_uploaders_present_when_nonempty() {
+        let yaml = DebcraftYaml {
+            name: "rust-x".to_string(),
+            version: "1.0.0-1".to_string(),
+            summary: None,
+            description: None,
+            maintainer: "M <m@m.com>".to_string(),
+            uploaders: vec!["Alice <a@a.com>".to_string()],
+            section: None,
+            priority: None,
+            contact: None,
+            source_code: None,
+            vcs_git: None,
+            license: None,
+            issues: None,
+            base: None,
+            custom_source_fields: BTreeMap::new(),
+            rules_requires_root: None,
+            parts: BTreeMap::new(),
+            packages: BTreeMap::new(),
+        };
+        let v = to_yaml(&yaml);
+        assert!(v.get("uploaders").is_some());
+        assert_eq!(
+            v["uploaders"][0],
+            serde_yaml_ng::Value::String("Alice <a@a.com>".to_string())
+        );
+    }
+
     // skip_serializing_if: verify that empty BTreeMap fields are omitted.
 
     #[test]
@@ -278,5 +483,194 @@ mod tests {
             v.get("packages").is_none(),
             "empty packages map should be omitted"
         );
+    }
+
+    // DebcraftPackage serialisation tests
+
+    #[test]
+    fn debcraft_package_default_is_empty() {
+        let pkg = DebcraftPackage::default();
+        let v = to_yaml(&pkg);
+        // Default package should have all fields omitted
+        assert!(v.get("architectures").is_none());
+        assert!(v.get("summary").is_none());
+        assert!(v.get("description").is_none());
+        assert!(v.get("depends").is_none());
+        assert!(v.get("recommends").is_none());
+        assert!(v.get("suggests").is_none());
+        assert!(v.get("provides").is_none());
+        assert!(v.get("breaks").is_none());
+        assert!(v.get("replaces").is_none());
+        assert!(v.get("conflicts").is_none());
+        assert!(v.get("section").is_none());
+        assert!(v.get("multi-arch").is_none());
+    }
+
+    #[test]
+    fn debcraft_package_with_all_fields() {
+        let pkg = DebcraftPackage {
+            architectures: Some("any".to_string()),
+            summary: Some("A package summary".to_string()),
+            description: Some("Detailed description".to_string()),
+            depends: vec!["libc6".to_string()],
+            recommends: vec!["bash-completion".to_string()],
+            suggests: vec!["docs".to_string()],
+            provides: vec!["virtual-pkg".to_string()],
+            breaks: vec!["old-pkg (<< 2.0)".to_string()],
+            replaces: vec!["old-pkg (<< 2.0)".to_string()],
+            conflicts: vec!["conflicting-pkg".to_string()],
+            section: Some("utils".to_string()),
+            multi_arch: Some("same".to_string()),
+        };
+        let v = to_yaml(&pkg);
+        assert_eq!(
+            v["architectures"],
+            serde_yaml_ng::Value::String("any".to_string())
+        );
+        assert_eq!(
+            v["summary"],
+            serde_yaml_ng::Value::String("A package summary".to_string())
+        );
+        assert!(v.get("depends").is_some());
+        assert!(v.get("recommends").is_some());
+        assert!(v.get("suggests").is_some());
+        assert!(v.get("provides").is_some());
+        assert!(v.get("breaks").is_some());
+        assert!(v.get("replaces").is_some());
+        assert!(v.get("conflicts").is_some());
+        assert_eq!(
+            v["section"],
+            serde_yaml_ng::Value::String("utils".to_string())
+        );
+        assert_eq!(
+            v["multi-arch"],
+            serde_yaml_ng::Value::String("same".to_string())
+        );
+    }
+
+    #[test]
+    fn debcraft_package_multi_arch_kebab_case() {
+        let pkg = DebcraftPackage {
+            multi_arch: Some("foreign".to_string()),
+            ..Default::default()
+        };
+        let v = to_yaml(&pkg);
+        assert!(
+            v.get("multi-arch").is_some(),
+            "multi_arch should serialise as multi-arch"
+        );
+        assert!(
+            v.get("multiArch").is_none(),
+            "camelCase must not appear"
+        );
+        assert!(
+            v.get("multi_arch").is_none(),
+            "snake_case must not appear in YAML"
+        );
+    }
+
+    #[test]
+    fn debcraft_package_multiple_depends() {
+        let pkg = DebcraftPackage {
+            depends: vec![
+                "libc6 (>= 2.31)".to_string(),
+                "libgcc-s1".to_string(),
+                "libssl3".to_string(),
+            ],
+            ..Default::default()
+        };
+        let v = to_yaml(&pkg);
+        let deps = v.get("depends").unwrap();
+        assert_eq!(deps[0], serde_yaml_ng::Value::String("libc6 (>= 2.31)".to_string()));
+        assert_eq!(deps[1], serde_yaml_ng::Value::String("libgcc-s1".to_string()));
+        assert_eq!(deps[2], serde_yaml_ng::Value::String("libssl3".to_string()));
+    }
+
+    // Full YAML round-trip: serialise to string and check key formatting.
+
+    #[test]
+    fn full_yaml_output_has_kebab_case_keys() {
+        let yaml = DebcraftYaml {
+            name: "rust-test".to_string(),
+            version: "0.1.0-1".to_string(),
+            summary: Some("test crate".to_string()),
+            description: None,
+            maintainer: "Test <test@test.com>".to_string(),
+            uploaders: vec![],
+            section: Some("rust".to_string()),
+            priority: None,
+            contact: Some("test@test.com".to_string()),
+            source_code: Some("https://github.com/test/test".to_string()),
+            vcs_git: Some("https://github.com/test/test.git".to_string()),
+            license: Some("MIT OR Apache-2.0".to_string()),
+            issues: Some("https://github.com/test/test/issues".to_string()),
+            base: Some("ubuntu@24.04".to_string()),
+            custom_source_fields: {
+                let mut m = BTreeMap::new();
+                m.insert("X-Cargo-Crate".to_string(), "test".to_string());
+                m
+            },
+            rules_requires_root: None,
+            parts: BTreeMap::new(),
+            packages: BTreeMap::new(),
+        };
+        let output = serde_yaml_ng::to_string(&yaml).unwrap();
+        assert!(output.contains("source-code:"), "should have source-code key");
+        assert!(output.contains("vcs-git:"), "should have vcs-git key");
+        assert!(output.contains("custom-source-fields:"), "should have custom-source-fields key");
+        assert!(!output.contains("source_code:"), "should not have snake_case");
+        assert!(!output.contains("vcs_git:"), "should not have snake_case");
+    }
+
+    #[test]
+    fn full_yaml_with_parts_serialises_correctly() {
+        let mut parts = BTreeMap::new();
+        parts.insert(
+            "my-crate".to_string(),
+            DebcraftPart {
+                plugin: "rust".to_string(),
+                source: "https://github.com/example/crate".to_string(),
+                rust_channel: Some("stable".to_string()),
+                rust_features: vec!["default".to_string(), "full".to_string()],
+                build_packages: vec!["libssl-dev".to_string()],
+                build_packages_arch: vec![
+                    BuildPackageEntry::Simple("librust-foo-dev".to_string()),
+                    BuildPackageEntry::WithProfile {
+                        package: "librust-bar-dev".to_string(),
+                        profiles: vec!["nocheck".to_string()],
+                    },
+                ],
+                after: vec![],
+            },
+        );
+
+        let yaml = DebcraftYaml {
+            name: "rust-crate".to_string(),
+            version: "1.0.0-1".to_string(),
+            summary: None,
+            description: None,
+            maintainer: "M <m@m.com>".to_string(),
+            uploaders: vec![],
+            section: None,
+            priority: None,
+            contact: None,
+            source_code: None,
+            vcs_git: None,
+            license: None,
+            issues: None,
+            base: None,
+            custom_source_fields: BTreeMap::new(),
+            rules_requires_root: None,
+            parts,
+            packages: BTreeMap::new(),
+        };
+
+        let output = serde_yaml_ng::to_string(&yaml).unwrap();
+        assert!(output.contains("my-crate:"));
+        assert!(output.contains("plugin: rust"));
+        assert!(output.contains("rust-channel: stable"));
+        assert!(output.contains("rust-features:"));
+        assert!(output.contains("build-packages:"));
+        assert!(output.contains("build-packages-arch:"));
     }
 }

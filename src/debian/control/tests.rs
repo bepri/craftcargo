@@ -337,12 +337,103 @@ fn test_deb_upstream_version_with_pre() {
 }
 
 #[test]
+fn test_deb_upstream_version_stable_release() {
+    let version = Version::new(1, 0, 0);
+    assert_eq!("1.0.0", deb_upstream_version(&version, None));
+}
+
+#[test]
+fn test_deb_upstream_version_large_numbers() {
+    let version = Version::new(123, 456, 789);
+    assert_eq!("123.456.789", deb_upstream_version(&version, None));
+}
+
+#[test]
+fn test_deb_upstream_version_pre_without_repack() {
+    let version = Version {
+        major: 2,
+        minor: 0,
+        patch: 0,
+        pre: Prerelease::new("beta.1").unwrap(),
+        build: Default::default(),
+    };
+    assert_eq!("2.0.0~beta.1", deb_upstream_version(&version, None));
+}
+
+#[test]
+fn test_deb_upstream_version_pre_rc() {
+    let version = Version {
+        major: 1,
+        minor: 0,
+        patch: 0,
+        pre: Prerelease::new("rc.1").unwrap(),
+        build: Default::default(),
+    };
+    assert_eq!("1.0.0~rc.1", deb_upstream_version(&version, None));
+}
+
+#[test]
+fn test_deb_upstream_version_repack_dfsg() {
+    let version = Version::new(3, 2, 1);
+    assert_eq!("3.2.1+dfsg", deb_upstream_version(&version, Some("dfsg")));
+}
+
+#[test]
+fn test_deb_upstream_version_repack_custom_suffix() {
+    let version = Version::new(1, 5, 0);
+    assert_eq!(
+        "1.5.0+ds1",
+        deb_upstream_version(&version, Some("ds1"))
+    );
+}
+
+#[test]
 fn test_base_deb_name() {
     let result = base_deb_name("derive_more");
 
     let expected = "derive-more";
 
     assert_eq!(expected, result);
+}
+
+#[test]
+fn test_base_deb_name_already_lowercase() {
+    assert_eq!("serde", base_deb_name("serde"));
+}
+
+#[test]
+fn test_base_deb_name_uppercase() {
+    assert_eq!("openssl", base_deb_name("OpenSSL"));
+}
+
+#[test]
+fn test_base_deb_name_multiple_underscores() {
+    assert_eq!("my-cool-crate", base_deb_name("my_cool_crate"));
+}
+
+#[test]
+fn test_base_deb_name_mixed_case_and_underscores() {
+    assert_eq!("tokio-util", base_deb_name("Tokio_Util"));
+}
+
+#[test]
+fn test_base_deb_name_hyphens_preserved() {
+    assert_eq!("serde-json", base_deb_name("serde-json"));
+}
+
+#[test]
+fn test_base_deb_name_single_char() {
+    assert_eq!("x", base_deb_name("x"));
+}
+
+#[test]
+fn test_base_deb_name_numbers() {
+    assert_eq!("sha2", base_deb_name("sha2"));
+}
+
+#[test]
+fn test_base_deb_name_numeric_crate() {
+    assert_eq!("blake3", base_deb_name("blake3"));
 }
 
 #[test]
@@ -355,6 +446,21 @@ fn test_dsc_name() {
 }
 
 #[test]
+fn test_dsc_name_simple() {
+    assert_eq!("rust-serde", dsc_name("serde"));
+}
+
+#[test]
+fn test_dsc_name_with_hyphens() {
+    assert_eq!("rust-serde-json", dsc_name("serde-json"));
+}
+
+#[test]
+fn test_dsc_name_uppercase_normalised() {
+    assert_eq!("rust-openssl", dsc_name("OpenSSL"));
+}
+
+#[test]
 fn test_deb_name() {
     let result = deb_name("derive_more");
 
@@ -364,12 +470,69 @@ fn test_deb_name() {
 }
 
 #[test]
+fn test_deb_name_simple() {
+    assert_eq!("librust-serde-dev", deb_name("serde"));
+}
+
+#[test]
+fn test_deb_name_with_hyphens() {
+    assert_eq!("librust-serde-json-dev", deb_name("serde-json"));
+}
+
+#[test]
+fn test_deb_name_uppercase_normalised() {
+    assert_eq!("librust-openssl-dev", deb_name("OpenSSL"));
+}
+
+#[test]
+fn test_deb_name_underscores() {
+    assert_eq!("librust-proc-macro2-dev", deb_name("proc_macro2"));
+}
+
+#[test]
 fn test_deb_feature_name() {
     let result = deb_feature_name("derive_more", "add");
 
     let expected = "librust-derive-more+add-dev";
 
     assert_eq!(expected, result);
+}
+
+#[test]
+fn test_deb_feature_name_simple() {
+    assert_eq!("librust-serde+derive-dev", deb_feature_name("serde", "derive"));
+}
+
+#[test]
+fn test_deb_feature_name_with_underscore_feature() {
+    assert_eq!(
+        "librust-serde+std-dev",
+        deb_feature_name("serde", "std")
+    );
+}
+
+#[test]
+fn test_deb_feature_name_complex_feature() {
+    assert_eq!(
+        "librust-tokio+full-dev",
+        deb_feature_name("tokio", "full")
+    );
+}
+
+#[test]
+fn test_deb_feature_name_underscore_in_feature() {
+    assert_eq!(
+        "librust-regex+unicode-perl-dev",
+        deb_feature_name("regex", "unicode_perl")
+    );
+}
+
+#[test]
+fn test_deb_feature_name_uppercase_crate() {
+    assert_eq!(
+        "librust-openssl+vendored-dev",
+        deb_feature_name("OpenSSL", "vendored")
+    );
 }
 
 struct PkgTestFmtData<'a> {

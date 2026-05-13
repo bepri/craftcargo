@@ -783,6 +783,50 @@ mod tests {
     }
 
     #[test]
+    fn spdx_single_license_unchanged() {
+        assert_eq!(normalize_spdx_license("MIT"), "MIT");
+        assert_eq!(normalize_spdx_license("Apache-2.0"), "Apache-2.0");
+        assert_eq!(normalize_spdx_license("GPL-3.0-only"), "GPL-3.0-only");
+    }
+
+    #[test]
+    fn spdx_and_expression_unchanged() {
+        assert_eq!(
+            normalize_spdx_license("MIT AND Apache-2.0"),
+            "MIT AND Apache-2.0"
+        );
+    }
+
+    #[test]
+    fn spdx_with_exception_unchanged() {
+        assert_eq!(
+            normalize_spdx_license("Apache-2.0 WITH LLVM-exception"),
+            "Apache-2.0 WITH LLVM-exception"
+        );
+    }
+
+    #[test]
+    fn spdx_complex_expression() {
+        assert_eq!(
+            normalize_spdx_license("MIT/Apache-2.0 AND GPL-2.0"),
+            "MIT OR Apache-2.0 AND GPL-2.0"
+        );
+    }
+
+    #[test]
+    fn spdx_empty_string() {
+        assert_eq!(normalize_spdx_license(""), "");
+    }
+
+    #[test]
+    fn spdx_unlicense() {
+        assert_eq!(
+            normalize_spdx_license("MIT/Unlicense"),
+            "MIT OR Unlicense"
+        );
+    }
+
+    #[test]
     fn issues_url_derived_from_github() {
         assert_eq!(
             derive_issues_url("https://github.com/foo/bar"),
@@ -863,6 +907,54 @@ mod tests {
     }
 
     #[test]
+    fn issues_url_github_trailing_slash() {
+        assert_eq!(
+            derive_issues_url("https://github.com/foo/bar/"),
+            Some("https://github.com/foo/bar/issues".to_string())
+        );
+    }
+
+    #[test]
+    fn issues_url_github_with_dot_git_and_trailing_slash() {
+        assert_eq!(
+            derive_issues_url("https://github.com/foo/bar.git/"),
+            Some("https://github.com/foo/bar/issues".to_string())
+        );
+    }
+
+    #[test]
+    fn issues_url_gitlab_self_hosted() {
+        assert_eq!(
+            derive_issues_url("https://gitlab.freedesktop.org/mesa/mesa"),
+            Some("https://gitlab.freedesktop.org/mesa/mesa/issues".to_string())
+        );
+    }
+
+    #[test]
+    fn issues_url_http_github() {
+        assert_eq!(
+            derive_issues_url("http://github.com/foo/bar"),
+            Some("http://github.com/foo/bar/issues".to_string())
+        );
+    }
+
+    #[test]
+    fn issues_url_bitbucket_not_supported() {
+        assert_eq!(
+            derive_issues_url("https://bitbucket.org/user/repo"),
+            None
+        );
+    }
+
+    #[test]
+    fn issues_url_codeberg_not_supported() {
+        assert_eq!(
+            derive_issues_url("https://codeberg.org/user/repo"),
+            None
+        );
+    }
+
+    #[test]
     fn vcs_git_derived_for_known_hosts() {
         assert!(derive_vcs_git("https://github.com/foo/bar").is_some());
         assert!(derive_vcs_git("https://gitlab.com/foo/bar").is_some());
@@ -875,5 +967,94 @@ mod tests {
         assert_eq!(derive_vcs_git("https://example.com/repo"), None);
         // substring-match trap: host contains "github.com" but isn't
         assert_eq!(derive_vcs_git("https://evil.com/github.com/foo"), None);
+    }
+
+    #[test]
+    fn vcs_git_strips_trailing_slash() {
+        assert_eq!(
+            derive_vcs_git("https://github.com/foo/bar/"),
+            Some("https://github.com/foo/bar".to_string())
+        );
+    }
+
+    #[test]
+    fn vcs_git_preserves_dot_git_suffix() {
+        assert_eq!(
+            derive_vcs_git("https://example.com/repo.git"),
+            Some("https://example.com/repo.git".to_string())
+        );
+    }
+
+    #[test]
+    fn vcs_git_salsa_debian() {
+        assert_eq!(
+            derive_vcs_git("https://salsa.debian.org/rust-team/debcargo"),
+            Some("https://salsa.debian.org/rust-team/debcargo".to_string())
+        );
+    }
+
+    #[test]
+    fn vcs_git_http_github() {
+        assert_eq!(
+            derive_vcs_git("http://github.com/foo/bar"),
+            Some("http://github.com/foo/bar".to_string())
+        );
+    }
+
+    #[test]
+    fn vcs_git_gitlab_self_hosted() {
+        assert_eq!(
+            derive_vcs_git("https://gitlab.freedesktop.org/mesa/mesa"),
+            Some("https://gitlab.freedesktop.org/mesa/mesa".to_string())
+        );
+    }
+
+    #[test]
+    fn vcs_git_none_for_plain_https() {
+        assert_eq!(derive_vcs_git("https://crates.io/crates/serde"), None);
+    }
+
+    #[test]
+    fn is_github_url_positive() {
+        assert!(is_github_url("https://github.com/foo/bar"));
+        assert!(is_github_url("http://github.com/foo/bar"));
+    }
+
+    #[test]
+    fn is_github_url_negative() {
+        assert!(!is_github_url("https://notgithub.com/foo/bar"));
+        assert!(!is_github_url("https://gitlab.com/foo/bar"));
+        assert!(!is_github_url("https://example.com/github.com/foo"));
+        assert!(!is_github_url("ftp://github.com/foo/bar"));
+    }
+
+    #[test]
+    fn is_gitlab_url_positive() {
+        assert!(is_gitlab_url("https://gitlab.com/foo/bar"));
+        assert!(is_gitlab_url("https://gitlab.example.org/foo/bar"));
+        assert!(is_gitlab_url("https://gitlab.freedesktop.org/mesa/mesa"));
+        assert!(is_gitlab_url("http://gitlab.com/foo/bar"));
+    }
+
+    #[test]
+    fn is_gitlab_url_negative() {
+        assert!(!is_gitlab_url("https://github.com/foo/bar"));
+        assert!(!is_gitlab_url("https://notgitlab.com/foo/bar"));
+        assert!(!is_gitlab_url("https://example.com/gitlab.com/foo"));
+        assert!(!is_gitlab_url("ftp://gitlab.com/foo/bar"));
+    }
+
+    #[test]
+    fn is_salsa_url_positive() {
+        assert!(is_salsa_url("https://salsa.debian.org/rust-team/debcargo"));
+        assert!(is_salsa_url("http://salsa.debian.org/foo/bar"));
+    }
+
+    #[test]
+    fn is_salsa_url_negative() {
+        assert!(!is_salsa_url("https://github.com/foo/bar"));
+        assert!(!is_salsa_url("https://notsalsa.debian.org/foo/bar"));
+        assert!(!is_salsa_url("https://salsa.example.com/foo/bar"));
+        assert!(!is_salsa_url("ftp://salsa.debian.org/foo/bar"));
     }
 }

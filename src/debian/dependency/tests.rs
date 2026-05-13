@@ -275,3 +275,145 @@ fn test_deb_dep_add_nocheck() {
 
     assert_eq!(expected, result);
 }
+
+#[test]
+fn test_deb_dep_add_nocheck_single_dep() {
+    let result = deb_dep_add_nocheck("librust-serde-dev (>= 1.0)");
+    assert_eq!("librust-serde-dev (>= 1.0) <!nocheck>", result);
+}
+
+#[test]
+fn test_deb_dep_add_nocheck_no_version() {
+    let result = deb_dep_add_nocheck("librust-serde-dev");
+    assert_eq!("librust-serde-dev <!nocheck>", result);
+}
+
+#[test]
+fn test_deb_dep_add_nocheck_three_alternatives() {
+    let result = deb_dep_add_nocheck("a-dev | b-dev | c-dev");
+    assert_eq!("a-dev <!nocheck> | b-dev <!nocheck> | c-dev <!nocheck>", result);
+}
+
+#[test]
+fn test_deb_dep_add_nocheck_versioned_alternatives() {
+    let result = deb_dep_add_nocheck("librust-foo-1-dev (>= 1.2) | librust-foo-dev (>= 1.0)");
+    assert_eq!(
+        "librust-foo-1-dev (>= 1.2) <!nocheck> | librust-foo-dev (>= 1.0) <!nocheck>",
+        result
+    );
+}
+
+#[test]
+fn test_v_ordering() {
+    let v1 = V::new(&semver::Comparator::parse("1.0.0").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("2.0.0").unwrap()).unwrap();
+    let v3 = V::new(&semver::Comparator::parse("1.1.0").unwrap()).unwrap();
+    let v4 = V::new(&semver::Comparator::parse("1.0.1").unwrap()).unwrap();
+
+    assert!(v1 < v2);
+    assert!(v1 < v3);
+    assert!(v1 < v4);
+    assert!(v3 < v2);
+    assert!(v4 < v3);
+}
+
+#[test]
+fn test_v_inclast_major() {
+    let v = V::new(&semver::Comparator::parse("5").unwrap()).unwrap();
+    assert_eq!((6, 0, 0), v.inclast().mmp());
+}
+
+#[test]
+fn test_v_inclast_minor() {
+    let v = V::new(&semver::Comparator::parse("1.5").unwrap()).unwrap();
+    assert_eq!((1, 6, 0), v.inclast().mmp());
+}
+
+#[test]
+fn test_v_inclast_patch() {
+    let v = V::new(&semver::Comparator::parse("1.5.9").unwrap()).unwrap();
+    assert_eq!((1, 5, 10), v.inclast().mmp());
+}
+
+#[test]
+fn test_v_display_major_only() {
+    let v = V::new(&semver::Comparator::parse("3").unwrap()).unwrap();
+    assert_eq!("3", v.to_string());
+}
+
+#[test]
+fn test_v_display_major_minor() {
+    let v = V::new(&semver::Comparator::parse("3.14").unwrap()).unwrap();
+    assert_eq!("3.14", v.to_string());
+}
+
+#[test]
+fn test_v_display_full() {
+    let v = V::new(&semver::Comparator::parse("3.14.159").unwrap()).unwrap();
+    assert_eq!("3.14.159", v.to_string());
+}
+
+#[test]
+fn test_v_range_constrain_ge_keeps_highest() {
+    let v1 = V::new(&semver::Comparator::parse("1.0").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("2.0").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_ge(v2.clone());
+
+    assert_eq!(vr.ge.as_ref().unwrap(), &v2);
+}
+
+#[test]
+fn test_v_range_constrain_lt_keeps_lowest() {
+    let v1 = V::new(&semver::Comparator::parse("3.0").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("5.0").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_lt(v2);
+    vr.constrain_lt(v1.clone());
+
+    assert_eq!(vr.lt.as_ref().unwrap(), &v1);
+}
+
+#[test]
+fn test_v_range_same_ge_and_lt_is_error() {
+    let v = V::new(&semver::Comparator::parse("1.0").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v.clone());
+    vr.constrain_lt(v);
+
+    assert!(vr.to_deb_clause("base", "-dev").is_err());
+}
+
+#[test]
+fn test_v_range_to_deb_clause_with_dev_suffix() {
+    let v1 = V::new(&semver::Comparator::parse("1.0").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("2.0").unwrap()).unwrap();
+
+    let mut vr = VRange::new();
+    vr.constrain_ge(v1);
+    vr.constrain_lt(v2);
+
+    assert_eq!(
+        vec!["base-1-dev"],
+        vr.to_deb_clause("base", "-dev").unwrap()
+    );
+}
+
+#[test]
+fn test_v_equality_different_precision() {
+    // 1.0 and 1.0.0 should be equal (both expand to (1,0,0))
+    let v1 = V::new(&semver::Comparator::parse("1.0").unwrap()).unwrap();
+    let v2 = V::new(&semver::Comparator::parse("1.0.0").unwrap()).unwrap();
+    assert_eq!(v1, v2);
+}
+
+#[test]
+fn test_v_zero_versions() {
+    let v = V::new(&semver::Comparator::parse("0.0.0").unwrap()).unwrap();
+    assert_eq!((0, 0, 0), v.mmp());
+    assert_eq!((0, 0, 1), v.inclast().mmp());
+}
