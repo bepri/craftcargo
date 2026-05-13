@@ -133,19 +133,17 @@ kebab-case for YAML output via #[serde(rename_all = "kebab-case")].
       // Standard build packages (always present for the part)
       #[serde(skip_serializing_if = "Vec::is_empty")]
       pub build_packages: Vec<String>,      // -> "build-packages"
-      // Architecture-specific build packages (assumed debcraft feature, F.4)
-      // These carry <!nocheck> profile annotations for library packages.
+      // Architecture-specific build packages with optional nocheck profile.
       #[serde(skip_serializing_if = "Vec::is_empty")]
       pub build_packages_arch: Vec<BuildPackageEntry>, // -> "build-packages-arch"
+      // Parts this part depends on (after: equivalent)
+      #[serde(skip_serializing_if = "Vec::is_empty")]
+      pub after: Vec<String>,               // -> "after"
   }
 
-  Note: The debcraft cargo helper manages the full Rust library packaging
-  workflow natively — no debhelper-compat level, dh-sequence-cargo, or
-  any other Debian packaging tool is needed or emitted. Only crate
-  dependencies (librust-*-dev packages) go into build-packages-arch.
-  The cargo helper is responsible for: source tree staging, installation
-  to /usr/share/cargo/registry/, test execution, and cargo-checksum.json
-  placement.
+  Note: library crates produce TWO parts (see 7a): a "crate" part using the
+  dump plugin and a "check" part carrying the nocheck-gated dependencies.
+  Binary crates produce a single part using the "rust" plugin.
 
 3c. Build package entry: BuildPackageEntry
 
@@ -418,9 +416,8 @@ Changes in this function vs. prepare_debian_control():
     architectures = Some("any".to_string())
     summary = Some(format!("{summary_prefix}{summary_suffix}"))
     description = Some(format!("{description_prefix}{description_suffix}"))
-    depends = (f_deps and o_deps translated to strings, same as now,
-               without any debhelper/Debian substvars — debcraft injects
-               these automatically)
+    depends = (f_deps and o_deps translated to strings, same as now.
+               No substvar strings — see N2 for per-substvar handling.)
     recommends = (feature packages only: existing recommends logic, unchanged)
     suggests = (feature packages only: existing suggests logic, unchanged)
     provides = (existing provides list, WITHOUT any version clause — debcraft
@@ -441,11 +438,13 @@ Changes in this function vs. prepare_debian_control():
     "librust-foo-1.2.3-dev"
   plus one entry per absorbed feature per version suffix as currently.
 
-  Key difference for depends: drop all Debian substvars (${misc:Depends},
-  ${shlibs:Depends}, ${cargo:Depends} etc.) — debcraft does not use variable
-  substitution syntax and injects equivalent values automatically. Only emit
-  explicit package name strings. Keep the explicit direct dep on the bare
-  library package from feature packages:
+  Key difference for depends: the current debcargo output contains substvar
+  strings (${misc:Depends}, ${shlibs:Depends}, ${cargo:Depends} etc.).
+  debcraft does not use substvar syntax. Apply the per-substvar policy from
+  N2: inline any known concrete values directly; omit known-empty ones.
+  For library packages all of these are empty or auto-handled — emit only
+  the explicit librust-*-dev dependency strings. Keep the explicit direct
+  dep on the bare library package from feature packages:
     DebcraftPackage::depends includes Package::deb_feature("", &pkgbase)
     for feature packages where !f_deps.contains(&"").
 
@@ -456,8 +455,8 @@ Changes in this function vs. prepare_debian_control():
     architectures = Some("any".to_string())
     summary = Some(...)
     description = Some(...)
-    depends = [] (debcraft injects shared library dependencies automatically;
-                  no substvars needed)
+    depends = [] (see N2/N4 — all substvars for binary packages are either
+                  empty or handled natively by debcraft; no values to inline)
     provides = [] for non-semver-suffix; ["bin_name (= ...)"] for semver-
                suffix (same as current Package::new_bin logic)
     multi_arch = None (debcraft default "no")
@@ -484,19 +483,38 @@ natively within debcraft — no debhelper tools are involved.
 
 7a. For library crates (lib = true):
 
-  Part name: use the crate name (crate_info.crate_name()).
-  Plugin: "cargo" (activates the debcraft cargo helper for this part;
-          see the delivery model note in the introduction).
+  Generate TWO parts: "crate" and "check".
 
-  DebcraftPart {
-      plugin: "cargo".to_string(),
-      source: ".".to_string(),
-      rust_channel: None,         // cargo helper uses system toolchain
-      rust_features: vec![],      // cargo helper handles features via packages
-      build_packages: vec![],     // no debhelper packages; the cargo helper
-                                  // manages the build environment natively
-      build_packages_arch: <library build deps with nocheck — see 7c>,
-  }
+  Part 1 — "crate": copies the source tree using the dump plugin.
+
+    DebcraftPart {
+        plugin: "dump".to_string(),
+        source: ".".to_string(),
+        rust_channel: None,
+        rust_features: vec![],
+        build_packages: vec![],
+        build_packages_arch: vec![],  // no build deps on the dump part
+        after: vec![],
+    }
+
+  Part 2 — "check": runs the crate tests. Carries the toolchain and
+  crate dependency packages, gated with <!nocheck> where applicable
+  to break bootstrapping cycles (see 7c).
+
+    DebcraftPart {
+        plugin: "cargo".to_string(),   // activates debcraft cargo helper
+        source: ".".to_string(),
+        rust_channel: None,            // cargo helper uses system toolchain
+        rust_features: vec![],         // features handled via packages
+        build_packages: vec![],        // toolchain managed by cargo helper
+        build_packages_arch: <crate deps with nocheck — see 7c>,
+        after: vec!["crate".to_string()],
+    }
+
+  The two-part split mirrors the separation between source installation
+  (dump, unconditional) and test execution (cargo helper, skippable via
+  nocheck). The "crate" part name is fixed; the "check" part name may be
+  adjusted to match debcraft conventions.
 
 7b. For binary-only crates (lib = false, bins non-empty):
 
@@ -511,21 +529,24 @@ natively within debcraft — no debhelper tools are involved.
       build_packages_arch: vec![],  // rust plugin is arch-independent build
   }
 
-7c. Build packages for library parts (nocheck handling):
+7c. Build packages for the "check" part (nocheck handling):
 
   Current logic in prepare_debian_control() (lines 706-742):
     - toolchain_deps: cargo:native, rustc:native (>= min_ver), libstd-rust-dev
     - default feature dep translation via deb_deps()
     - if !has_bins && !skip_nocheck: wrap each dep with deb_dep_add_nocheck()
 
-  For debcraft.yaml, this translates to build_packages_arch entries:
-    - Each toolchain dep → BuildPackageEntry::Simple (toolchain always needed)
+  For the "check" part's build_packages_arch:
+    - Each toolchain dep → BuildPackageEntry::Simple (always needed)
     - Each crate dep:
         if skip_nocheck() → BuildPackageEntry::Simple
         else              → BuildPackageEntry::WithProfile {
                                 package: dep_string,
                                 profiles: vec!["nocheck".to_string()]
                            }
+
+  The "crate" part has no build_packages_arch entries — it uses the dump
+  plugin which requires no build dependencies.
 
   The source override fields build_depends, build_depends_arch,
   build_depends_indep, build_depends_excludes from SourceOverride are applied
@@ -795,14 +816,37 @@ N1. Provides version clause
   This applies to all provides entries: versioned aliases (librust-foo-1-dev
   etc.) are also emitted as bare names; debcraft handles version binding.
 
-N2. Debian substvar removal
-  debcraft does not use variable substitution syntax (${misc:Depends},
-  ${shlibs:Depends}, ${cargo:Depends}, ${cargo:Provides} etc.). debcraft
-  injects equivalent values automatically at packaging time. All such
-  substvar strings present in the current debcargo output must be dropped
-  in the debcraft path — emit only explicit package name strings.
-  This affects depends, recommends, suggests, and provides fields.
-  This is the most pervasive change in the package field lists.
+N2. Substvar handling policy
+  debcraft.yaml does not use ${...} variable substitution syntax in package
+  relationship fields. For each substvar that appears in the current debcargo
+  output, apply the following rule:
+
+    - If the substvar expands to a KNOWN CONCRETE VALUE in the Rust packaging
+      context, place that value directly in the corresponding debcraft.yaml
+      field (depends, provides, recommends, suggests, etc.).
+
+    - If the substvar is KNOWN TO ALWAYS BE EMPTY for Rust packages, omit it
+      entirely (do not emit an empty string).
+
+    - If the substvar's value is INJECTED AUTOMATICALLY by debcraft (e.g.
+      shared library deps for binary packages), omit it from the YAML —
+      debcraft will handle it without needing an explicit entry.
+
+  Per-substvar resolution for Rust packages:
+
+    ${misc:Depends}      — empty for all Rust packages; omit.
+    ${shlibs:Depends}    — empty for library packages (source-only, no .so);
+                           for binary packages, debcraft injects this
+                           automatically; omit from YAML in both cases.
+    ${cargo:Depends}     — always empty (never populated); omit.
+    ${cargo:Provides}    — always empty (never populated); omit.
+    ${cargo:Recommends}  — always empty (never populated); omit.
+    ${cargo:Suggests}    — always empty (never populated); omit.
+    ${binary:Version}    — handled by debcraft's automatic version injection
+                           into provides; emit bare package names (see N1).
+
+  If a future substvar is encountered that has a known non-empty expansion,
+  inline its value rather than leaving it as a substvar string.
 
 N3. Feature package doc symlink
   dh-cargo (the Debian tool) installs a doc symlink for feature packages:
@@ -810,14 +854,16 @@ N3. Feature package doc symlink
   The debcraft cargo helper must replicate this behaviour natively.
   No change needed in debcargo.
 
-N4. Removal of Debian substvar depends
-  In current control.rs, binary packages have:
+N4. Binary package substvar resolution
+  In current control.rs, binary packages use:
     Depends: ${misc:Depends}, ${shlibs:Depends}, ${cargo:Depends}
     Provides: ${cargo:Provides}
-  None of these substvar mechanisms exist in debcraft; debcraft injects
-  equivalent values automatically. Drop all of them from the debcraft path.
-  Result: binary package depends/recommends/suggests are empty in
-  debcraft.yaml unless overridden in debcargo.toml.
+    Recommends: ${cargo:Recommends}
+    Suggests: ${cargo:Suggests}
+  Applying the policy from N2: all of these are either always empty or
+  auto-handled by debcraft, so none produce values to inline. The resulting
+  debcraft.yaml binary package has empty depends/recommends/suggests/provides
+  (unless explicit deps are added via debcargo.toml overrides).
 
 N5. extra_lines removal
   Package::extra_lines currently carries arbitrary control field text
