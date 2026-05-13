@@ -10,3 +10,6 @@
 *.kdev4
 book/build/
 .demo-output*
+demo/node_modules/
+demo/package.json
+demo/package-lock.json
