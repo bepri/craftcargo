@@ -7,11 +7,11 @@ use std::path::Path;
 use semver::Version;
 
 use crate::config::{package_field_for_feature, Config, PackageKey};
-use crate::crates::{all_dependencies_and_features, CrateInfo};
+use crate::crates::{all_dependencies_and_features, transitive_deps, CrateInfo};
 use crate::debian::control::{deb_feature_name, deb_name, deb_upstream_version, dsc_name};
 use crate::debian::{
     collapse_features, deb_deps, generate_homepage, normalize_feature_deps, reduce_provides,
-    DebInfo,
+    toolchain_deps, DebInfo,
 };
 use crate::errors::Result;
 
@@ -578,12 +578,173 @@ fn apply_package_overrides(
 }
 
 fn build_debcraft_parts(
-    _crate_info: &CrateInfo,
+    crate_info: &CrateInfo,
     _deb_info: &DebInfo,
-    _config: &Config,
+    config: &Config,
     _packages: &BTreeMap<String, DebcraftPackage>,
 ) -> Result<BTreeMap<String, DebcraftPart>> {
-    todo!("step 7: parts generation")
+    let mut parts = BTreeMap::new();
+
+    let lib = crate_info.is_lib() && config.build_lib_package();
+    let bins = crate_info.get_binary_targets();
+    let has_bins = !bins.is_empty();
+
+    if lib {
+        // 7a: library crate — two parts: "crate" (dump) and "check" (cargo helper).
+
+        // 7a / "crate" part: copies the source tree unconditionally using the dump plugin.
+        // No build dependencies — the dump plugin needs none.
+        let crate_part = DebcraftPart {
+            plugin: "dump".to_string(),
+            source: ".".to_string(),
+            rust_channel: None,
+            rust_features: vec![],
+            build_packages: vec![],
+            build_packages_arch: vec![],
+            after: vec![],
+        };
+        parts.insert("crate".to_string(), crate_part);
+
+        // 7a / "check" part: runs the crate tests via the debcraft cargo helper.
+        // build_packages_arch carries toolchain deps + crate deps, nocheck-gated per 7c.
+        let build_packages_arch = build_check_part_deps(crate_info, config)?;
+
+        let check_part = DebcraftPart {
+            plugin: "cargo".to_string(),
+            source: ".".to_string(),
+            rust_channel: None,
+            rust_features: vec![],
+            build_packages: vec![],
+            build_packages_arch,
+            after: vec!["crate".to_string()],
+        };
+        parts.insert("check".to_string(), check_part);
+    } else if has_bins {
+        // 7b: binary-only crate — single "rust" part using the craft-parts rust plugin.
+        let build_packages_arch = build_bin_part_deps(crate_info, config)?;
+
+        let rust_part = DebcraftPart {
+            plugin: "rust".to_string(),
+            source: ".".to_string(),
+            // 7b: "none" tells the rust plugin to use the system toolchain.
+            rust_channel: Some("none".to_string()),
+            // 7b: features come from build deps; no explicit feature list needed.
+            rust_features: vec![],
+            // 7b: toolchain and crate deps go in build_packages for the rust plugin.
+            build_packages: build_packages_arch
+                .iter()
+                .map(|e| match e {
+                    schema::BuildPackageEntry::Simple(s) => s.clone(),
+                    schema::BuildPackageEntry::WithProfile { package, .. } => package.clone(),
+                })
+                .collect(),
+            build_packages_arch: vec![],
+            after: vec![],
+        };
+        parts.insert("rust".to_string(), rust_part);
+    }
+
+    Ok(parts)
+}
+
+/// Build the `build_packages_arch` list for the library "check" part (7c).
+///
+/// Toolchain deps are always unconditional.  Crate deps are wrapped in a
+/// `nocheck` profile unless `skip_nocheck` is set, which breaks bootstrapping
+/// cycles — mirroring the `deb_dep_add_nocheck` logic in `prepare_debian_control()`.
+fn build_check_part_deps(
+    crate_info: &CrateInfo,
+    config: &Config,
+) -> Result<Vec<schema::BuildPackageEntry>> {
+    let features_with_deps = all_dependencies_and_features(crate_info.manifest());
+    let working = normalize_feature_deps(features_with_deps)?;
+    let (default_features, default_deps) = transitive_deps(&working, "default")?;
+
+    let extra_override_deps = package_field_for_feature(
+        |x| config.package_depends(x),
+        PackageKey::feature("default"),
+        &default_features,
+    );
+
+    let skip_nocheck = config.skip_nocheck().unwrap_or(false);
+
+    // 7c: toolchain deps are always Simple (never gated by nocheck).
+    let mut entries: Vec<schema::BuildPackageEntry> =
+        toolchain_deps(crate_info.rust_version().as_deref())
+            .into_iter()
+            .map(schema::BuildPackageEntry::Simple)
+            .collect();
+
+    // 7c: crate deps get a nocheck profile unless skip_nocheck is set.
+    let crate_dep_strings: Vec<String> = deb_deps(config.allow_prerelease_deps, &default_deps)?
+        .into_iter()
+        .chain(extra_override_deps)
+        .collect();
+
+    for dep in crate_dep_strings {
+        let entry = if skip_nocheck {
+            // 7c: skip_nocheck — treat all deps as unconditional.
+            schema::BuildPackageEntry::Simple(dep)
+        } else {
+            schema::BuildPackageEntry::WithProfile {
+                package: dep,
+                profiles: vec!["nocheck".to_string()],
+            }
+        };
+        entries.push(entry);
+    }
+
+    // 7c: apply build_depends_excludes from SourceOverride.
+    if let Some(excludes) = config.build_depends_excludes() {
+        entries.retain(|e| {
+            let pkg = match e {
+                schema::BuildPackageEntry::Simple(s) => s.as_str(),
+                schema::BuildPackageEntry::WithProfile { package, .. } => package.as_str(),
+            };
+            !excludes.iter().any(|ex| ex == pkg)
+        });
+    }
+
+    // 7c: append any extra arch-specific build deps from SourceOverride.
+    if let Some(extra) = config.build_depends_arch() {
+        entries.extend(
+            extra
+                .iter()
+                .map(|d| schema::BuildPackageEntry::Simple(d.clone())),
+        );
+    }
+
+    Ok(entries)
+}
+
+/// Build the `build_packages` list for the binary-only "rust" part (7b).
+///
+/// For binary crates there is no bootstrapping concern, so all deps are simple
+/// strings — no nocheck wrapping.
+fn build_bin_part_deps(
+    crate_info: &CrateInfo,
+    config: &Config,
+) -> Result<Vec<schema::BuildPackageEntry>> {
+    let features_with_deps = all_dependencies_and_features(crate_info.manifest());
+    let working = normalize_feature_deps(features_with_deps)?;
+    let (default_features, default_deps) = transitive_deps(&working, "default")?;
+
+    let extra_override_deps = package_field_for_feature(
+        |x| config.package_depends(x),
+        PackageKey::feature("default"),
+        &default_features,
+    );
+
+    // 7b: toolchain deps + translated crate deps, all Simple (no nocheck needed).
+    let entries: Vec<schema::BuildPackageEntry> =
+        toolchain_deps(crate_info.rust_version().as_deref())
+            .into_iter()
+            .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
+            .chain(extra_override_deps)
+            .map(schema::BuildPackageEntry::Simple)
+            .collect();
+
+    Ok(entries)
 }
 
 fn write_companion_files(
