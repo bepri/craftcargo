@@ -1,0 +1,13 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#00d4aa', 'primaryTextColor': '#eaeaea', 'primaryBorderColor': '#00d4aa', 'lineColor': '#00d4aa', 'secondaryColor': '#16213e', 'tertiaryColor': '#1a1a2e'}}}%%
+
+graph LR
+    A["🦀 crates.io<br/>registry"] -->|fetch metadata| B["⚙️ craftcargo"]
+    B -->|generate| C["📄 debcraft.yaml"]
+    C -->|input to| D["🔨 debcraft"]
+    D -->|build| E["📦 .deb package"]
+
+    style A fill:#16213e,stroke:#00d4aa,color:#eaeaea
+    style B fill:#00d4aa,stroke:#00d4aa,color:#1a1a2e,font-weight:bold
+    style C fill:#16213e,stroke:#ffcc00,color:#eaeaea
+    style D fill:#16213e,stroke:#00d4aa,color:#eaeaea
+    style E fill:#16213e,stroke:#00d4aa,color:#eaeaea
