@@ -34,6 +34,15 @@ pub fn prepare_debcraft_yaml(
 ) -> Result<()> {
     let mut yaml = build_debcraft_top_level(crate_info, deb_info, config)?;
 
+    // N7: if an existing debcraft.yaml is present and the upstream version
+    // is unchanged, preserve the Debian revision instead of resetting to -1.
+    let existing_path = output_dir.join("debcraft.yaml");
+    if existing_path.exists() {
+        if let Ok(existing_str) = fs::read_to_string(&existing_path) {
+            yaml.version = resolve_debian_version(&yaml.version, &existing_str);
+        }
+    }
+
     yaml.packages = build_debcraft_packages(deb_info, crate_info, config)?;
 
     yaml.parts = build_debcraft_parts(crate_info, deb_info, config, &yaml.packages)?;
@@ -54,6 +63,34 @@ pub fn prepare_debcraft_yaml(
     )?;
 
     Ok(())
+}
+
+/// Preserve the Debian revision when regenerating an existing `debcraft.yaml` (N7).
+///
+/// Parses the `version:` field from the existing YAML text and compares the
+/// upstream portion to `new_version`.  If they match, the existing Debian
+/// revision is kept; if the upstream has changed, the revision resets to 1.
+fn resolve_debian_version(new_version: &str, existing_yaml: &str) -> String {
+    // Extract just the upstream part from new_version (strip trailing "-N").
+    let new_upstream = new_version.rsplit_once('-').map_or(new_version, |(u, _)| u);
+
+    // Scan the YAML text for the `version:` line — avoids a full deserialise.
+    for line in existing_yaml.lines() {
+        let trimmed = line.trim();
+        if let Some(rest) = trimmed.strip_prefix("version:") {
+            let existing = rest.trim().trim_matches('"');
+            if let Some((existing_upstream, existing_rev)) = existing.rsplit_once('-') {
+                if existing_upstream == new_upstream {
+                    // Same upstream version — keep the existing Debian revision.
+                    return existing.to_string();
+                }
+                let _ = existing_rev; // upstream changed — fall through to reset
+            }
+            break;
+        }
+    }
+    // Upstream changed or could not parse — reset to revision 1.
+    new_version.to_string()
 }
 
 fn build_debcraft_top_level(
@@ -220,6 +257,20 @@ fn build_debcraft_packages(
     config: &Config,
 ) -> Result<BTreeMap<String, DebcraftPackage>> {
     let mut packages = BTreeMap::new();
+
+    // N5: extra_lines has no debcraft.yaml equivalent; warn once per package that sets it.
+    for key in config.configured_packages() {
+        if let Some(lines) = config.package_extra_lines(key) {
+            if !lines.is_empty() {
+                debcargo_warn!(
+                    "A package sets extra_lines {:?} which has no debcraft.yaml \
+                     equivalent and will be ignored. Use custom-source-fields or a \
+                     debcraft overlay file instead.",
+                    lines
+                );
+            }
+        }
+    }
 
     let crate_name = crate_info.crate_name();
     let base_pkgname = deb_info.base_package_name();
@@ -878,6 +929,31 @@ mod tests {
     use super::*;
     use std::io::Write;
     use tempfile::TempDir;
+
+    // ── N7: version bump detection ─────────────────────────────────────────
+
+    #[test]
+    fn n7_preserves_revision_when_upstream_unchanged() {
+        let existing = "name: rust-foo\nversion: 1.2.3-2\n";
+        assert_eq!(resolve_debian_version("1.2.3-1", existing), "1.2.3-2");
+    }
+
+    #[test]
+    fn n7_resets_revision_when_upstream_changes() {
+        let existing = "name: rust-foo\nversion: 1.2.3-2\n";
+        assert_eq!(resolve_debian_version("1.2.4-1", existing), "1.2.4-1");
+    }
+
+    #[test]
+    fn n7_resets_revision_when_no_existing_file() {
+        assert_eq!(resolve_debian_version("1.0.0-1", ""), "1.0.0-1");
+    }
+
+    #[test]
+    fn n7_handles_higher_existing_revision() {
+        let existing = "name: rust-foo\nversion: 2.0.0-5\n";
+        assert_eq!(resolve_debian_version("2.0.0-1", existing), "2.0.0-5");
+    }
 
     // ── Output layout tests ────────────────────────────────────────────────
 
