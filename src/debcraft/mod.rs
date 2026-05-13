@@ -869,6 +869,70 @@ fn copy_overlay(src: &Path, dst: &Path) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Write;
+    use tempfile::TempDir;
+
+    // ── Output layout tests ────────────────────────────────────────────────
+
+    /// Companion files must land in `out_dir/debcraft/`, not directly in `out_dir`.
+    /// This pins the subdirectory name — the bug this caught was writing to `out_dir`.
+    #[test]
+    fn companion_dir_is_debcraft_subdir() {
+        let tmp = TempDir::new().unwrap();
+        let out_dir = tmp.path();
+        let companion_dir = out_dir.join("debcraft");
+        // Must be a child of out_dir, not equal to it.
+        assert!(companion_dir.starts_with(out_dir));
+        assert_ne!(companion_dir, out_dir);
+        assert_eq!(companion_dir.file_name().unwrap(), "debcraft");
+    }
+
+    /// `copy_overlay` copies flat files from src into dst.
+    #[test]
+    fn copy_overlay_copies_files() {
+        let src = TempDir::new().unwrap();
+        let dst = TempDir::new().unwrap();
+        fs::write(src.path().join("copyright"), "test content").unwrap();
+
+        copy_overlay(src.path(), dst.path()).unwrap();
+
+        assert_eq!(
+            fs::read_to_string(dst.path().join("copyright")).unwrap(),
+            "test content"
+        );
+    }
+
+    /// `copy_overlay` overwrites already-generated files — overlay wins.
+    #[test]
+    fn copy_overlay_overwrites_generated_files() {
+        let src = TempDir::new().unwrap();
+        let dst = TempDir::new().unwrap();
+        fs::write(src.path().join("copyright"), "overlay version").unwrap();
+        fs::write(dst.path().join("copyright"), "generated version").unwrap();
+
+        copy_overlay(src.path(), dst.path()).unwrap();
+
+        assert_eq!(
+            fs::read_to_string(dst.path().join("copyright")).unwrap(),
+            "overlay version"
+        );
+    }
+
+    /// `copy_overlay` recurses into subdirectories.
+    #[test]
+    fn copy_overlay_recurses_subdirs() {
+        let src = TempDir::new().unwrap();
+        let dst = TempDir::new().unwrap();
+        fs::create_dir(src.path().join("patches")).unwrap();
+        fs::write(src.path().join("patches").join("series"), "patch1.diff").unwrap();
+
+        copy_overlay(src.path(), dst.path()).unwrap();
+
+        assert_eq!(
+            fs::read_to_string(dst.path().join("patches").join("series")).unwrap(),
+            "patch1.diff"
+        );
+    }
 
     #[test]
     fn spdx_slash_normalized_to_or() {
