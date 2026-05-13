@@ -1,46 +1,51 @@
 name: rust-foobar
 version: 0.1.0-1
+description: Description
 maintainer: Debian Rust Maintainers <pkg-rust-maintainers@alioth-lists.debian.net>
 section: rust
 contact: Debian Rust Maintainers <pkg-rust-maintainers@alioth-lists.debian.net>
 license: MIT
-custom-source-fields:
-  X-Cargo-Crate: foobar
-  X-Cargo-Crate-Version: 0.1.0
 parts:
-  check:
-    plugin: cargo
-    source: .
-    build-packages-arch:
-    - cargo:native
-    - rustc:native
-    - libstd-rust-dev
-    - package: librust-anyhow-1+default-dev (>= 1.0.96)
-      profiles:
-      - nocheck
-    - package: some-dependency-for-lib
-      profiles:
-      - nocheck
-    after:
-    - crate
   crate:
     plugin: dump
     source: .
 packages:
-  librust-foobar+futures-dev:
+  librust-foobar-dev:
+    architectures: any
+    summary: Rust crate "foobar" - Rust source code
+    description: Source code for Debianized Rust crate "foobar"
+    depends:
+    - librust-anyhow-1-default-dev (>= 1.0.96)
+    - some-dependency-for-lib
+    suggests:
+    - librust-foobar-futures-dev
+    - librust-foobar-somefeature-dev
+    - librust-foobar-someotherfeature-dev
+    provides:
+    - librust-foobar-default-dev
+    - librust-foobar-0-dev
+    - librust-foobar-0-default-dev
+    - librust-foobar-0.1-dev
+    - librust-foobar-0.1-default-dev
+    - librust-foobar-0.1.0-dev
+    - librust-foobar-0.1.0-default-dev
+    conflicts:
+    - global-conflict
+    multi-arch: same
+  librust-foobar-futures-dev:
     architectures: any
     summary: Rust crate "foobar" - feature "futures"
     description: This metapackage enables feature "futures" for the Rust foobar crate, by pulling in any additional dependencies needed by that feature.
     depends:
     - librust-foobar-dev
-    - librust-futures+default-dev (<< 0.4)
-    - librust-futures+default-dev (>= 0.2)
+    - librust-futures-default-dev (<< 0.4)
+    - librust-futures-default-dev (>= 0.2)
     provides:
-    - librust-foobar-0+futures-dev
-    - librust-foobar-0.1+futures-dev
-    - librust-foobar-0.1.0+futures-dev
+    - librust-foobar-0-futures-dev
+    - librust-foobar-0.1-futures-dev
+    - librust-foobar-0.1.0-futures-dev
     multi-arch: same
-  librust-foobar+somefeature-dev:
+  librust-foobar-somefeature-dev:
     architectures: any
     summary: Rust crate "foobar" - feature "somefeature"
     description: This metapackage enables feature "somefeature" for the Rust foobar crate, by pulling in any additional dependencies needed by that feature.
@@ -49,46 +54,24 @@ packages:
     - librust-thiserror-2-dev
     - some-dependency-for-lib-with-feature
     provides:
-    - librust-foobar-0+somefeature-dev
-    - librust-foobar-0.1+somefeature-dev
-    - librust-foobar-0.1.0+somefeature-dev
+    - librust-foobar-0-somefeature-dev
+    - librust-foobar-0.1-somefeature-dev
+    - librust-foobar-0.1.0-somefeature-dev
     breaks:
     - broken-by-somefeature
     replaces:
     - replaced-by-somefeature
     multi-arch: same
-  librust-foobar+someotherfeature-dev:
+  librust-foobar-someotherfeature-dev:
     architectures: any
     summary: Rust crate "foobar" - feature "someotherfeature"
     description: This metapackage enables feature "someotherfeature" for the Rust foobar crate, by pulling in any additional dependencies needed by that feature.
     depends:
     - librust-foobar-dev
-    - librust-foobar+somefeature-dev
-    - librust-foobar+futures-dev
+    - librust-foobar-somefeature-dev
+    - librust-foobar-futures-dev
     provides:
-    - librust-foobar-0+someotherfeature-dev
-    - librust-foobar-0.1+someotherfeature-dev
-    - librust-foobar-0.1.0+someotherfeature-dev
-    multi-arch: same
-  librust-foobar-dev:
-    architectures: any
-    summary: Rust crate "foobar" - Rust source code
-    description: Source code for Debianized Rust crate "foobar"
-    depends:
-    - librust-anyhow-1+default-dev (>= 1.0.96)
-    - some-dependency-for-lib
-    suggests:
-    - librust-foobar+futures-dev
-    - librust-foobar+somefeature-dev
-    - librust-foobar+someotherfeature-dev
-    provides:
-    - librust-foobar+default-dev
-    - librust-foobar-0-dev
-    - librust-foobar-0+default-dev
-    - librust-foobar-0.1-dev
-    - librust-foobar-0.1+default-dev
-    - librust-foobar-0.1.0-dev
-    - librust-foobar-0.1.0+default-dev
-    conflicts:
-    - global-conflict
+    - librust-foobar-0-someotherfeature-dev
+    - librust-foobar-0.1-someotherfeature-dev
+    - librust-foobar-0.1.0-someotherfeature-dev
     multi-arch: same

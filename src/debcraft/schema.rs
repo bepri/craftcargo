@@ -71,27 +71,9 @@ pub struct DebcraftPart {
     /// Build-time dependencies that are always required.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub build_packages: Vec<String>,
-    /// Architecture-specific build dependencies, potentially with profile annotations.
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub build_packages_arch: Vec<BuildPackageEntry>,
     /// Parts that this part must wait for (craft-parts `after` equivalent).
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub after: Vec<String>,
-}
-
-/// A build-package entry, optionally restricted to specific build profiles.
-///
-/// `Simple` serialises as a plain string; `WithProfile` serialises as an
-/// object with a `profiles` list, representing the `<!nocheck>` equivalent.
-#[derive(Serialize)]
-#[serde(untagged)]
-pub enum BuildPackageEntry {
-    Simple(String),
-    WithProfile {
-        package: String,
-        #[serde(skip_serializing_if = "Vec::is_empty")]
-        profiles: Vec<String>,
-    },
 }
 
 /// A binary package entry in debcraft.yaml.
@@ -135,65 +117,6 @@ mod tests {
         serde_yaml_ng::to_value(v).expect("serialisation failed")
     }
 
-    // BuildPackageEntry: the untagged enum is the trickiest part of the schema.
-
-    #[test]
-    fn build_package_entry_simple_is_plain_string() {
-        let entry = BuildPackageEntry::Simple("librust-foo-dev (>= 1.0)".to_string());
-        let v = to_yaml(&entry);
-        assert_eq!(
-            v,
-            serde_yaml_ng::Value::String("librust-foo-dev (>= 1.0)".to_string())
-        );
-    }
-
-    #[test]
-    fn build_package_entry_with_profile_is_object() {
-        let entry = BuildPackageEntry::WithProfile {
-            package: "librust-foo-dev".to_string(),
-            profiles: vec!["nocheck".to_string()],
-        };
-        let v = to_yaml(&entry);
-        assert_eq!(
-            v["package"],
-            serde_yaml_ng::Value::String("librust-foo-dev".to_string())
-        );
-        assert_eq!(
-            v["profiles"][0],
-            serde_yaml_ng::Value::String("nocheck".to_string())
-        );
-    }
-
-    #[test]
-    fn build_package_entry_with_empty_profiles_omits_profiles_key() {
-        let entry = BuildPackageEntry::WithProfile {
-            package: "librust-foo-dev".to_string(),
-            profiles: vec![],
-        };
-        let v = to_yaml(&entry);
-        assert!(
-            v.get("profiles").is_none(),
-            "empty profiles should be omitted"
-        );
-    }
-
-    #[test]
-    fn build_package_entry_with_multiple_profiles() {
-        let entry = BuildPackageEntry::WithProfile {
-            package: "librust-foo-dev".to_string(),
-            profiles: vec!["nocheck".to_string(), "cross".to_string()],
-        };
-        let v = to_yaml(&entry);
-        assert_eq!(
-            v["profiles"][0],
-            serde_yaml_ng::Value::String("nocheck".to_string())
-        );
-        assert_eq!(
-            v["profiles"][1],
-            serde_yaml_ng::Value::String("cross".to_string())
-        );
-    }
-
     // Kebab-case renaming: spot-check the fields most likely to be misnamed.
 
     #[test]
@@ -204,7 +127,6 @@ mod tests {
             rust_channel: Some("none".to_string()),
             rust_features: vec!["default".to_string()],
             build_packages: vec!["libssl-dev".to_string()],
-            build_packages_arch: vec![],
             after: vec![],
         };
         let v = to_yaml(&part);
@@ -234,7 +156,6 @@ mod tests {
             rust_channel: None,
             rust_features: vec![],
             build_packages: vec![],
-            build_packages_arch: vec![],
             after: vec![],
         };
         let v = to_yaml(&part);
@@ -250,10 +171,6 @@ mod tests {
             v.get("build-packages").is_none(),
             "empty build_packages should be omitted"
         );
-        assert!(
-            v.get("build-packages-arch").is_none(),
-            "empty build_packages_arch should be omitted"
-        );
         assert!(v.get("after").is_none(), "empty after should be omitted");
     }
 
@@ -265,7 +182,6 @@ mod tests {
             rust_channel: None,
             rust_features: vec![],
             build_packages: vec![],
-            build_packages_arch: vec![],
             after: vec!["crate".to_string()],
         };
         let v = to_yaml(&part);
@@ -657,14 +573,7 @@ mod tests {
                 source: "https://github.com/example/crate".to_string(),
                 rust_channel: Some("stable".to_string()),
                 rust_features: vec!["default".to_string(), "full".to_string()],
-                build_packages: vec!["libssl-dev".to_string()],
-                build_packages_arch: vec![
-                    BuildPackageEntry::Simple("librust-foo-dev".to_string()),
-                    BuildPackageEntry::WithProfile {
-                        package: "librust-bar-dev".to_string(),
-                        profiles: vec!["nocheck".to_string()],
-                    },
-                ],
+                build_packages: vec!["libssl-dev".to_string(), "librust-foo-dev".to_string()],
                 after: vec![],
             },
         );
@@ -697,6 +606,5 @@ mod tests {
         assert!(output.contains("rust-channel: stable"));
         assert!(output.contains("rust-features:"));
         assert!(output.contains("build-packages:"));
-        assert!(output.contains("build-packages-arch:"));
     }
 }

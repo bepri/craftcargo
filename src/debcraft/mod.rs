@@ -9,7 +9,7 @@ use semver::Version;
 
 use crate::config::{package_field_for_feature, Config, PackageKey};
 use crate::crates::{all_dependencies_and_features, transitive_deps, CrateInfo};
-use crate::debian::control::{deb_feature_name, deb_name, deb_upstream_version, dsc_name};
+use crate::debian::control::{deb_feature_name, deb_name, dsc_name};
 use crate::debian::{
     collapse_features, deb_deps, generate_homepage, normalize_feature_deps, reduce_provides,
     toolchain_deps, DebInfo,
@@ -17,6 +17,36 @@ use crate::debian::{
 use crate::errors::Result;
 
 use schema::{DebcraftPackage, DebcraftPart, DebcraftYaml};
+
+/// Sanitise a Debian package name for use in debcraft.yaml.
+///
+/// debcraft forbids `+` in package names; replace every occurrence with `-`.
+fn debcraft_pkg_name(name: &str) -> String {
+    name.replace('+', "-")
+}
+
+/// Truncate a package summary to at most 78 characters.
+///
+/// If the string exceeds the limit, it is cut at the last word boundary
+/// within the limit and an ellipsis is appended.
+fn truncate_summary(s: String) -> String {
+    if s.chars().count() <= 78 {
+        return s;
+    }
+    // Trim to ≤75 chars at a word boundary to leave room for " …".
+    let truncated = s
+        .char_indices()
+        .take_while(|(i, _)| *i < 75)
+        .last()
+        .map(|(i, c)| i + c.len_utf8())
+        .map(|end| &s[..end])
+        .unwrap_or("");
+    let cut = truncated
+        .rfind(' ')
+        .map(|p| &truncated[..p])
+        .unwrap_or(truncated);
+    format!("{cut} …")
+}
 
 /// Generate a `debcraft.yaml` file and companion files in `output_dir`.
 ///
@@ -108,8 +138,17 @@ fn build_debcraft_top_level(
 
     // 5c: summary / description (top-level gets the " - Rust source code" suffix)
     let (crate_summary, crate_description) = crate_info.get_summary_description();
-    let summary = crate_summary.map(|s| format!("{s} - Rust source code"));
-    let description = crate_description;
+    let summary = crate_summary.map(|s| truncate_summary(format!("{s} - Rust source code")));
+    // Use the packager-supplied description from debcargo.toml; fall back to the
+    // auto-extracted long description from Cargo.toml; use a placeholder when both
+    // are absent so the field always appears in the output.
+    let description = Some(
+        config
+            .description
+            .clone()
+            .or(crate_description)
+            .unwrap_or_else(|| "Description".to_string()),
+    );
 
     // 5d / 5e: maintainer and uploaders
     let maintainer = config.maintainer().to_string();
@@ -135,37 +174,22 @@ fn build_debcraft_top_level(
     ))
     .filter(|s| !s.is_empty());
 
-    // 5i: vcs-git — config override first, then repository if it looks like a git URL
-    let vcs_git = config
-        .vcs_git()
-        .map(str::to_string)
-        .or_else(|| meta.repository.as_deref().and_then(derive_vcs_git));
-
-    // 5j: license — config override wins; otherwise normalise SPDX "/" separator from Cargo.toml (9a)
+    // 5i: license — config override wins; otherwise normalise SPDX "/" separator from Cargo.toml (9a)
     let license = config
         .license
         .clone()
         .or_else(|| meta.license.as_deref().map(normalize_spdx_license));
 
-    // 5k: issues URL — config override wins; otherwise derived from repository (9a)
+    // 5j: issues URL — config override wins; otherwise derived from repository (9a)
     let issues = config
         .issues
         .clone()
         .or_else(|| meta.repository.as_deref().and_then(derive_issues_url));
 
-    // 5l: custom source fields
-    let plain_version = deb_upstream_version(crate_info.version(), None);
-    let mut custom_source_fields = BTreeMap::new();
-    custom_source_fields.insert(
-        "X-Cargo-Crate".to_string(),
-        crate_info.crate_name().to_string(),
-    );
-    custom_source_fields.insert("X-Cargo-Crate-Version".to_string(), plain_version);
-
-    // 5m: rules-requires-root
+    // 5k: rules-requires-root
     let rules_requires_root = config.requires_root.clone();
 
-    // 5n: base image and optional build-base image (9a)
+    // 5l: base image and optional build-base image (9a)
     let base = config.base.clone();
     let build_base = config.build_base.clone();
 
@@ -180,12 +204,12 @@ fn build_debcraft_top_level(
         priority: None,
         contact,
         source_code,
-        vcs_git,
+        vcs_git: None,
         license,
         issues,
         base,
         build_base,
-        custom_source_fields,
+        custom_source_fields: BTreeMap::new(),
         rules_requires_root,
         parts: BTreeMap::new(),
         packages: BTreeMap::new(),
@@ -196,10 +220,6 @@ fn build_debcraft_top_level(
 fn apply_source_overrides(yaml: &mut DebcraftYaml, config: &Config) {
     if let Some(section) = config.section() {
         yaml.section = Some(section.to_string());
-    }
-    // vcs_git override
-    if let Some(vcs_git) = config.vcs_git() {
-        yaml.vcs_git = Some(vcs_git.to_string());
     }
     // source-code can be overridden by vcs_browser or homepage in [source]
     if let Some(browser) = config.vcs_browser().or_else(|| config.homepage()) {
@@ -227,15 +247,6 @@ fn derive_issues_url(repository: &str) -> Option<String> {
     None
 }
 
-/// If `repository` looks like a git URL, return it as a vcs-git value.
-fn derive_vcs_git(repository: &str) -> Option<String> {
-    let url = repository.trim_end_matches('/');
-    if is_github_url(url) || is_gitlab_url(url) || is_salsa_url(url) || url.ends_with(".git") {
-        return Some(url.to_string());
-    }
-    None
-}
-
 fn is_github_url(url: &str) -> bool {
     url.starts_with("https://github.com/") || url.starts_with("http://github.com/")
 }
@@ -245,10 +256,6 @@ fn is_gitlab_url(url: &str) -> bool {
     url.strip_prefix("https://")
         .or_else(|| url.strip_prefix("http://"))
         .map_or(false, |rest| rest.starts_with("gitlab."))
-}
-
-fn is_salsa_url(url: &str) -> bool {
-    url.starts_with("https://salsa.debian.org/") || url.starts_with("http://salsa.debian.org/")
 }
 
 fn build_debcraft_packages(
@@ -264,8 +271,7 @@ fn build_debcraft_packages(
             if !lines.is_empty() {
                 debcargo_warn!(
                     "A package sets extra_lines {:?} which has no debcraft.yaml \
-                     equivalent and will be ignored. Use custom-source-fields or a \
-                     debcraft overlay file instead.",
+                     equivalent and will be ignored. Use a debcraft overlay file instead.",
                     lines
                 );
             }
@@ -377,10 +383,14 @@ fn build_debcraft_packages(
                 if f.is_empty() {
                     deb_name(&pkgbase)
                 } else {
-                    deb_feature_name(&pkgbase, f)
+                    debcraft_pkg_name(&deb_feature_name(&pkgbase, f))
                 }
             }));
-            depends.extend(deb_deps(config.allow_prerelease_deps, &o_deps)?);
+            depends.extend(
+                deb_deps(config.allow_prerelease_deps, &o_deps)?
+                    .into_iter()
+                    .map(|d| debcraft_pkg_name(&d)),
+            );
 
             // 6a: recommends/suggests on the base lib package only (feature pkgs get neither).
             let (recommends, suggests) = if feature.is_empty() {
@@ -423,13 +433,15 @@ fn build_debcraft_packages(
             let pkg_name = if feature.is_empty() {
                 deb_name(&pkgbase)
             } else {
-                deb_feature_name(&pkgbase, feature)
+                debcraft_pkg_name(&deb_feature_name(&pkgbase, feature))
             };
 
             // 6a: construct DebcraftPackage, then apply per-package config overrides.
             let mut pkg = DebcraftPackage {
                 architectures: Some("any".to_string()),
-                summary: Some(format!("{summary_prefix}{summary_suffix}")),
+                summary: Some(truncate_summary(format!(
+                    "{summary_prefix}{summary_suffix}"
+                ))),
                 description: Some(format!("{description_prefix}{description_suffix}")),
                 depends,
                 recommends,
@@ -476,7 +488,9 @@ fn build_debcraft_packages(
         // 6b: depends is empty — substvars (${shlibs:Depends} etc.) are handled natively by debcraft.
         let mut pkg = DebcraftPackage {
             architectures: Some("any".to_string()),
-            summary: Some(format!("{summary_prefix}{summary_suffix}")),
+            summary: Some(truncate_summary(format!(
+                "{summary_prefix}{summary_suffix}"
+            ))),
             description: Some(format!("{description_prefix}{description_suffix}")),
             depends: vec![],
             recommends: vec![],
@@ -551,15 +565,19 @@ fn pkg_provides_bare(
         let p = format!("{basename}{suffix}");
         let entry = match feature.unwrap_or("") {
             "" => deb_name(&p),
-            f => deb_feature_name(&p, f),
+            f => debcraft_pkg_name(&deb_feature_name(&p, f)),
         };
         provides.push(entry);
-        provides.extend(f_provides.iter().map(|f| deb_feature_name(&p, f)));
+        provides.extend(
+            f_provides
+                .iter()
+                .map(|f| debcraft_pkg_name(&deb_feature_name(&p, f))),
+        );
     }
     // The package does not provide itself.
     let self_name = match feature.unwrap_or("") {
         "" => deb_name(&pkgbase),
-        f => deb_feature_name(&pkgbase, f),
+        f => debcraft_pkg_name(&deb_feature_name(&pkgbase, f)),
     };
     provides.retain(|x| x != &self_name);
     provides
@@ -572,7 +590,7 @@ fn filter_provides_bare(features: &[&str], f_provides: &[&str], pkgbase: &str) -
     features
         .iter()
         .filter(|f| !f_provides.contains(f))
-        .map(|f| deb_feature_name(pkgbase, f))
+        .map(|f| debcraft_pkg_name(&deb_feature_name(pkgbase, f)))
         .collect()
 }
 
@@ -592,9 +610,9 @@ fn apply_package_overrides(
     }
     // Per-package override replaces the whole string; global override replaces only the prefix.
     if let Some(per_pkg) = config.package_summary(key) {
-        pkg.summary = Some(per_pkg.to_string());
+        pkg.summary = Some(truncate_summary(per_pkg.to_string()));
     } else if let Some(global) = config.summary.as_deref() {
-        pkg.summary = Some(format!("{global}{summary_suffix}"));
+        pkg.summary = Some(truncate_summary(format!("{global}{summary_suffix}")));
     }
     if let Some(per_pkg) = config.package_description(key) {
         pkg.description = Some(per_pkg.to_string());
@@ -657,38 +675,21 @@ fn build_debcraft_parts(
     let has_bins = !bins.is_empty();
 
     if lib {
-        // 7a: library crate — two parts: "crate" (dump) and "check" (cargo helper).
-
-        // 7a / "crate" part: copies the source tree unconditionally using the dump plugin.
-        // No build dependencies — the dump plugin needs none.
+        // 7a: library crate — single "crate" part using the dump plugin.
+        // The dump plugin stages the source tree verbatim; no compilation needed
+        // since Rust library packages distribute source code.
         let crate_part = DebcraftPart {
             plugin: "dump".to_string(),
             source: ".".to_string(),
             rust_channel: None,
             rust_features: vec![],
             build_packages: vec![],
-            build_packages_arch: vec![],
             after: vec![],
         };
         parts.insert("crate".to_string(), crate_part);
-
-        // 7a / "check" part: runs the crate tests via the debcraft cargo helper.
-        // build_packages_arch carries toolchain deps + crate deps, nocheck-gated per 7c.
-        let build_packages_arch = build_check_part_deps(crate_info, config)?;
-
-        let check_part = DebcraftPart {
-            plugin: "cargo".to_string(),
-            source: ".".to_string(),
-            rust_channel: None,
-            rust_features: vec![],
-            build_packages: vec![],
-            build_packages_arch,
-            after: vec!["crate".to_string()],
-        };
-        parts.insert("check".to_string(), check_part);
     } else if has_bins {
         // 7b: binary-only crate — single "rust" part using the craft-parts rust plugin.
-        let build_packages_arch = build_bin_part_deps(crate_info, config)?;
+        let build_packages = build_bin_part_deps(crate_info, config)?;
 
         let rust_part = DebcraftPart {
             plugin: "rust".to_string(),
@@ -697,15 +698,7 @@ fn build_debcraft_parts(
             rust_channel: Some("none".to_string()),
             // 7b: features come from build deps; no explicit feature list needed.
             rust_features: vec![],
-            // 7b: toolchain and crate deps go in build_packages for the rust plugin.
-            build_packages: build_packages_arch
-                .iter()
-                .map(|e| match e {
-                    schema::BuildPackageEntry::Simple(s) => s.clone(),
-                    schema::BuildPackageEntry::WithProfile { package, .. } => package.clone(),
-                })
-                .collect(),
-            build_packages_arch: vec![],
+            build_packages,
             after: vec![],
         };
         parts.insert("rust".to_string(), rust_part);
@@ -714,84 +707,11 @@ fn build_debcraft_parts(
     Ok(parts)
 }
 
-/// Build the `build_packages_arch` list for the library "check" part (7c).
-///
-/// Toolchain deps are always unconditional.  Crate deps are wrapped in a
-/// `nocheck` profile unless `skip_nocheck` is set, which breaks bootstrapping
-/// cycles — mirroring the `deb_dep_add_nocheck` logic in `prepare_debian_control()`.
-fn build_check_part_deps(
-    crate_info: &CrateInfo,
-    config: &Config,
-) -> Result<Vec<schema::BuildPackageEntry>> {
-    let features_with_deps = all_dependencies_and_features(crate_info.manifest());
-    let working = normalize_feature_deps(features_with_deps)?;
-    let (default_features, default_deps) = transitive_deps(&working, "default")?;
-
-    let extra_override_deps = package_field_for_feature(
-        |x| config.package_depends(x),
-        PackageKey::feature("default"),
-        &default_features,
-    );
-
-    let skip_nocheck = config.skip_nocheck().unwrap_or(false);
-
-    // 7c: toolchain deps are always Simple (never gated by nocheck).
-    let mut entries: Vec<schema::BuildPackageEntry> =
-        toolchain_deps(crate_info.rust_version().as_deref())
-            .into_iter()
-            .map(schema::BuildPackageEntry::Simple)
-            .collect();
-
-    // 7c: crate deps get a nocheck profile unless skip_nocheck is set.
-    let crate_dep_strings: Vec<String> = deb_deps(config.allow_prerelease_deps, &default_deps)?
-        .into_iter()
-        .chain(extra_override_deps)
-        .collect();
-
-    for dep in crate_dep_strings {
-        let entry = if skip_nocheck {
-            // 7c: skip_nocheck — treat all deps as unconditional.
-            schema::BuildPackageEntry::Simple(dep)
-        } else {
-            schema::BuildPackageEntry::WithProfile {
-                package: dep,
-                profiles: vec!["nocheck".to_string()],
-            }
-        };
-        entries.push(entry);
-    }
-
-    // 7c: apply build_depends_excludes from SourceOverride.
-    if let Some(excludes) = config.build_depends_excludes() {
-        entries.retain(|e| {
-            let pkg = match e {
-                schema::BuildPackageEntry::Simple(s) => s.as_str(),
-                schema::BuildPackageEntry::WithProfile { package, .. } => package.as_str(),
-            };
-            !excludes.iter().any(|ex| ex == pkg)
-        });
-    }
-
-    // 7c: append any extra arch-specific build deps from SourceOverride.
-    if let Some(extra) = config.build_depends_arch() {
-        entries.extend(
-            extra
-                .iter()
-                .map(|d| schema::BuildPackageEntry::Simple(d.clone())),
-        );
-    }
-
-    Ok(entries)
-}
-
 /// Build the `build_packages` list for the binary-only "rust" part (7b).
 ///
 /// For binary crates there is no bootstrapping concern, so all deps are simple
-/// strings — no nocheck wrapping.
-fn build_bin_part_deps(
-    crate_info: &CrateInfo,
-    config: &Config,
-) -> Result<Vec<schema::BuildPackageEntry>> {
+/// strings.
+fn build_bin_part_deps(crate_info: &CrateInfo, config: &Config) -> Result<Vec<String>> {
     let features_with_deps = all_dependencies_and_features(crate_info.manifest());
     let working = normalize_feature_deps(features_with_deps)?;
     let (default_features, default_deps) = transitive_deps(&working, "default")?;
@@ -802,14 +722,12 @@ fn build_bin_part_deps(
         &default_features,
     );
 
-    // 7b: toolchain deps + translated crate deps, all Simple (no nocheck needed).
-    let entries: Vec<schema::BuildPackageEntry> =
-        toolchain_deps(crate_info.rust_version().as_deref())
-            .into_iter()
-            .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
-            .chain(extra_override_deps)
-            .map(schema::BuildPackageEntry::Simple)
-            .collect();
+    // 7b: toolchain deps + translated crate deps, all plain strings.
+    let entries: Vec<String> = toolchain_deps(crate_info.rust_version().as_deref())
+        .into_iter()
+        .chain(deb_deps(config.allow_prerelease_deps, &default_deps)?)
+        .chain(extra_override_deps)
+        .collect();
 
     Ok(entries)
 }
@@ -886,7 +804,7 @@ fn write_companion_files(
                 if feature.is_empty() {
                     continue;
                 }
-                let pkg_name = deb_feature_name(&pkgbase, feature);
+                let pkg_name = debcraft_pkg_name(&deb_feature_name(&pkgbase, feature));
                 let overrides_path = companion_dir.join(format!("{pkg_name}.lintian-overrides"));
                 if !overrides_path.exists() {
                     fs::write(
@@ -1200,66 +1118,6 @@ mod tests {
     }
 
     #[test]
-    fn vcs_git_derived_for_known_hosts() {
-        assert!(derive_vcs_git("https://github.com/foo/bar").is_some());
-        assert!(derive_vcs_git("https://gitlab.com/foo/bar").is_some());
-        assert!(derive_vcs_git("https://salsa.debian.org/rust-team/foo").is_some());
-        assert!(derive_vcs_git("https://example.com/repo.git").is_some());
-    }
-
-    #[test]
-    fn vcs_git_none_for_unknown_plain_url() {
-        assert_eq!(derive_vcs_git("https://example.com/repo"), None);
-        // substring-match trap: host contains "github.com" but isn't
-        assert_eq!(derive_vcs_git("https://evil.com/github.com/foo"), None);
-    }
-
-    #[test]
-    fn vcs_git_strips_trailing_slash() {
-        assert_eq!(
-            derive_vcs_git("https://github.com/foo/bar/"),
-            Some("https://github.com/foo/bar".to_string())
-        );
-    }
-
-    #[test]
-    fn vcs_git_preserves_dot_git_suffix() {
-        assert_eq!(
-            derive_vcs_git("https://example.com/repo.git"),
-            Some("https://example.com/repo.git".to_string())
-        );
-    }
-
-    #[test]
-    fn vcs_git_salsa_debian() {
-        assert_eq!(
-            derive_vcs_git("https://salsa.debian.org/rust-team/debcargo"),
-            Some("https://salsa.debian.org/rust-team/debcargo".to_string())
-        );
-    }
-
-    #[test]
-    fn vcs_git_http_github() {
-        assert_eq!(
-            derive_vcs_git("http://github.com/foo/bar"),
-            Some("http://github.com/foo/bar".to_string())
-        );
-    }
-
-    #[test]
-    fn vcs_git_gitlab_self_hosted() {
-        assert_eq!(
-            derive_vcs_git("https://gitlab.freedesktop.org/mesa/mesa"),
-            Some("https://gitlab.freedesktop.org/mesa/mesa".to_string())
-        );
-    }
-
-    #[test]
-    fn vcs_git_none_for_plain_https() {
-        assert_eq!(derive_vcs_git("https://crates.io/crates/serde"), None);
-    }
-
-    #[test]
     fn is_github_url_positive() {
         assert!(is_github_url("https://github.com/foo/bar"));
         assert!(is_github_url("http://github.com/foo/bar"));
@@ -1289,17 +1147,36 @@ mod tests {
         assert!(!is_gitlab_url("ftp://gitlab.com/foo/bar"));
     }
 
+    // ── truncate_summary ───────────────────────────────────────────────────
+
     #[test]
-    fn is_salsa_url_positive() {
-        assert!(is_salsa_url("https://salsa.debian.org/rust-team/debcargo"));
-        assert!(is_salsa_url("http://salsa.debian.org/foo/bar"));
+    fn truncate_summary_short_string_unchanged() {
+        let s = "Short summary".to_string();
+        assert_eq!(truncate_summary(s.clone()), s);
     }
 
     #[test]
-    fn is_salsa_url_negative() {
-        assert!(!is_salsa_url("https://github.com/foo/bar"));
-        assert!(!is_salsa_url("https://notsalsa.debian.org/foo/bar"));
-        assert!(!is_salsa_url("https://salsa.example.com/foo/bar"));
-        assert!(!is_salsa_url("ftp://salsa.debian.org/foo/bar"));
+    fn truncate_summary_exactly_78_chars_unchanged() {
+        let s = "A".repeat(78);
+        assert_eq!(truncate_summary(s.clone()), s);
+    }
+
+    #[test]
+    fn truncate_summary_long_string_truncated_with_ellipsis() {
+        let s = "word ".repeat(20); // 100 chars
+        let result = truncate_summary(s);
+        assert!(
+            result.chars().count() <= 78,
+            "result was {} chars",
+            result.chars().count()
+        );
+        assert!(result.ends_with('…'));
+    }
+
+    #[test]
+    fn truncate_summary_no_spaces_hard_cuts() {
+        let s = "A".repeat(100);
+        let result = truncate_summary(s);
+        assert!(result.chars().count() <= 78);
     }
 }

@@ -246,6 +246,8 @@ E.1 X-Cargo-Crate and X-Cargo-Crate-Version (CRITICAL)
   These are read by dh-cargo to locate the crate in
   /usr/share/cargo/registry/ and construct the correct install path. Without them, dh-cargo
   cannot build the package.
+  craftcargo's debcraft.yaml generator does not emit these fields, so this metadata is
+  currently dropped in debcraft.yaml output.
   debcraft.yaml has no mechanism for custom source stanza fields.
   This is a BLOCKING gap: debcraft must support X-Cargo-Crate fields or
   provide an equivalent mechanism to tell the cargo build plugin which
@@ -276,7 +278,8 @@ E.4 cargo-checksum.json
 E.5 Vcs-Git field
   debcargo generates both Vcs-Git and Vcs-Browser. debcraft.yaml only has
   source-code, which maps to Vcs-Browser. Vcs-Git would be lost unless
-  debcraft adds a vcs-git field or derives it from source-code.
+  debcraft adds a vcs-git field or derives it from source-code. craftcargo
+  does not emit vcs-git in debcraft.yaml output.
 
 E.6 debian/tests/control (autopkgtest)
   debcargo generates a full debian/tests/control with one test stanza per
