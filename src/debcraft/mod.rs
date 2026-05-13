@@ -771,7 +771,13 @@ fn write_companion_files(
     let year = chrono::Local::now().year();
     let year_range = (year, year);
 
+    // Companion files live in out_dir/debcraft/ (step 13 layout).
+    let companion_dir = out_dir.join("debcraft");
+    fs::create_dir_all(&companion_dir)?;
+
     // 8a: write copyright file using the shared DEP-5 generator.
+    // Note: out_dir (not companion_dir) is passed as srcdir so the generator
+    // can scan the extracted crate source for copyright notices.
     {
         let dep5 = crate::debian::copyright::debian_copyright(
             out_dir,
@@ -783,7 +789,7 @@ fn write_companion_files(
             copyright_guess_harder,
             config.excludes.as_deref().unwrap_or_default(),
         )?;
-        let copyright_path = out_dir.join("copyright");
+        let copyright_path = companion_dir.join("copyright");
         if !copyright_path.exists() {
             fs::write(&copyright_path, format!("{dep5}"))?;
         }
@@ -794,7 +800,7 @@ fn write_companion_files(
         let checksum = crate_info
             .checksum()
             .unwrap_or("Could not get crate checksum");
-        let checksum_path = out_dir.join("cargo-checksum.json");
+        let checksum_path = companion_dir.join("cargo-checksum.json");
         if !checksum_path.exists() {
             fs::write(
                 &checksum_path,
@@ -823,7 +829,7 @@ fn write_companion_files(
                     continue;
                 }
                 let pkg_name = deb_feature_name(&pkgbase, feature);
-                let overrides_path = out_dir.join(format!("{pkg_name}.lintian-overrides"));
+                let overrides_path = companion_dir.join(format!("{pkg_name}.lintian-overrides"));
                 if !overrides_path.exists() {
                     fs::write(
                         &overrides_path,
@@ -837,7 +843,7 @@ fn write_companion_files(
     // 8e: copy overlay files over generated ones (overlay wins).
     if let Some(overlay_dir) = config.overlay_debcraft_dir(config_path) {
         if overlay_dir.is_dir() {
-            copy_overlay(&overlay_dir, out_dir)?;
+            copy_overlay(&overlay_dir, &companion_dir)?;
         }
     }
 
