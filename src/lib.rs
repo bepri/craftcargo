@@ -3,6 +3,7 @@ pub mod errors;
 pub mod cli;
 pub mod config;
 pub mod crates;
+pub mod debcraft;
 pub mod debian;
 mod util;
 
