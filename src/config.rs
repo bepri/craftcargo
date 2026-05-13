@@ -41,6 +41,9 @@ pub struct Config {
     pub contact: Option<String>,
     /// Base image for debcraft (e.g. `"ubuntu@24.04"`); omitted when not set.
     pub base: Option<String>,
+    /// Overlay directory for debcraft companion files; defaults to `debcraft/`
+    /// relative to the config file if not set.
+    pub overlay_debcraft: Option<PathBuf>,
 
     pub source: Option<SourceOverride>,
     pub packages: IndexMap<String, PackageOverride>,
@@ -142,6 +145,7 @@ impl Default for Config {
             requires_root: None,
             contact: None,
             base: None,
+            overlay_debcraft: None,
             unknown_fields: HashMap::new(),
         }
     }
@@ -206,6 +210,19 @@ impl Config {
 
     pub fn overlay_dir(&self, config_path: Option<&Path>) -> Option<PathBuf> {
         Some(config_path?.parent()?.join(self.overlay.as_ref()?))
+    }
+
+    /// Overlay directory for debcraft companion files.
+    ///
+    /// Returns the explicit `overlay_debcraft` path if set; otherwise defaults
+    /// to `debcraft/` relative to the config file (8e).
+    pub fn overlay_debcraft_dir(&self, config_path: Option<&Path>) -> Option<PathBuf> {
+        let base = config_path?.parent()?;
+        if let Some(explicit) = &self.overlay_debcraft {
+            Some(base.join(explicit))
+        } else {
+            Some(base.join("debcraft"))
+        }
     }
 
     pub fn crate_src_path(&self, config_path: Option<&Path>) -> Option<PathBuf> {

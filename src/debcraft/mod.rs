@@ -4,6 +4,7 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 
+use chrono::Datelike;
 use semver::Version;
 
 use crate::config::{package_field_for_feature, Config, PackageKey};
@@ -748,14 +749,107 @@ fn build_bin_part_deps(
 }
 
 fn write_companion_files(
-    _crate_info: &CrateInfo,
-    _deb_info: &DebInfo,
-    _config_path: Option<&Path>,
-    _config: &Config,
-    _copyright_guess_harder: bool,
-    _out_dir: &Path,
+    crate_info: &CrateInfo,
+    deb_info: &DebInfo,
+    config_path: Option<&Path>,
+    config: &Config,
+    copyright_guess_harder: bool,
+    out_dir: &Path,
 ) -> Result<()> {
-    todo!("step 8: companion files")
+    let maintainer = config.maintainer();
+    let uploaders_owned = config.uploaders().cloned().unwrap_or_default();
+    let uploaders: Vec<&str> = uploaders_owned.iter().map(String::as_str).collect();
+
+    let year = chrono::Local::now().year();
+    let year_range = (year, year);
+
+    // 8a: write copyright file using the shared DEP-5 generator.
+    {
+        let dep5 = crate::debian::copyright::debian_copyright(
+            out_dir,
+            crate_info.manifest(),
+            crate_info.manifest_path(),
+            maintainer,
+            &uploaders,
+            year_range,
+            copyright_guess_harder,
+            config.excludes.as_deref().unwrap_or_default(),
+        )?;
+        let copyright_path = out_dir.join("copyright");
+        if !copyright_path.exists() {
+            fs::write(&copyright_path, format!("{dep5}"))?;
+        }
+    }
+
+    // 8b: write cargo-checksum.json for the debcraft cargo helper.
+    {
+        let checksum = crate_info
+            .checksum()
+            .unwrap_or("Could not get crate checksum");
+        let checksum_path = out_dir.join("cargo-checksum.json");
+        if !checksum_path.exists() {
+            fs::write(
+                &checksum_path,
+                format!(r#"{{"package":"{checksum}","files":{{}}}}"#),
+            )?;
+        }
+    }
+
+    // 8c: write one lintian-overrides file per non-empty feature package.
+    {
+        let features_with_deps = all_dependencies_and_features(crate_info.manifest());
+        if let Ok(working) = normalize_feature_deps(features_with_deps) {
+            let (_, reduced) = if config.collapse_features {
+                collapse_features(&working)
+            } else {
+                reduce_provides(working)
+            };
+            let base_pkgname = deb_info.base_package_name();
+            let name_suffix = deb_info.name_suffix();
+            let pkgbase = match name_suffix {
+                None => base_pkgname.to_string(),
+                Some(suf) => format!("{base_pkgname}{suf}"),
+            };
+            for (feature, _) in reduced {
+                if feature.is_empty() {
+                    continue;
+                }
+                let pkg_name = deb_feature_name(&pkgbase, feature);
+                let overrides_path = out_dir.join(format!("{pkg_name}.lintian-overrides"));
+                if !overrides_path.exists() {
+                    fs::write(
+                        &overrides_path,
+                        format!("{pkg_name} binary: empty-rust-library-declares-provides *"),
+                    )?;
+                }
+            }
+        }
+    }
+
+    // 8e: copy overlay files over generated ones (overlay wins).
+    if let Some(overlay_dir) = config.overlay_debcraft_dir(config_path) {
+        if overlay_dir.is_dir() {
+            copy_overlay(&overlay_dir, out_dir)?;
+        }
+    }
+
+    Ok(())
+}
+
+/// Recursively copy files from `src` into `dst`, overwriting any already-generated files.
+fn copy_overlay(src: &Path, dst: &Path) -> Result<()> {
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let file_type = entry.file_type()?;
+        let dest_path = dst.join(entry.file_name());
+        if file_type.is_dir() {
+            fs::create_dir_all(&dest_path)?;
+            copy_overlay(&entry.path(), &dest_path)?;
+        } else {
+            fs::copy(entry.path(), &dest_path)?;
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]
