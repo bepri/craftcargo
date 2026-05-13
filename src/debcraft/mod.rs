@@ -321,7 +321,14 @@ fn build_debcraft_packages(
                 // Feature packages always need a direct dep on the base lib.
                 depends.push(deb_name(&pkgbase));
             }
-            depends.extend(f_deps.iter().map(|f| deb_feature_name(&pkgbase, f)));
+            depends.extend(f_deps.iter().map(|&f| {
+                // Empty string in f_deps means the base lib package itself.
+                if f.is_empty() {
+                    deb_name(&pkgbase)
+                } else {
+                    deb_feature_name(&pkgbase, f)
+                }
+            }));
             depends.extend(deb_deps(config.allow_prerelease_deps, &o_deps)?);
 
             // 6a: recommends/suggests on the base lib package only (feature pkgs get neither).
