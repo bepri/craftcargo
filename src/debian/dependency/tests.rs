@@ -291,7 +291,10 @@ fn test_deb_dep_add_nocheck_no_version() {
 #[test]
 fn test_deb_dep_add_nocheck_three_alternatives() {
     let result = deb_dep_add_nocheck("a-dev | b-dev | c-dev");
-    assert_eq!("a-dev <!nocheck> | b-dev <!nocheck> | c-dev <!nocheck>", result);
+    assert_eq!(
+        "a-dev <!nocheck> | b-dev <!nocheck> | c-dev <!nocheck>",
+        result
+    );
 }
 
 #[test]

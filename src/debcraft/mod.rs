@@ -104,11 +104,17 @@ fn build_debcraft_top_level(
         .map(str::to_string)
         .or_else(|| meta.repository.as_deref().and_then(derive_vcs_git));
 
-    // 5j: license — normalise SPDX "/" separator to " OR "
-    let license = meta.license.as_deref().map(normalize_spdx_license);
+    // 5j: license — config override wins; otherwise normalise SPDX "/" separator from Cargo.toml (9a)
+    let license = config
+        .license
+        .clone()
+        .or_else(|| meta.license.as_deref().map(normalize_spdx_license));
 
-    // 5k: issues URL derived from repository
-    let issues = meta.repository.as_deref().and_then(derive_issues_url);
+    // 5k: issues URL — config override wins; otherwise derived from repository (9a)
+    let issues = config
+        .issues
+        .clone()
+        .or_else(|| meta.repository.as_deref().and_then(derive_issues_url));
 
     // 5l: custom source fields
     let plain_version = deb_upstream_version(crate_info.version(), None);
@@ -122,8 +128,9 @@ fn build_debcraft_top_level(
     // 5m: rules-requires-root
     let rules_requires_root = config.requires_root.clone();
 
-    // 5n: base image
+    // 5n: base image and optional build-base image (9a)
     let base = config.base.clone();
+    let build_base = config.build_base.clone();
 
     Ok(DebcraftYaml {
         name,
@@ -140,6 +147,7 @@ fn build_debcraft_top_level(
         license,
         issues,
         base,
+        build_base,
         custom_source_fields,
         rules_requires_root,
         parts: BTreeMap::new(),
@@ -914,10 +922,7 @@ mod tests {
 
     #[test]
     fn spdx_unlicense() {
-        assert_eq!(
-            normalize_spdx_license("MIT/Unlicense"),
-            "MIT OR Unlicense"
-        );
+        assert_eq!(normalize_spdx_license("MIT/Unlicense"), "MIT OR Unlicense");
     }
 
     #[test]
@@ -1034,18 +1039,12 @@ mod tests {
 
     #[test]
     fn issues_url_bitbucket_not_supported() {
-        assert_eq!(
-            derive_issues_url("https://bitbucket.org/user/repo"),
-            None
-        );
+        assert_eq!(derive_issues_url("https://bitbucket.org/user/repo"), None);
     }
 
     #[test]
     fn issues_url_codeberg_not_supported() {
-        assert_eq!(
-            derive_issues_url("https://codeberg.org/user/repo"),
-            None
-        );
+        assert_eq!(derive_issues_url("https://codeberg.org/user/repo"), None);
     }
 
     #[test]

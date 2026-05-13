@@ -37,6 +37,9 @@ pub struct DebcraftYaml {
     pub issues: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base: Option<String>,
+    /// Separate base image used only during the build phase; omitted when not set.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_base: Option<String>,
     /// Custom source stanza fields, e.g. X-Cargo-Crate and X-Cargo-Crate-Version.
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub custom_source_fields: BTreeMap<String, String>,
@@ -251,10 +254,7 @@ mod tests {
             v.get("build-packages-arch").is_none(),
             "empty build_packages_arch should be omitted"
         );
-        assert!(
-            v.get("after").is_none(),
-            "empty after should be omitted"
-        );
+        assert!(v.get("after").is_none(), "empty after should be omitted");
     }
 
     #[test]
@@ -269,7 +269,10 @@ mod tests {
             after: vec!["crate".to_string()],
         };
         let v = to_yaml(&part);
-        assert!(v.get("after").is_some(), "non-empty after should be present");
+        assert!(
+            v.get("after").is_some(),
+            "non-empty after should be present"
+        );
         assert_eq!(
             v["after"][0],
             serde_yaml_ng::Value::String("crate".to_string())
@@ -293,6 +296,7 @@ mod tests {
             license: None,
             issues: None,
             base: None,
+            build_base: None,
             custom_source_fields: {
                 let mut m = BTreeMap::new();
                 m.insert("X-Cargo-Crate".to_string(), "foo".to_string());
@@ -332,6 +336,7 @@ mod tests {
             license: None,
             issues: None,
             base: None,
+            build_base: None,
             custom_source_fields: BTreeMap::new(),
             rules_requires_root: None,
             parts: BTreeMap::new(),
@@ -369,6 +374,7 @@ mod tests {
             license: Some("MIT".to_string()),
             issues: None,
             base: Some("ubuntu@24.04".to_string()),
+            build_base: None,
             custom_source_fields: BTreeMap::new(),
             rules_requires_root: None,
             parts: BTreeMap::new(),
@@ -411,13 +417,17 @@ mod tests {
             license: None,
             issues: None,
             base: None,
+            build_base: None,
             custom_source_fields: BTreeMap::new(),
             rules_requires_root: None,
             parts: BTreeMap::new(),
             packages: BTreeMap::new(),
         };
         let v = to_yaml(&yaml);
-        assert!(v.get("uploaders").is_none(), "empty uploaders should be omitted");
+        assert!(
+            v.get("uploaders").is_none(),
+            "empty uploaders should be omitted"
+        );
     }
 
     #[test]
@@ -437,6 +447,7 @@ mod tests {
             license: None,
             issues: None,
             base: None,
+            build_base: None,
             custom_source_fields: BTreeMap::new(),
             rules_requires_root: None,
             parts: BTreeMap::new(),
@@ -469,6 +480,7 @@ mod tests {
             license: None,
             issues: None,
             base: None,
+            build_base: None,
             custom_source_fields: BTreeMap::new(),
             rules_requires_root: None,
             parts: BTreeMap::new(),
@@ -559,10 +571,7 @@ mod tests {
             v.get("multi-arch").is_some(),
             "multi_arch should serialise as multi-arch"
         );
-        assert!(
-            v.get("multiArch").is_none(),
-            "camelCase must not appear"
-        );
+        assert!(v.get("multiArch").is_none(), "camelCase must not appear");
         assert!(
             v.get("multi_arch").is_none(),
             "snake_case must not appear in YAML"
@@ -581,8 +590,14 @@ mod tests {
         };
         let v = to_yaml(&pkg);
         let deps = v.get("depends").unwrap();
-        assert_eq!(deps[0], serde_yaml_ng::Value::String("libc6 (>= 2.31)".to_string()));
-        assert_eq!(deps[1], serde_yaml_ng::Value::String("libgcc-s1".to_string()));
+        assert_eq!(
+            deps[0],
+            serde_yaml_ng::Value::String("libc6 (>= 2.31)".to_string())
+        );
+        assert_eq!(
+            deps[1],
+            serde_yaml_ng::Value::String("libgcc-s1".to_string())
+        );
         assert_eq!(deps[2], serde_yaml_ng::Value::String("libssl3".to_string()));
     }
 
@@ -605,6 +620,7 @@ mod tests {
             license: Some("MIT OR Apache-2.0".to_string()),
             issues: Some("https://github.com/test/test/issues".to_string()),
             base: Some("ubuntu@24.04".to_string()),
+            build_base: None,
             custom_source_fields: {
                 let mut m = BTreeMap::new();
                 m.insert("X-Cargo-Crate".to_string(), "test".to_string());
@@ -615,10 +631,19 @@ mod tests {
             packages: BTreeMap::new(),
         };
         let output = serde_yaml_ng::to_string(&yaml).unwrap();
-        assert!(output.contains("source-code:"), "should have source-code key");
+        assert!(
+            output.contains("source-code:"),
+            "should have source-code key"
+        );
         assert!(output.contains("vcs-git:"), "should have vcs-git key");
-        assert!(output.contains("custom-source-fields:"), "should have custom-source-fields key");
-        assert!(!output.contains("source_code:"), "should not have snake_case");
+        assert!(
+            output.contains("custom-source-fields:"),
+            "should have custom-source-fields key"
+        );
+        assert!(
+            !output.contains("source_code:"),
+            "should not have snake_case"
+        );
         assert!(!output.contains("vcs_git:"), "should not have snake_case");
     }
 
@@ -659,6 +684,7 @@ mod tests {
             license: None,
             issues: None,
             base: None,
+            build_base: None,
             custom_source_fields: BTreeMap::new(),
             rules_requires_root: None,
             parts,

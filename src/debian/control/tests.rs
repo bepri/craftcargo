@@ -381,10 +381,7 @@ fn test_deb_upstream_version_repack_dfsg() {
 #[test]
 fn test_deb_upstream_version_repack_custom_suffix() {
     let version = Version::new(1, 5, 0);
-    assert_eq!(
-        "1.5.0+ds1",
-        deb_upstream_version(&version, Some("ds1"))
-    );
+    assert_eq!("1.5.0+ds1", deb_upstream_version(&version, Some("ds1")));
 }
 
 #[test]
@@ -500,23 +497,20 @@ fn test_deb_feature_name() {
 
 #[test]
 fn test_deb_feature_name_simple() {
-    assert_eq!("librust-serde+derive-dev", deb_feature_name("serde", "derive"));
+    assert_eq!(
+        "librust-serde+derive-dev",
+        deb_feature_name("serde", "derive")
+    );
 }
 
 #[test]
 fn test_deb_feature_name_with_underscore_feature() {
-    assert_eq!(
-        "librust-serde+std-dev",
-        deb_feature_name("serde", "std")
-    );
+    assert_eq!("librust-serde+std-dev", deb_feature_name("serde", "std"));
 }
 
 #[test]
 fn test_deb_feature_name_complex_feature() {
-    assert_eq!(
-        "librust-tokio+full-dev",
-        deb_feature_name("tokio", "full")
-    );
+    assert_eq!("librust-tokio+full-dev", deb_feature_name("tokio", "full"));
 }
 
 #[test]

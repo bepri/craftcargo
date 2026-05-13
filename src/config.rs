@@ -41,6 +41,12 @@ pub struct Config {
     pub contact: Option<String>,
     /// Base image for debcraft (e.g. `"ubuntu@24.04"`); omitted when not set.
     pub base: Option<String>,
+    /// Separate base image used only during the build phase (9a).
+    pub build_base: Option<String>,
+    /// Override for the debcraft.yaml `issues` field; derived from repository URL when absent.
+    pub issues: Option<String>,
+    /// Override for the SPDX license string; defaults to `[package.license]` from Cargo.toml.
+    pub license: Option<String>,
     /// Overlay directory for debcraft companion files; defaults to `debcraft/`
     /// relative to the config file if not set.
     pub overlay_debcraft: Option<PathBuf>,
@@ -145,6 +151,9 @@ impl Default for Config {
             requires_root: None,
             contact: None,
             base: None,
+            build_base: None,
+            issues: None,
+            license: None,
             overlay_debcraft: None,
             unknown_fields: HashMap::new(),
         }
