@@ -43,6 +43,7 @@ pub struct DebcraftYaml {
     /// Rules-Requires-Root equivalent; omit when debcraft default ("no") applies.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rules_requires_root: Option<String>,
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub parts: BTreeMap<String, DebcraftPart>,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub packages: BTreeMap<String, DebcraftPackage>,

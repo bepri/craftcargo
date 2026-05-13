@@ -70,10 +70,7 @@ fn build_debcraft_top_level(
 
     // 5d / 5e: maintainer and uploaders
     let maintainer = config.maintainer().to_string();
-    let uploaders = config
-        .uploaders()
-        .map(|v| v.iter().map(String::as_str).map(str::to_string).collect())
-        .unwrap_or_default();
+    let uploaders = config.uploaders().map(|v| v.clone()).unwrap_or_default();
 
     // 5f: section
     let lib = crate_info.is_lib() && config.build_lib_package();
@@ -169,14 +166,12 @@ fn normalize_spdx_license(license: &str) -> String {
 /// If `repository` looks like a GitHub or GitLab URL, return its issues URL.
 fn derive_issues_url(repository: &str) -> Option<String> {
     let url = repository.trim_end_matches('/').trim_end_matches(".git");
-    if url.starts_with("https://github.com/") || url.starts_with("http://github.com/") {
-        return Some(format!("{url}/issues"));
+    // Don't double-append if already pointing at the issues page.
+    if url.ends_with("/issues") {
+        return Some(url.to_string());
     }
-    // GitLab: any https://gitlab.* host
-    if let Some(rest) = url.strip_prefix("https://") {
-        if rest.starts_with("gitlab.") {
-            return Some(format!("{url}/issues"));
-        }
+    if is_github_url(url) || is_gitlab_url(url) {
+        return Some(format!("{url}/issues"));
     }
     None
 }
@@ -184,14 +179,25 @@ fn derive_issues_url(repository: &str) -> Option<String> {
 /// If `repository` looks like a git URL, return it as a vcs-git value.
 fn derive_vcs_git(repository: &str) -> Option<String> {
     let url = repository.trim_end_matches('/');
-    if url.contains("github.com")
-        || url.contains("gitlab.")
-        || url.contains("salsa.debian.org")
-        || url.ends_with(".git")
-    {
+    if is_github_url(url) || is_gitlab_url(url) || is_salsa_url(url) || url.ends_with(".git") {
         return Some(url.to_string());
     }
     None
+}
+
+fn is_github_url(url: &str) -> bool {
+    url.starts_with("https://github.com/") || url.starts_with("http://github.com/")
+}
+
+fn is_gitlab_url(url: &str) -> bool {
+    // Match https://gitlab.<anything>/ — check the host, not a substring anywhere.
+    url.strip_prefix("https://")
+        .or_else(|| url.strip_prefix("http://"))
+        .map_or(false, |rest| rest.starts_with("gitlab."))
+}
+
+fn is_salsa_url(url: &str) -> bool {
+    url.starts_with("https://salsa.debian.org/") || url.starts_with("http://salsa.debian.org/")
 }
 
 fn build_debcraft_packages(
@@ -272,9 +278,20 @@ mod tests {
     }
 
     #[test]
+    fn issues_url_not_double_appended() {
+        assert_eq!(
+            derive_issues_url("https://github.com/foo/bar/issues"),
+            Some("https://github.com/foo/bar/issues".to_string())
+        );
+    }
+
+    #[test]
     fn issues_url_none_for_unknown_host() {
         assert_eq!(derive_issues_url("https://sr.ht/~user/repo"), None);
         assert_eq!(derive_issues_url("https://example.com/repo"), None);
+        // substring-match trap: host is not github.com
+        assert_eq!(derive_issues_url("https://notgithub.com/foo/bar"), None);
+        assert_eq!(derive_issues_url("https://evil.com/github.com/foo"), None);
     }
 
     #[test]
@@ -288,5 +305,7 @@ mod tests {
     #[test]
     fn vcs_git_none_for_unknown_plain_url() {
         assert_eq!(derive_vcs_git("https://example.com/repo"), None);
+        // substring-match trap: host contains "github.com" but isn't
+        assert_eq!(derive_vcs_git("https://evil.com/github.com/foo"), None);
     }
 }
