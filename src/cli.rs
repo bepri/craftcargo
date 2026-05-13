@@ -3,7 +3,7 @@ use clap::{builder::styling::AnsiColor, builder::Styles, Parser, Subcommand};
 use crate::{
     build_order::BuildOrderArgs,
     deb_dependencies::DebDependenciesArgs,
-    package::{PackageExecuteArgs, PackageExtractArgs, PackageInitArgs},
+    package::{PackageDebcraftArgs, PackageExecuteArgs, PackageExtractArgs, PackageInitArgs},
 };
 
 #[cfg(feature = "update-dependencies")]
@@ -53,6 +53,15 @@ pub enum Opt {
         extract: PackageExtractArgs,
         #[command(flatten)]
         finish: PackageExecuteArgs,
+    },
+    /// Package a Rust crate for debcraft (generates debcraft.yaml).
+    PackageDebcraft {
+        #[command(flatten)]
+        init: PackageInitArgs,
+        #[command(flatten)]
+        extract: PackageExtractArgs,
+        #[command(flatten)]
+        finish: PackageDebcraftArgs,
     },
     /// Print the transitive dependencies of a package in topological order.
     BuildOrder {

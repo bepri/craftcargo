@@ -16,7 +16,7 @@ use debcargo::{
 use debcargo::update_dependencies::update_dependencies;
 #[cfg(feature = "update-dependencies")]
 use Opt::UpdateDependencies;
-use Opt::{BuildOrder, DebDependencies, DebSrcName, Extract, Package, Update};
+use Opt::{BuildOrder, DebDependencies, DebSrcName, Extract, Package, PackageDebcraft, Update};
 
 #[test]
 fn verify_app() {
@@ -60,6 +60,18 @@ fn real_main() -> Result<()> {
             log::info!("preparing debian folder");
             process.prepare_debian_folder(&finish)?;
             process.post_package_checks()
+        }
+        PackageDebcraft {
+            init,
+            extract,
+            finish,
+        } => {
+            log::info!("preparing crate info");
+            let mut process = PackageProcess::init(init)?;
+            log::info!("extracting crate");
+            process.extract(extract)?;
+            log::info!("generating debcraft.yaml");
+            process.execute_debcraft(&finish)
         }
         BuildOrder { args } => {
             let build_order = build_order(&args)?;

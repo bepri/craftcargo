@@ -6,6 +6,7 @@ use clap::{crate_version, Parser};
 
 use crate::config::{Config, PackageKey};
 use crate::crates::CrateInfo;
+use crate::debcraft;
 use crate::debian::{self, DebInfo};
 use crate::errors::Result;
 use crate::util;
@@ -58,6 +59,17 @@ pub struct PackageExecuteArgs {
     #[arg(long)]
     pub copyright_guess_harder: bool,
     /// Don't write back hint files or d/changelog to the source overlay directory.
+    #[arg(long)]
+    pub no_overlay_write_back: bool,
+}
+
+/// Arguments for the `package-debcraft` subcommand (step 10).
+#[derive(Debug, Clone, Parser)]
+pub struct PackageDebcraftArgs {
+    /// Guess extra values for debcraft/copyright. Might be slow.
+    #[arg(long)]
+    pub copyright_guess_harder: bool,
+    /// Don't write back hint files to the overlay directory.
     #[arg(long)]
     pub no_overlay_write_back: bool,
 }
@@ -190,6 +202,28 @@ impl PackageProcess {
         // stage finished; set vars
         self.orig_tarball = Some(orig_tarball);
         Ok(())
+    }
+
+    /// Generate a `debcraft.yaml` and companion files in the output directory (step 11).
+    pub fn execute_debcraft(&mut self, args: &PackageDebcraftArgs) -> Result<()> {
+        let Self {
+            crate_info,
+            deb_info,
+            config_path,
+            config,
+            output_dir,
+            ..
+        } = self;
+        let output_dir = output_dir.as_ref().unwrap();
+
+        debcraft::prepare_debcraft_yaml(
+            crate_info,
+            deb_info,
+            config_path.as_deref(),
+            config,
+            output_dir,
+            args.copyright_guess_harder,
+        )
     }
 
     pub fn prepare_debian_folder(&mut self, args: &PackageExecuteArgs) -> Result<()> {
