@@ -622,6 +622,58 @@ echo "debcargo testing: suppressing dh-cargo-built-using";;
     Ok(())
 }
 
+pub(crate) fn normalize_feature_deps(mut features_with_deps: CrateDepInfo) -> Result<CrateDepInfo> {
+    // Detect corner case with feature naming regarding _ vs -.
+    // Debian does not support _ in package names. Cargo automatically converts - in crate names
+    // to _, but features (including optional dependencies) can have both _ and -.
+    let potential_corner_case = features_with_deps
+        .keys()
+        .filter(|x| control::base_deb_name(x).as_str() != **x)
+        .copied()
+        .collect::<Vec<_>>();
+    for f in potential_corner_case {
+        let f_ = control::base_deb_name(f);
+        if let Some((df1, dd1)) = features_with_deps.remove(f_.as_str()) {
+            features_with_deps.entry(f).and_modify(|(df0, dd0)| {
+                let mut df = BTreeSet::from_iter(df0.drain(..));
+                df.extend(df1);
+                df.remove(f_.as_str());
+                df.remove(f);
+                let mut dd: HashSet<cargo::core::Dependency> = HashSet::from_iter(dd0.drain(..));
+                dd.extend(dd1);
+                df0.extend(df);
+                dd0.extend(dd);
+            });
+            for (df, _) in features_with_deps.values_mut() {
+                for feat in df.iter_mut() {
+                    if *feat == f_.as_str() {
+                        *feat = f;
+                    }
+                }
+            }
+            let dep_feats = traverse_depth(
+                &|k: &&'static str| features_with_deps.get(k).map(|x| &x.0),
+                f,
+            );
+            if dep_feats.contains(f) {
+                debcargo_bail!(
+                    "Tried to merge features {} and {} as they are not representable separately\n\
+                     in Debian, but this resulted in a feature cycle. You need to manually patch the package.",
+                    f, f_
+                );
+            }
+            debcargo_warn!(
+                "Merged features {} and {} as they are not representable separately in Debian.\n\
+                 We checked that this does not break the package in an obvious way (feature cycle), however\n\
+                 if there is a more sophisticated breakage, you'll have to manually patch those \
+                 features instead.",
+                f, f_
+            );
+        }
+    }
+    Ok(features_with_deps)
+}
+
 fn prepare_debian_control<F: FnMut(&str) -> std::result::Result<fs::File, io::Error>>(
     deb_info: &DebInfo,
     crate_info: &CrateInfo,
@@ -1191,7 +1243,7 @@ fn generate_test_dependencies(
         .collect::<Vec<_>>()
 }
 
-fn collapse_features(
+pub(crate) fn collapse_features(
     orig_features_with_deps: &CrateDepInfo,
 ) -> (BTreeMap<&'static str, Vec<&'static str>>, CrateDepInfo) {
     let (provides, deps) = orig_features_with_deps.iter().fold(
@@ -1223,7 +1275,7 @@ fn collapse_features(
 ///   f3 depends on f4
 /// into
 ///   f4 provides f1, f2, f3
-fn reduce_provides(
+pub(crate) fn reduce_provides(
     mut features_with_deps: CrateDepInfo,
 ) -> (BTreeMap<&'static str, Vec<&'static str>>, CrateDepInfo) {
     // If any features have duplicate dependencies, deduplicate them by

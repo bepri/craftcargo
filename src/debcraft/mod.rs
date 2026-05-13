@@ -4,10 +4,15 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 
-use crate::config::Config;
-use crate::crates::CrateInfo;
-use crate::debian::control::{deb_upstream_version, dsc_name};
-use crate::debian::{generate_homepage, DebInfo};
+use semver::Version;
+
+use crate::config::{package_field_for_feature, Config, PackageKey};
+use crate::crates::{all_dependencies_and_features, CrateInfo};
+use crate::debian::control::{deb_feature_name, deb_name, deb_upstream_version, dsc_name};
+use crate::debian::{
+    collapse_features, deb_deps, generate_homepage, normalize_feature_deps, reduce_provides,
+    DebInfo,
+};
 use crate::errors::Result;
 
 use schema::{DebcraftPackage, DebcraftPart, DebcraftYaml};
@@ -201,11 +206,375 @@ fn is_salsa_url(url: &str) -> bool {
 }
 
 fn build_debcraft_packages(
-    _deb_info: &DebInfo,
-    _crate_info: &CrateInfo,
-    _config: &Config,
+    deb_info: &DebInfo,
+    crate_info: &CrateInfo,
+    config: &Config,
 ) -> Result<BTreeMap<String, DebcraftPackage>> {
-    todo!("step 6: binary package generation")
+    let mut packages = BTreeMap::new();
+
+    let crate_name = crate_info.crate_name();
+    let base_pkgname = deb_info.base_package_name();
+    let name_suffix = deb_info.name_suffix();
+    let pkgbase = match name_suffix {
+        None => base_pkgname.to_string(),
+        Some(suf) => format!("{base_pkgname}{suf}"),
+    };
+
+    let lib = crate_info.is_lib() && config.build_lib_package();
+    let mut bins = crate_info.get_binary_targets();
+    if lib && !bins.is_empty() && !config.build_bin_package() {
+        bins.clear();
+    }
+    let bin_name = if config.bin_name == Config::default().bin_name {
+        deb_info.base_package_name()
+    } else {
+        config.bin_name.as_str()
+    };
+
+    let (crate_summary, crate_description) = crate_info.get_summary_description();
+    let summary_prefix = crate_summary.unwrap_or_else(|| format!("Rust crate \"{crate_name}\""));
+    let description_prefix = {
+        let tmp = crate_description.unwrap_or_default();
+        if tmp.is_empty() {
+            tmp
+        } else {
+            format!("{tmp}\n.\n")
+        }
+    };
+
+    // 6a: library packages — one DebcraftPackage per feature (including base "").
+    if lib {
+        // 6a: feature/dep graph construction (reused unchanged from debian path).
+        let features_with_deps = all_dependencies_and_features(crate_info.manifest());
+        let working = normalize_feature_deps(features_with_deps)?;
+        let (mut provides, reduced) = if config.collapse_features {
+            collapse_features(&working)
+        } else {
+            reduce_provides(working)
+        };
+
+        // 6a: classify features into recommends (default-linked) vs. suggests.
+        let mut rec_features: Vec<&str> = vec![];
+        let mut sug_features: Vec<&str> = vec![];
+        for (&feature, features) in &provides {
+            if feature.is_empty() {
+                continue;
+            }
+            if feature == "default" || features.contains(&"default") {
+                rec_features.push(feature);
+            } else {
+                sug_features.push(feature);
+            }
+        }
+
+        for (feature, (f_deps, o_deps)) in reduced {
+            let pk = PackageKey::feature(feature);
+            let f_provides = provides.remove(feature).unwrap();
+
+            // 6a: per-feature summary and description (mirrors Package::new logic).
+            let summary_suffix = if feature.is_empty() {
+                " - Rust source code".to_string()
+            } else {
+                match f_provides.len() {
+                    0 => format!(" - feature \"{feature}\""),
+                    n => format!(" - feature \"{}\" and {} more", feature, n),
+                }
+            };
+            let description_suffix = if feature.is_empty() {
+                format!("Source code for Debianized Rust crate \"{crate_name}\"")
+            } else {
+                format!(
+                    "This metapackage enables feature \"{}\" for the \
+                     Rust {} crate, by pulling in any additional \
+                     dependencies needed by that feature.{}",
+                    feature,
+                    crate_name,
+                    match f_provides.len() {
+                        0 => String::new(),
+                        1 => format!(
+                            "\n\nAdditionally, this package also provides the \
+                             \"{}\" feature.",
+                            f_provides[0],
+                        ),
+                        _ => format!(
+                            "\n\nAdditionally, this package also provides the \
+                             \"{}\", and \"{}\" features.",
+                            f_provides[..f_provides.len() - 1].join("\", \""),
+                            f_provides[f_provides.len() - 1],
+                        ),
+                    },
+                )
+            };
+
+            // 6a: depends — explicit librust deps only, no substvars (${misc:Depends} etc. omitted).
+            let mut depends = vec![];
+            if !feature.is_empty() && !f_deps.contains(&"") {
+                // Feature packages always need a direct dep on the base lib.
+                depends.push(deb_name(&pkgbase));
+            }
+            depends.extend(f_deps.iter().map(|f| deb_feature_name(&pkgbase, f)));
+            depends.extend(deb_deps(config.allow_prerelease_deps, &o_deps)?);
+
+            // 6a: recommends/suggests on the base lib package only (feature pkgs get neither).
+            let (recommends, suggests) = if feature.is_empty() {
+                (
+                    filter_provides_bare(&rec_features, &f_provides, &pkgbase),
+                    filter_provides_bare(&sug_features, &f_provides, &pkgbase),
+                )
+            } else {
+                (vec![], vec![])
+            };
+
+            // 6a: provides — bare names only; no "(= ${binary:Version})" clause.
+            // debcraft injects the correct version at packaging time automatically.
+            let feature_opt = if feature.is_empty() {
+                None
+            } else {
+                Some(feature)
+            };
+            let pkg_provides = pkg_provides_bare(
+                base_pkgname,
+                name_suffix,
+                crate_info.version(),
+                feature_opt,
+                &f_provides,
+            );
+
+            // 6a: breaks/replaces for semver-suffixed base lib packages.
+            let mut breaks = vec![];
+            let mut replaces = vec![];
+            if name_suffix.is_some() && feature.is_empty() {
+                let mut next = crate_info.version().clone();
+                next.patch += 1;
+                breaks.push(format!("{} (<< {}~)", deb_name(base_pkgname), next));
+                replaces.push(format!("{} (<< {}~)", deb_name(base_pkgname), next));
+            }
+            if let Some(min_ver) = crate_info.rust_version().as_deref() {
+                breaks.push(format!("rustc (<< {min_ver}~)"));
+            }
+
+            let pkg_name = if feature.is_empty() {
+                deb_name(&pkgbase)
+            } else {
+                deb_feature_name(&pkgbase, feature)
+            };
+
+            // 6a: construct DebcraftPackage, then apply per-package config overrides.
+            let mut pkg = DebcraftPackage {
+                architectures: Some("any".to_string()),
+                summary: Some(format!("{summary_prefix}{summary_suffix}")),
+                description: Some(format!("{description_prefix}{description_suffix}")),
+                depends,
+                recommends,
+                suggests,
+                provides: pkg_provides,
+                breaks,
+                replaces,
+                conflicts: vec![],
+                section: None,
+                multi_arch: Some("same".to_string()),
+            };
+            apply_package_overrides(
+                &mut pkg,
+                config,
+                pk,
+                &summary_suffix,
+                &description_suffix,
+                &f_provides,
+            );
+            packages.insert(pkg_name, pkg);
+        }
+        assert!(provides.is_empty());
+    }
+
+    // 6b: binary executable package.
+    if !bins.is_empty() {
+        let summary_suffix = String::new();
+        let description_suffix = format!(
+            "This package contains the following binaries built from the Rust crate\n\"{}\":\n - {}",
+            crate_name,
+            bins.join("\n - ")
+        );
+
+        // 6b: for semver-suffix packages, provide the unversioned binary name (bare, no version clause).
+        let bin_provides = name_suffix
+            .map(|_| vec![bin_name.to_string()])
+            .unwrap_or_default();
+
+        let bin_pkg_name = match name_suffix {
+            None => bin_name.to_string(),
+            Some(suf) => format!("{bin_name}{suf}"),
+        };
+
+        // 6b: depends is empty — substvars (${shlibs:Depends} etc.) are handled natively by debcraft.
+        let mut pkg = DebcraftPackage {
+            architectures: Some("any".to_string()),
+            summary: Some(format!("{summary_prefix}{summary_suffix}")),
+            description: Some(format!("{description_prefix}{description_suffix}")),
+            depends: vec![],
+            recommends: vec![],
+            suggests: vec![],
+            provides: bin_provides,
+            breaks: vec![],
+            replaces: vec![],
+            conflicts: vec![],
+            // 6b: section is a FIXME when a lib package also exists (mixed crate).
+            section: if lib {
+                Some("FIXME-(packages.\"(name)\".section)".to_string())
+            } else {
+                None
+            },
+            // 6b: multi_arch omitted — debcraft defaults to "no" for binary packages.
+            multi_arch: None,
+        };
+        apply_package_overrides(
+            &mut pkg,
+            config,
+            PackageKey::Bin,
+            &summary_suffix,
+            &description_suffix,
+            &[],
+        );
+        packages.insert(bin_pkg_name, pkg);
+    }
+
+    // 6c: extra packages from [packages."extra+{name}"] in debcargo.toml.
+    // Mirrors Package::new_extra() + apply_overrides(); all fields come from config.
+    for configured in config.configured_packages() {
+        if let PackageKey::Extra(package) = configured {
+            let mut pkg = DebcraftPackage::default();
+            apply_package_overrides(&mut pkg, config, configured, "", "", &[]);
+            packages.insert(package.to_string(), pkg);
+        }
+    }
+
+    Ok(packages)
+}
+
+/// Generate bare (no version clause) provides entries for a library package.
+///
+/// Implements the 6a provides list: bare `librust-foo-{version}-dev` names at
+/// each version granularity (major, major.minor, major.minor.patch), plus one
+/// entry per absorbed feature per suffix.  The package's own name is excluded.
+///
+/// Key difference from the Debian path (control.rs:388-403): debcraft injects
+/// the package version at packaging time, so no `(= ${binary:Version})` clause.
+fn pkg_provides_bare(
+    basename: &str,
+    name_suffix: Option<&str>,
+    version: &Version,
+    feature: Option<&str>,
+    f_provides: &[&str],
+) -> Vec<String> {
+    let pkgbase = match name_suffix {
+        None => basename.to_string(),
+        Some(suf) => format!("{basename}{suf}"),
+    };
+    let version_suffixes = [
+        String::new(),
+        format!("-{}", version.major),
+        format!("-{}.{}", version.major, version.minor),
+        format!("-{}.{}.{}", version.major, version.minor, version.patch),
+    ];
+    let mut provides = vec![];
+    for suffix in &version_suffixes {
+        if name_suffix.is_some() && suffix.is_empty() {
+            continue;
+        }
+        let p = format!("{basename}{suffix}");
+        let entry = match feature.unwrap_or("") {
+            "" => deb_name(&p),
+            f => deb_feature_name(&p, f),
+        };
+        provides.push(entry);
+        provides.extend(f_provides.iter().map(|f| deb_feature_name(&p, f)));
+    }
+    // The package does not provide itself.
+    let self_name = match feature.unwrap_or("") {
+        "" => deb_name(&pkgbase),
+        f => deb_feature_name(&pkgbase, f),
+    };
+    provides.retain(|x| x != &self_name);
+    provides
+}
+
+/// Filter feature names into bare deb package strings for recommends/suggests.
+///
+/// Used by 6a to build the base lib package's recommends and suggests lists.
+fn filter_provides_bare(features: &[&str], f_provides: &[&str], pkgbase: &str) -> Vec<String> {
+    features
+        .iter()
+        .filter(|f| !f_provides.contains(f))
+        .map(|f| deb_feature_name(pkgbase, f))
+        .collect()
+}
+
+/// Apply config overrides to a `DebcraftPackage`, mirroring `Package::apply_overrides()`.
+///
+/// Called at the end of 6a (lib features), 6b (binary), and 6c (extra packages).
+fn apply_package_overrides(
+    pkg: &mut DebcraftPackage,
+    config: &Config,
+    key: PackageKey<'_>,
+    summary_suffix: &str,
+    description_suffix: &str,
+    f_provides: &[&str],
+) {
+    if let Some(section) = config.package_section(key) {
+        pkg.section = Some(section.to_string());
+    }
+    // Per-package override replaces the whole string; global override replaces only the prefix.
+    if let Some(per_pkg) = config.package_summary(key) {
+        pkg.summary = Some(per_pkg.to_string());
+    } else if let Some(global) = config.summary.as_deref() {
+        pkg.summary = Some(format!("{global}{summary_suffix}"));
+    }
+    if let Some(per_pkg) = config.package_description(key) {
+        pkg.description = Some(per_pkg.to_string());
+    } else if let Some(global) = config.description.as_deref() {
+        pkg.description = Some(format!("{global}{description_suffix}"));
+    }
+    pkg.depends.extend(package_field_for_feature(
+        |x| config.package_depends(x),
+        key,
+        f_provides,
+    ));
+    pkg.recommends.extend(package_field_for_feature(
+        |x| config.package_recommends(x),
+        key,
+        f_provides,
+    ));
+    pkg.suggests.extend(package_field_for_feature(
+        |x| config.package_suggests(x),
+        key,
+        f_provides,
+    ));
+    pkg.provides.extend(package_field_for_feature(
+        |x| config.package_provides(x),
+        key,
+        f_provides,
+    ));
+    pkg.breaks.extend(package_field_for_feature(
+        |x| config.package_breaks(x),
+        key,
+        f_provides,
+    ));
+    pkg.replaces.extend(package_field_for_feature(
+        |x| config.package_replaces(x),
+        key,
+        f_provides,
+    ));
+    pkg.conflicts.extend(package_field_for_feature(
+        |x| config.package_conflicts(x),
+        key,
+        f_provides,
+    ));
+    if let Some(arch) = config.package_architecture(key) {
+        pkg.architectures = Some(arch.join(" "));
+    }
+    if let Some(ma) = config.package_multi_arch(key) {
+        pkg.multi_arch = Some(ma.to_string());
+    }
 }
 
 fn build_debcraft_parts(
@@ -292,6 +661,44 @@ mod tests {
         // substring-match trap: host is not github.com
         assert_eq!(derive_issues_url("https://notgithub.com/foo/bar"), None);
         assert_eq!(derive_issues_url("https://evil.com/github.com/foo"), None);
+    }
+
+    #[test]
+    fn provides_bare_has_no_version_clause() {
+        let version = semver::Version::new(1, 2, 3);
+        let provides = pkg_provides_bare("foo", None, &version, None, &[]);
+        assert!(!provides.is_empty());
+        for entry in &provides {
+            assert!(
+                !entry.contains('$'),
+                "provides entry contains substvar: {entry}"
+            );
+            assert!(
+                !entry.contains('('),
+                "provides entry has version clause: {entry}"
+            );
+        }
+    }
+
+    #[test]
+    fn provides_bare_skips_unversioned_in_semver_suffix_pkg() {
+        let version = semver::Version::new(1, 2, 3);
+        // With name_suffix the unversioned "librust-foo-dev" must not appear.
+        let provides = pkg_provides_bare("foo", Some("-1"), &version, None, &[]);
+        assert!(
+            !provides.iter().any(|p| p == "librust-foo-dev"),
+            "unversioned entry must be absent in semver-suffix package; got: {provides:?}"
+        );
+        // But versioned entries should still be present.
+        assert!(provides.iter().any(|p| p.contains("foo-1")));
+    }
+
+    #[test]
+    fn provides_bare_does_not_contain_self() {
+        let version = semver::Version::new(1, 2, 3);
+        // The package's own name must not be in its provides list.
+        let provides = pkg_provides_bare("foo", None, &version, None, &[]);
+        assert!(!provides.contains(&"librust-foo-dev".to_string()));
     }
 
     #[test]
