@@ -20,9 +20,9 @@ pub struct PackageProcess {
     /// Output directory as specified by the user.
     pub output_dir: Option<PathBuf>,
     /// Whether the crate tarball was modified, and whether that included Cargo.toml
-    /// (re)normalization
+    /// (re)normalisation
     pub source_modified: bool,
-    /// If it was modified, whether that included Cargo.toml normalization
+    /// If it was modified, whether that included Cargo.toml normalisation
     pub manifest_normalized: bool,
     /// Tempdir that contains a working copy of the eventual output.
     pub temp_output_dir: Option<tempfile::TempDir>,

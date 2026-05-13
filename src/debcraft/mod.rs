@@ -15,7 +15,7 @@ use schema::{DebcraftPackage, DebcraftPart, DebcraftYaml};
 /// Generate a `debcraft.yaml` file and companion files in `output_dir`.
 ///
 /// This is the debcraft equivalent of `prepare_debian_folder()`.  Instead of
-/// writing a full `debian/` tree it builds the schema in memory, serializes it
+/// writing a full `debian/` tree it builds the schema in memory, serialises it
 /// to YAML, and writes a small set of companion files alongside it.
 #[allow(clippy::too_many_arguments)]
 pub fn prepare_debcraft_yaml(
@@ -98,7 +98,7 @@ fn build_debcraft_top_level(
         .map(str::to_string)
         .or_else(|| meta.repository.as_deref().and_then(derive_vcs_git));
 
-    // 5j: license — normalize SPDX "/" separator to " OR "
+    // 5j: license — normalise SPDX "/" separator to " OR "
     let license = meta.license.as_deref().map(normalize_spdx_license);
 
     // 5k: issues URL derived from repository
@@ -156,7 +156,7 @@ fn apply_source_overrides(yaml: &mut DebcraftYaml, config: &Config) {
     }
 }
 
-/// Normalize an SPDX license expression from Cargo.toml.
+/// Normalise an SPDX license expression from Cargo.toml.
 ///
 /// Cargo uses "/" as an OR separator (pre-SPDX legacy); replace with " OR ".
 fn normalize_spdx_license(license: &str) -> String {

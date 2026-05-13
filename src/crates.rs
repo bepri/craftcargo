@@ -485,7 +485,7 @@ impl CrateInfo {
                     .unwrap();
             description = re.replace(&description, "").to_string();
 
-            // https://stackoverflow.com/questions/38406793/why-is-capitalizing-the-first-letter-of-a-string-so-convoluted-in-rust
+            // https://stackoverflow.com/questions/38406793/why-is-capitalising-the-first-letter-of-a-string-so-convoluted-in-rust
             description = {
                 let mut d = description.chars();
                 match d.next() {

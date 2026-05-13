@@ -81,7 +81,7 @@ B.3 Description splitting and cleaning
       1. "\n\n" -> paragraph break; single "\n" -> space (unwrap line wraps).
       2. Strip prefixes: crate name, "This ... is/provides", articles
          (a/an/the), "rust implementation/library/tool/crate of/to/for".
-      3. Capitalize first letter.
+      3. Capitalise first letter.
       4. First sentence or first line -> summary; remainder -> description.
       5. Fallback: summary = Rust crate "{crate_name}" if no description.
     Source: debcargo src/crates.rs: get_summary_description()
@@ -564,7 +564,7 @@ where N comes from DEB_BUILD_OPTIONS=parallel=N (default: nproc).
 After the test invocation, the test phase also runs:
   env CARGO_CHANNEL=debug  /usr/share/cargo/bin/dh-cargo-built-using
 to generate cargo:Built-Using / cargo:Static-Built-Using substvars for
-debug build artifacts (see G.8).
+debug build artefacts (see G.8).
 
 
 G.5 Install phase
@@ -813,7 +813,7 @@ contact                         CFG   can default to maintainer
 source-code                     AUTO  [package.homepage] or [package.repository]
                                       or crates.io URL (note: maps to
                                       Vcs-Browser; Vcs-Git is MISS F.7)
-license                         AUTO  [package.license] (SPDX), normalized
+license                         AUTO  [package.license] (SPDX), normalised
 issues                          AUTO  could derive from [package.repository]
                                       + "/issues" for GitHub/GitLab repos
 adopt-info                      N/A

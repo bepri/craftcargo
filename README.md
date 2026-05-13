@@ -12,7 +12,7 @@ policy](https://wiki.debian.org/Teams/RustPackaging/Policy).
 
 ## Features ##
 
- * Easy to customize, using config files and overlay directories. This includes
+ * Easy to customise, using config files and overlay directories. This includes
    patching or otherwise fixing Rust crates to adhere to Debian policy.
  * Guess copyright information from crate metadata and source code, used to
    suggest appropriate values for `debian/copyright`.

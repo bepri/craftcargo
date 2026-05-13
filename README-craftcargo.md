@@ -447,9 +447,9 @@ For crates that expose a Rust library (`[lib]` in `Cargo.toml`) craftcargo follo
 ```yaml
 name: rust-serde
 version: 1.0.197-1
-summary: a generic serialization/deserialization framework
+summary: a generic serialisation/deserialisation framework
 description: |
-  Serde is a framework for serializing and deserializing Rust data structures
+  Serde is a framework for serialising and deserialising Rust data structures
   efficiently and generically.
 base: ubuntu@24.04
 maintainer: Alice Example <alice@example.com>

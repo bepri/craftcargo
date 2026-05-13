@@ -1,4 +1,4 @@
-//! Serde-serializable structs mirroring the debcraft.yaml schema.
+//! Serde-serialisable structs mirroring the debcraft.yaml schema.
 //!
 //! All fields use Rust snake_case and are renamed to kebab-case in YAML output.
 
@@ -21,7 +21,7 @@ pub struct DebcraftYaml {
     pub uploaders: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub section: Option<String>,
-    /// Only serialized when non-default (debcraft default is "optional").
+    /// Only serialised when non-default (debcraft default is "optional").
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -78,7 +78,7 @@ pub struct DebcraftPart {
 
 /// A build-package entry, optionally restricted to specific build profiles.
 ///
-/// `Simple` serializes as a plain string; `WithProfile` serializes as an
+/// `Simple` serialises as a plain string; `WithProfile` serialises as an
 /// object with a `profiles` list, representing the `<!nocheck>` equivalent.
 #[derive(Serialize)]
 #[serde(untagged)]
@@ -129,7 +129,7 @@ mod tests {
     use super::*;
 
     fn to_yaml<T: Serialize>(v: &T) -> serde_yaml_ng::Value {
-        serde_yaml_ng::to_value(v).expect("serialization failed")
+        serde_yaml_ng::to_value(v).expect("serialisation failed")
     }
 
     // BuildPackageEntry: the untagged enum is the trickiest part of the schema.
@@ -190,15 +190,15 @@ mod tests {
         let v = to_yaml(&part);
         assert!(
             v.get("rust-channel").is_some(),
-            "rust_channel should serialize as rust-channel"
+            "rust_channel should serialise as rust-channel"
         );
         assert!(
             v.get("rust-features").is_some(),
-            "rust_features should serialize as rust-features"
+            "rust_features should serialise as rust-features"
         );
         assert!(
             v.get("build-packages").is_some(),
-            "build_packages should serialize as build-packages"
+            "build_packages should serialise as build-packages"
         );
         assert!(
             v.get("rustChannel").is_none(),

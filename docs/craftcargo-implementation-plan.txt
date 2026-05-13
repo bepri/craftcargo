@@ -44,11 +44,11 @@ File: Cargo.toml
 Add to [dependencies]:
   serde_yaml = "0.9"
 
-serde is already a dependency (used by config.rs for TOML deserialization).
+serde is already a dependency (used by config.rs for TOML deserialisation).
 serde_yaml uses the same Serialize/Deserialize derive macros so no new
 derive dependency is needed.
 
-Note: serde_yaml 0.9 serializes structs with rename_all = "kebab-case"
+Note: serde_yaml 0.9 serialises structs with rename_all = "kebab-case"
 correctly, preserving kebab-case keys in the output YAML. Verify the version
 is compatible with the existing serde constraint in Cargo.toml.
 
@@ -68,7 +68,7 @@ Register the module in src/lib.rs by adding:
 3. DEFINE SCHEMA STRUCTS (src/debcraft/schema.rs)
 ===================================================
 
-Define serde-serializable Rust structs that directly mirror the debcraft.yaml
+Define serde-serialisable Rust structs that directly mirror the debcraft.yaml
 schema. All struct fields use snake_case (Rust convention) and are renamed to
 kebab-case for YAML output via #[serde(rename_all = "kebab-case")].
 
@@ -88,7 +88,7 @@ kebab-case for YAML output via #[serde(rename_all = "kebab-case")].
       pub uploaders: Vec<String>,
       #[serde(skip_serializing_if = "Option::is_none")]
       pub section: Option<String>,
-      // "optional" is debcraft's default; only serialize if different
+      // "optional" is debcraft's default; only serialise if different
       #[serde(skip_serializing_if = "Option::is_none")]
       pub priority: Option<String>,
       #[serde(skip_serializing_if = "Option::is_none")]
@@ -149,7 +149,7 @@ kebab-case for YAML output via #[serde(rename_all = "kebab-case")].
 
   Build packages for library crates need <!nocheck> profile annotations to
   break bootstrapping cycles (debcargo-rules.txt section 3). Represent this
-  as an enum that serializes to either a plain string or an object:
+  as an enum that serialises to either a plain string or an object:
 
   #[derive(Serialize)]
   #[serde(untagged)]
@@ -236,7 +236,7 @@ in src/debian/mod.rs. The function signature is nearly identical:
 
   Differences from prepare_debian_folder():
   - No tempdir parameter: we build a DebcraftYaml struct in memory, then
-    serialize it. Companion files (copyright, lintian-overrides,
+    serialise it. Companion files (copyright, lintian-overrides,
     cargo-checksum.json) are written directly to output_dir/debcraft/.
   - No changelog_ready parameter: debcraft.yaml carries the version directly;
     there is no changelog to maintain.
@@ -261,7 +261,7 @@ in src/debian/mod.rs. The function signature is nearly identical:
     // 4. Apply top-level source overrides from config
     apply_source_overrides(&mut yaml, config);
 
-    // 5. Serialize to YAML and write debcraft.yaml
+    // 5. Serialise to YAML and write debcraft.yaml
     let out_dir = output_dir;  // or output_dir.join("debcraft") if using subdir
     fs::create_dir_all(out_dir)?;
     let yaml_str = serde_yaml::to_string(&yaml)?;
@@ -345,7 +345,7 @@ prepare_debian_control() in src/debian/mod.rs.
 5j. license
   Extract the top-level license SPDX string from Cargo.toml metadata:
     crate_info.manifest().license().map(str::to_string)
-  Normalize "/" to " OR " and handle other SPDX syntax if needed.
+  Normalise "/" to " OR " and handle other SPDX syntax if needed.
   This is not currently extracted as a separate value in debcargo (it goes
   into debian/copyright via debian_copyright()); add extraction here.
 
@@ -396,7 +396,7 @@ All the following logic is REUSED UNCHANGED:
 
   - all_dependencies_and_features() — feature/dep graph construction
   - reduce_provides() / collapse_features() — feature reduction
-  - Feature name normalization (_ vs - merging and cycle detection)
+  - Feature name normalisation (_ vs - merging and cycle detection)
   - transitive_deps() — dep expansion
   - deb_deps() — Cargo deps → Debian package name strings
   - The build_deps (toolchain + default feature deps) calculation
@@ -872,7 +872,7 @@ N5. extra_lines removal
   handled by the debcraft cargo helper. The PackageOverride.extra_lines config
   field has no debcraft.yaml mapping; emit a warning if it is set.
 
-N6. Cargo.toml normalization and orig tarball
+N6. Cargo.toml normalisation and orig tarball
   The orig tarball creation (prepare_orig_tarball) and apply_overlay_and_patches
   functions in src/debian/mod.rs are UNCHANGED. These run before
   prepare_debcraft_yaml() is called, in the extract phase of PackageProcess.
